@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="report_reward_english">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="droga_pharma.droga_pharma_header_layout">
+                </t>
+                <t t-call="web.external_layout">
+                    <div class="page">
+<!--                        <div style="margin-left: 5%; display: flex;">-->
+                        <h4 style="margin-left: 30%; text-decoration: underline;">Droga Pharmacy <t t-if="str(doc.issue_type) == 'RWDB'">Beauty Picks Reward</t>
+                        <t t-if="str(doc.issue_type) == 'RWDS'">
+                          Supplements Reward
+                        </t> </h4>
+<!--                            <p style="display: inline;"><span t-field="doc.name"/></p>-->
+<!--                        </div>-->
+                        <br/>
+                        <br/>
+                        <h5 style="margin-left: 5%;">Dear family of our pharmacy!</h5>
+                        <br/>
+                        <div style="margin-left: 5%; margin-right: 10%;">
+                            <h5>Our company offers various rewards to its beloved customers in many different ways.</h5>
+                          <h5> Therefore,
+                              <t t-if="str(doc.issue_type) == 'RWDB'"> as you have invited another new customer to our pharmacy, we gave you this beauty care product as a gift.</t>
+
+                            <t t-if="str(doc.issue_type) == 'RWDS'">
+                                as you have used our MTM/Counselling/Compounding service, we gave you this Supplements reward as a gift.
+                            </t></h5>
+
+                        </div>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <h5 style="margin-left: 40%;">Thank You!</h5>
+                        <div style="margin-left: 20%; margin-top:23%;">
+                            <h5 style="margin-left: 10%;">More ways to bond, more ways to get rewarded!</h5>
+                            <h5 style="margin-left: 27%;">Droga Pharmacy</h5>
+                            <h5 style="margin-left: 23%;">Protecting your health!</h5>
+                        </div>
+                        <br/>
+                        <br/>
+<!--                        <div style="margin-top:20%; display: flex;">-->
+<!--                            <strong><span style="display: inline; margin-right: 20%;" t-field="doc.customer.name"/></strong>-->
+<!--                            <h5 style="display: inline; margin-right: 25%;">Date: </h5>-->
+<!--                            <h5 style="display: inline;">Signature: </h5>-->
+<!--                        </div>-->
+                    </div>
+                    <t t-call="droga_pharma.droga_pharma_footer_layout">
+                    </t>
+                </t>
+            </t>
+        </t>
+    </template>
+    <template id="report_reward_amharic">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="droga_pharma.droga_pharma_header_layout">
+                </t>
+                <t t-call="web.external_layout">
+                    <head>
+                        <style>
+                            @font-face {
+                                font-family: amharic_font;
+                                src: url('/droga_pharma/static/fonts/amharic_font.ttf') format('truetype');
+                            }
+                        </style>
+                    </head>
+                    <div class="page">
+                        <h4 style="font-family: amharic_font, Arial, sans-serif; margin-left: 30%; text-decoration: underline;">የድሮጋ ፋርማሲ <t t-if="str(doc.issue_type) == 'RWDB'">የውበት መጠበቂያ ስጦታ</t>
+                        <t t-if="str(doc.issue_type) == 'RWDS'">
+                          የጤና መጠበቂያ ስጦታ
+                        </t> </h4>
+                        <br/>
+                        <br/>
+                        <h5 style="font-family: amharic_font, Arial, sans-serif; margin-left: 5%;">ውድ የመድኃኒት ቤታችን ቤተሰብ!</h5>
+                        <br/>
+                        <div style="margin-left: 5%; margin-right: 10%;">
+                            <h5 style="font-family: amharic_font, Arial, sans-serif;">ድርጅታችን በተለያየ መንገድ አብዝተው ለተወዳጁን ደንበኞቹ የተለያየ ሽልማት ይሰጣል ፡፡</h5>
+                          <h5 style="font-family: amharic_font, Arial, sans-serif;" > ስለሆነም እርስዎም
+                              <t t-if="str(doc.issue_type) == 'RWDB'"> ሌላ አዲስ ደንበኛ ወደ መድኃኒት ቤታችን ስለጋበዙ ይህን የውበት መጠበቂያ በስጦታ አበረከትንልዎ ፡፡</t>
+
+                            <t t-if="str(doc.issue_type) == 'RWDS'">
+                                የመድኅኒት ቤታችንን የመድኃኒት ክትትል/MTM/ አገልግሎት ስለተጠቀሙ ይህን የጤና መጠበቂያ ስጦታ አበረከትንልዎ ፡፡
+                            </t></h5>
+                        </div>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <h5 style="font-family: amharic_font, Arial, sans-serif; margin-left: 40%;">እናመሰግናለን!</h5>
+                        <div style="margin-left: 20%; margin-top:23%;">
+                            <h5 style="font-family: amharic_font, Arial, sans-serif; margin-left: 20%;">ከኛ ይወዳጁ፣ አብዝተው ያትርፉ!</h5>
+                            <h5 style="font-family: amharic_font, Arial, sans-serif; margin-left: 27%;">ድሮጋ ፋርማሲ</h5>
+                            <h5 style="font-family: amharic_font, Arial, sans-serif; margin-left: 23%;">ጤናዎን በመጠበቅ ላይ!</h5>
+                        </div>
+                        <br/>
+                        <br/>
+<!--                        <div style="margin-top:20%; display: flex;">-->
+<!--                            <strong><span style="display: inline; margin-right: 20%;" t-field="doc.customer.name"/></strong>-->
+<!--                            <h5 style="display: inline; margin-right: 25%;">Date: </h5>-->
+<!--                            <h5 style="display: inline;">Signature: </h5>-->
+<!--                        </div>-->
+                    </div>
+                    <t t-call="droga_pharma.droga_pharma_footer_layout">
+                    </t>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

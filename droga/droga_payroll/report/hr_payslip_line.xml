@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_hr_payslip_line_tree_report" model="ir.ui.view">
+        <field name="name">hr.payslip.line.tree</field>
+        <field name="model">hr.payslip.line</field>
+        <field name="arch" type="xml">
+            <tree string="Payslip Lines">
+                <field name="period"/>
+                <field name="badge_id"/>
+                <field name="employee_id" string="Employee Name" />
+                <field name="name"/>
+
+                <field name="quantity"/>
+                <field name="amount"/>
+                <field name="total"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Search View Definition -->
+    <record id="view_hr_payslip_line_search_report" model="ir.ui.view">
+        <field name="name">hr.payslip.line.search</field>
+        <field name="model">hr.payslip.line</field>
+        <field name="arch" type="xml">
+            <search string="Search Payslip Lines">
+                <field name="employee_id"/>
+                <field name="badge_id"/>
+                <field name="name"/>
+                <field name="period"/>
+
+                <field name="total"/>
+                <filter string="Employee" name="group_by_employee" context="{'group_by':'employee_id'}"/>
+                 <filter string="Period" name="group_by_period" context="{'group_by':'period'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_hr_payslip_line_tree_action" model="ir.actions.act_window">
+        <field name="name">Payslip Lines</field>
+        <field name="res_model">hr.payslip.line</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_hr_payslip_line_tree_report"/>
+    </record>
+
+
+</odoo>

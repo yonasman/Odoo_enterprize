@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="stock_menu_avail" model="ir.ui.view">
+            <field name="name">Warehouse avail menu</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <page string="Physiotherapy sales access">
+                        <field name="warehouse_ids_pt_disp" mode="tree">
+                            <tree create="0">
+                                <field name="name"></field>
+                                <field name="code"></field>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Store Access Import and WS">
+                        <field name="warehouse_ids_im_ws" mode="tree">
+                            <tree create="0">
+                                <field name="name"></field>
+                                <field name="code"></field>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Store Access Pharmacy">
+                        <field name="warehouse_ids_ph" mode="tree">
+                            <tree create="0">
+                                <field name="name"></field>
+                                <field name="code"></field>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Pharmacy sales access">
+                        <field name="warehouse_ids_ph_disp" mode="tree">
+                            <tree create="0">
+                                <field name="name"></field>
+                                <field name="code"></field>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

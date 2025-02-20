@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="droga_product_analysis_action" model="ir.actions.act_window">
+        <field name="name">Product analysis</field>
+        <field name="res_model">droga.bdr.product.analysis</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <data>
+        <record id="sequence_product_analysis" model="ir.sequence">
+            <field name="name">Product Analysis Sequence</field>
+            <field name="code">droga.reg.prod.analysis.custom.sequence</field>
+            <field name="prefix">PROD_ANA_</field>
+        </record>
+
+        <record id="droga_product_analysis_view" model="ir.ui.view">
+            <field name="name">droga.product.analysis.view</field>
+            <field name="model">droga.bdr.product.analysis</field>
+            <field name="arch" type="xml">
+                <tree string="Product analysis" >
+                    <field name="analysis_no"/>
+                    <field name="product_descr"/>
+                    <field name="score_out_of_hundred" decoration-success="product_grade == 'green'" decoration-info="product_grade == 'blue'" decoration-warning="product_grade == 'yellow'" decoration-danger="product_grade == 'red'" widget="badge"/>
+                    <field name="product_grade" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="product_analysis_form" model="ir.ui.view">
+            <field name="name">product.analysis.form</field>
+            <field name="model">droga.bdr.product.analysis</field>
+            <field name="arch" type="xml">
+                <form string="Product Analysis">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="analysis_no"/>
+                                <field name="product_descr"/>
+                                <field name="req" widget="many2many_tags" string="Select Requests"/>
+                                <field name="config_name"/>
+
+                                <field name="sup" widget="many2many_tags" string="Select Possible Suppliers"/>
+                            </group>
+                            <group>
+                                <field name="score_out_of_hundred" readonly="1"/>
+                                <field name="grade_name"/>
+                                <field name="exb_num" widget="many2many_tags" string="Select Suppliers information entry"/>
+                                <field name="sup_config_name"/>
+
+
+                                <field name="product_grade" invisible="1"/>
+                            </group>
+                            <br/>
+                            <br/>
+                            <notebook>
+                                <page string="Product Criterias">
+                                    <group>
+                                        <field name="criteria_ids">
+                                            <tree editable="top">
+                                                <field name="criteria" readonly="1"/>
+                                                <field name="header" attrs="{'readonly': [('id', '!=', False)]}"/>
+                                                <field name="minimum_score"
+                                                       attrs="{'readonly': [('id', '!=', False)]}"/>
+                                                <field name="maximum_score"
+                                                       attrs="{'readonly': [('id', '!=', False)]}"/>
+                                                <field name="weight"/>
+                                                <field name="score"/>
+                                            </tree>
+                                        </field>
+                                    </group>
+                                </page>
+                                <page string="Supplier Analysis">
+                                    <field name="sup_criteria_ids">
+                                        <tree editable="top">
+                                            <field name="supplier" readonly="1"/>
+                                            <field name="criteria" readonly="1"/>
+                                            <field name="min_val" readonly="1"/>
+                                            <field name="max_val" readonly="1"/>
+                                            <field name="weight" readonly="1"/>
+                                            <field name="total_score" readonly="1"/>
+
+
+                                            <field name="score"/>
+                                        </tree>
+                                    </field>
+                                </page>
+                            </notebook>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

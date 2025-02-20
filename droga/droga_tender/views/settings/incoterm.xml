@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="droga_tender_settings_incoterm_action" model="ir.actions.act_window">
+        <field name="name">incoterms registry</field>
+        <field name="res_model">droga.tender.settings.incoterm</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="droga_tender_settings_incoterm_view_tree" model="ir.ui.view">
+        <field name="name">droga.tender.settings.incoterm.view.tree</field>
+        <field name="model">droga.tender.settings.incoterm</field>
+        <field name="arch" type="xml">
+            <tree string="" delete="0">
+                <field name="incoterm_name"></field>
+                <field name="incoterm_descr"></field>
+                <field name="status"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_tender_settings_incoterm_view_form" model="ir.ui.view">
+        <field name="name">droga.tender.settings.incoterm.view.form</field>
+        <field name="model">droga.tender.settings.incoterm</field>
+        <field name="arch" type="xml">
+            <form string="" delete="0">
+                <sheet>
+                    <group>
+                        <field name="incoterm_name"></field>
+                        <field name="incoterm_descr"></field>
+                        <field name="status"></field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <menuitem
+            id="droga_tender_settings_incoterm"
+            name="Incoterm Registry"
+            action="droga_tender_settings_incoterm_action"
+            parent="tender_settings_menu"
+            sequence="16"/>
+</odoo>

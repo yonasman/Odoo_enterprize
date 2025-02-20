@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <menuitem
+            id="droga_project_inventory"
+            name="Inventory"
+            parent="project.menu_main_pm"
+            groups="droga_project.proj_stkeeper"
+            sequence="99">
+        <menuitem
+                action="stock.stock_picking_type_action"
+                id="droga_project_stock_picking_type_menu"
+                sequence="1"
+                groups="droga_project.proj_stkeeper"
+                name="Overview"/>
+        <menuitem
+                id="droga_project_transfer_menu"
+                name="Store transfer requests"
+                action="droga_inventory.droga_inventory_transfer_custom_action"
+                sequence="2"/>
+        <menuitem
+                id="droga_project_reports_menu"
+                name="Reports"
+                sequence="3">
+
+            <menuitem
+                    id="droga_project_stock_on_hand_reports_menu"
+                    name="Stock on hand"
+                    action="stock.action_view_quants"
+                    sequence="0"/>
+
+            <menuitem
+                    id="droga_project_stock_transactions_reports_menu"
+                    name="Stock transactions"
+                    action="stock.stock_move_line_action"
+                    sequence="1"/>
+        </menuitem>
+
+    </menuitem>
+</odoo>

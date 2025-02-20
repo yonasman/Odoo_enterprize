@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="droga_crm_customer_settings_contact_action" model="ir.actions.act_window">
+        <field name="name">Contact</field>
+        <field name="res_model">droga.crm.contacts</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="droga_crm_customer_contact_view_tree" model="ir.ui.view">
+        <field name="name">droga.crm.contacts.view.tree</field>
+        <field name="model">droga.crm.contacts</field>
+        <field name="arch" type="xml">
+            <tree string="" editable="top" delete="0">
+                <field name="parent_customer"></field>
+                <field name="specialty"></field>
+                <field name="contact_name"></field>
+                <field name="mobile"></field>
+            </tree>
+        </field>
+    </record>
+
+
+    <menuitem
+        id="droga_crm_customer_settings_contact"
+        name="Contact settings"
+        action="droga_crm_customer_settings_contact_action"
+        parent="customer_settings_sub_menu"
+        sequence="20"/>
+
+</odoo>

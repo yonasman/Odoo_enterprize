@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="droga_inv_settings_trans_type_action" model="ir.actions.act_window">
+        <field name="name">Transaction types</field>
+        <field name="res_model">droga.inventory.transaction.types</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <record id="droga_inv_settings_trans_type_tree" model="ir.ui.view">
+        <field name="name">droga.inventory.transaction.types.view.tree</field>
+        <field name="model">droga.inventory.transaction.types</field>
+        <field name="arch" type="xml">
+            <tree string="" editable="bottom">
+                <field name="from_loc"></field>
+                <field name="qty_flag"></field>
+                <field name="from_con_type"></field>
+                <field name="to_loc"></field>
+                <field name="to_con_type"></field>
+                <field name="type"></field>
+                <field name="contra_account"></field>
+                <field name="summary_detail"></field>
+                <field name="has_detail"></field>
+            </tree>
+        </field>
+    </record>
+
+
+    <menuitem
+            id="droga_inv_settings_trans_type_menu"
+            name="Transaction types"
+            action="droga_inv_settings_trans_type_action"
+            parent="stock.menu_stock_config_settings"
+            sequence="18"/>
+</odoo>

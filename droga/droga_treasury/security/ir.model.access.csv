@@ -1,0 +1,16 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_account_loan,account.loan,model_account_loan,account.group_account_manager,1,1,1,1
+access_account_loan_receipt,account.loan.receipt,model_account_loan_receipt,account.group_account_manager,1,1,1,1
+access_account_loan_int,account.loan.int,model_account_loan_int,account.group_account_manager,1,1,1,1
+access_account_loan_schedule,account.loan.schedule,model_account_loan_schedule,account.group_account_manager,1,1,1,1
+access_account_loan_type,account.loan.type,model_account_loan_type,account.group_account_manager,1,1,1,1
+access_droga_monthly_close,droga.monthly.close,model_droga_monthly_close,account.group_account_manager,1,1,1,1
+access_account_loan_repayment,account.loan.repayment,model_account_loan_repayment,account.group_account_manager,1,1,1,1
+access_account_loan_renew_schedule,account.loan.renew.schedule,model_account_loan_renew_schedule,account.group_account_manager,1,1,1,1
+access_account_loan_renew,account.loan.renew,model_account_loan_renew,account.group_account_manager,1,1,1,1
+access_account_loan_renews,account.loan.renews,model_account_loan_renews,account.group_account_manager,1,1,1,1
+access_account_loan_penality_range,account.loan.penality.range,model_account_loan_penality_range,account.group_account_manager,1,1,1,1
+access_account_loan_repayment_detail,account.loan.repayment.detail,model_account_loan_repayment_detail,account.group_account_manager,1,1,1,1
+access_droga_account_loan_reports_xls_detail,droga.account.loan.reports.xls,model_droga_account_loan_reports_xls,account.group_account_manager,1,1,1,1
+access_droga_loan_daily_report,droga.loan.daily.report,model_droga_loan_daily_report,account.group_account_manager,1,1,1,1
+

@@ -1,0 +1,766 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_order_tree_pharma_to_invoice" model="ir.ui.view">
+        <field name="name">sale.order.tree.pharmacy.invoice</field>
+        <field name="model">sale.order</field>
+        <field name="arch" type="xml">
+            <tree string="" create="0" delete="false">
+                <field name="name"></field>
+                <field name="emp_descr"></field>
+                <field name="date_order"></field>
+                <field name="wareh" string="Branch"></field>
+                <field name="total_disc_pharma" string="Discount"></field>
+                <field name="amount_total" sum="Total"></field>
+                <field name="invoice_status"
+                       decoration-success="invoice_status == 'invoiced' or (invoice_status=='no' and state=='dispense')"
+                       decoration-info="invoice_status == 'to invoice'"
+                       decoration-warning="invoice_status == 'upselling'"
+                       widget="badge" optional="show"/>
+                <field name="state" invisible="1"></field>
+                <field name="invoice_printed"
+                       decoration-success="invoice_printed == 'Yes'"
+                       decoration-warning="invoice_printed == 'No'"
+                       widget="badge" optional="show"/>
+                <button type="object" string="Create Invoice" name="create_inv_local"
+                        attrs="{'invisible': ['|',('state', '!=', 'sale'),('invoice_status','!=','to invoice')]}"
+                        groups="droga_pharma.pharma_br_admin,droga_pharma.pharma_ip_admin"
+                        class="oe_highlight"></button>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_order_tree_pharma_no_invoice" model="ir.ui.view">
+        <field name="name">sale.order.tree.pharmacy.no.invoice</field>
+        <field name="model">sale.order</field>
+        <field name="arch" type="xml">
+            <tree string="" delete="false">
+                <field name="name"></field>
+                <field name="emp_descr"></field>
+                <field name="date_order"></field>
+                <field name="wareh" string="Branch"></field>
+                <field name="total_disc_pharma" string="Discount"></field>
+                <field name="amount_total"></field>
+                <field name="state"
+                       decoration-success="state == 'dispense'"
+                       decoration-info="state == 'sale'"
+                       decoration-warning="state == 'draft'"
+                       widget="badge"></field>
+                <field name="invoice_status"
+                       decoration-success="invoice_status == 'invoiced' or (invoice_status=='no' and state=='dispense')"
+                       decoration-info="invoice_status == 'to invoice'"
+                       decoration-warning="invoice_status == 'upselling'"
+                       widget="badge" optional="show"/>
+                <field name="invoice_printed"
+                       decoration-success="invoice_printed == 'Yes'"
+                       decoration-warning="invoice_printed == 'No'"
+                       widget="badge" optional="show"/>
+                <button type="object" string="Dispense products" name="disp_products"
+                        groups="droga_inventory.inventory_stk"
+                        attrs="{'invisible': ['|',('state', '!=', 'sale'),('invoice_printed','=','No')]}"
+                        class="oe_highlight"></button>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_sales_pharmacy_search_to_invoice" model="ir.ui.view">
+        <field name="name">sale.order.search.pharma.no.invoice</field>
+        <field name="model">sale.order</field>
+        <field name="arch" type="xml">
+            <search string="Sales order">
+                <field name="name"></field>
+                <field name="emp_descr"></field>
+                <field name="state"></field>
+                <field name="date_order"></field>
+                <field name="invoice_status"></field>
+
+                <filter string="Today sales"
+                        domain="[('date_order', '&gt;=', context_today().strftime('%Y-%m-%d')), ('date_order', '&lt;', (context_today() + relativedelta(days=1)).strftime('%Y-%m-%d'))]"
+                        name="today_sales"></filter>
+
+                <filter string="Current week sales"
+                        domain="[
+                        ('date_order', '>=', (datetime.datetime.combine(context_today() + relativedelta(weeks=-1,days=1,weekday=0), datetime.time(0,0,0)).to_utc()).strftime('%Y-%m-%d %H:%M:%S')),
+                        ('date_order', '&lt;', (datetime.datetime.combine(context_today() + relativedelta(days=1,weekday=0), datetime.time(0,0,0)).to_utc()).strftime('%Y-%m-%d %H:%M:%S'))]"
+                        name="current_week_sales"></filter>
+
+                <filter string="Previous week sales"
+                        domain="[
+                    ('date_order', '&lt;', (context_today() + relativedelta(weeks=-1, weekday=6)).strftime('%Y-%m-%d 00:00:00')),
+                    ('date_order', '&gt;', (context_today() + relativedelta(weeks=-2, weekday=6)).strftime('%Y-%m-%d 00:00:00'))]"
+                        name="previous_week_sales"></filter>
+
+                <filter string="Current month sales"
+                        domain="[('date_order','&lt;',(context_today()+relativedelta(months=1)).strftime('%%Y-%%m-01')),
+                        ('date_order','&gt;=',time.strftime('%%Y-%%m-01'))]"
+                        name="current_month_sales"></filter>
+
+                <filter string="Previous month sales"
+                        domain="[('date_order','&gt;=',(context_today()-relativedelta(months=1)).strftime('%%Y-%%m-01')),
+                        ('date_order','&lt;',time.strftime('%%Y-%%m-01'))]"
+                        name="previous_month_sales"></filter>
+                <separator/>
+
+                <filter string="To Invoice" domain="[('invoice_status', '=','to invoice')]" name="to_invoice"></filter>
+
+                <separator/>
+
+                <filter string="Printed not dispensed" domain="[('invoice_printed', '=','Yes'),('state','=','sale')]"
+                        name="to_dispense"></filter>
+                <filter string="Invoiced not printed"
+                        domain="[('invoice_status', '=','invoiced'),('invoice_printed','=','No')]"
+                        name="invoiced_not_printed"></filter>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_order_form_pharma" model="ir.ui.view">
+        <field name="name">sale.order.form.pharmacy</field>
+        <field name="model">sale.order</field>
+        <field name="arch" type="xml">
+            <form string="Sales Order" class="o_sale_order" style="font-size:11pt" delete="0">
+                <header>
+                    <field name="invoice_status" invisible="1"></field>
+                    <button name="action_confirm"
+                            string="Confirm" font-size="16px"
+                            groups="droga_pharma.pharma_dp_admin,droga_pharma.pharma_br_admin"
+                            type="object" class="btn-primary" data-hotkey="q"
+                            attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                    <button name="action_done"
+                            string="Done" font-size="16px"
+                            groups="droga_pharma.physio_user_4k"
+                            type="object" class="btn-primary" data-hotkey="q"
+                            attrs="{'invisible': [('state', '!=', 'memb')]}"/>
+                    <button name="create_inv_local"
+                            string="Create Invoice" font-size="16px"
+                            groups="droga_pharma.pharma_br_admin,droga_pharma.pharma_ip_admin"
+                            type="object" class="btn-primary" data-hotkey="q"
+                            attrs="{'invisible': [('state', '!=', 'sale')]}"/>
+                    <button name="cancel_sales"
+                            string="Cancel" font-size="16px"
+                            groups="droga_pharma.pharma_dp_admin,droga_pharma.pharma_br_admin"
+                            type="object" class="oe_highlight btn-danger" data-hotkey="q"
+                            attrs="{'invisible': ['|',('state','not in',('draft','sale')),('invoice_status', '!=', 'to invoice')]}"/>
+                    <!--
+                    <button name="action_cancel"
+                            string="Cancel" font-size="16px"
+                            groups="droga_pharma.pharma_dp_admin,droga_pharma.pharma_br_admin"
+                            type="object" class="btn-primary" data-hotkey="q"
+                            attrs="{'invisible': ['|',('state','not in',('draft','sale')),('invoice_status', '!=', 'to invoice')]}"/>
+                            -->
+                    <button name="action_confirm"
+                            string="Confirm" font-size="16px"
+                            groups="droga_pharma.pharma_director"
+                            type="object" class="btn-primary" data-hotkey="q"
+                            attrs="{'invisible': [('state', '!=', 'price_request_pharma')]}"/>
+                    <button name="action_amend" class="oe_highlight btn-warning"
+                            string="Amend" font-size="16px"
+                            groups="droga_pharma.pharma_director"
+                            type="object" data-hotkey="q"
+                            attrs="{'invisible': [('state', '!=', 'price_request_pharma')]}"/>
+                    <button name="action_cancel" class="oe_highlight btn-danger"
+                            string="Reject" font-size="16px"
+                            groups="droga_pharma.pharma_director"
+                            type="object" data-hotkey="q"
+                            attrs="{'invisible': [('state', '!=', 'price_request_pharma')]}"/>
+                    <button name="conf_and_invoice"
+                            string="Confirm and create invoice" font-size="16px"
+                            groups="droga_pharma.pharma_di_admin"
+                            type="object" class="btn-primary" data-hotkey="q"
+                            attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                    <button type="object" string="Dispense for manual sales" name="disp_products_manual"
+                            groups="droga_pharma.pharma_di_admin,droga_pharma.pharma_dp_admin"
+                            attrs="{'invisible': ['|',('state','=','dispense'),('state', '!=', 'sale')]}"
+                            class="oe_highlight"></button>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,sale,dispense"/>
+
+                </header>
+
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_invoice"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-pencil-square-o"
+                                attrs="{'invisible': [('invoice_count', '=', 0)]}">
+                            <field name="invoice_count" widget="statinfo" string="Invoices"/>
+                        </button>
+                        <button name="action_mtm_orders"
+                                type="object"
+                                class="oe_stat_button"
+                                string="MTM orders"
+                                icon="fa-credit-card-alt"
+                                attrs="{'invisible': ['|', ('has_mtm_products', '=', False), ('state', '!=', 'dispense')]}">
+
+                        </button>
+
+                        <button type="object"
+                                name="action_view_delivery"
+                                class="oe_stat_button"
+                                icon="fa-truck"
+                                groups="droga_pharma.pharma_director"
+                                attrs="{'invisible': [('delivery_count', '=', 0)]}">
+                            <field name="delivery_count" widget="statinfo" string="Delivery"/>
+                        </button>
+                        <button name="action_counselling_orders"
+                                type="object"
+                                class="oe_stat_button"
+                                string="Counselling orders"
+                                icon="fa-credit-card-alt"
+                                attrs="{'invisible': ['|', ('has_counsell_products', '=', False),  ('state', '!=', 'dispense')]}">
+                        </button>
+                        <field name="show_beauty_button" invisible="1"></field>
+                        <field name="show_vit_button" invisible="1"></field>
+                        <button name="action_beautypicks"
+                                type="object"
+                                class="oe_stat_button"
+                                string="Reward"
+                                attrs="{'invisible': [('show_beauty_button', '=', False)]}"
+                                icon="fa-credit-card-alt">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Reward</span>
+                                <span class="o_stat_text">Beauty-picks</span>
+                            </div>
+                        </button>
+                        <button name="action_supp_rewards"
+                                type="object"
+                                class="oe_stat_button"
+                                attrs="{'invisible': [('show_vit_button', '=', False)]}"
+                                icon="fa-credit-card-alt">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Reward</span>
+                                <span class="o_stat_text">Supplements</span>
+                            </div>
+                        </button>
+                        <field name="has_mtm_products" invisible="1"/>
+                        <field name="has_counsell_products" invisible="1"/>
+                    </div>
+                    <group>
+                        <group>
+                            <div style="white-space:nowrap">
+                                <h1>
+                                    <div>
+                                        Total -
+                                        <field style="color:#89C35C" name="amount_total" readonly="1"/>
+                                        <field name="name" invisible="1"></field>
+                                        <field name="order_from" invisible="1"></field>
+
+                                    </div>
+                                </h1>
+
+
+                            </div>
+
+                        </group>
+
+
+                    </group>
+                    <field name="total_disc_pharma" invisible="1"></field>
+                    <field name="deduct_type" invisible="1"></field>
+                    <field name="deduct_descr" invisible="1"></field>
+                    <group style="white-space:nowrap;font-size:13pt" col="1">
+
+                        <field style="color:#89C35C" attrs="{'invisible': [('total_disc_pharma', '=', 0)]}" name="deduct_descr" string="" readonly="1"/>
+
+                    </group>
+                    <hr></hr>
+                    <group name="sale_header">
+                        <group name="partner_details">
+                            <field name="partner_custom" string="Customer" options='{"no_open":True,"no_create": True}'></field>
+                            <field name="partner_id" invisible="1" widget="res_partner_many2one"
+                                   context="{'res_partner_search_mode': 'customer', 'show_address': 0, 'show_vat': False}"
+                                   options='{"always_reload": True,"no_open":True,"no_create": True}'/>
+
+
+                            <field name="pay_type" invisible="1"/>
+
+                            <field name="customer_emp" attrs="{'invisible': [('pay_type', '=', True)]}"
+                                   context="{'default_parent_customer':partner_id}"
+                                   options="{'no_open':False,'no_create': False}"></field>
+                            <field name="cust_id_linked" attrs="{'invisible': [('pay_type', '=', True)]}"></field>
+
+                            <label for="customer_emp" string="Customer Name"
+                                   attrs="{'invisible': [('pay_type', '=', False)]}"/>
+                            <div class="o_row" attrs="{'invisible': [('pay_type', '=', False)]}">
+
+                                <field name="customer_emp" class="oe_inline"
+                                       context="{'default_parent_customer':partner_id}"
+                                       options="{'no_open':False,'no_create': False}"></field>
+
+                                <label for="cust_id_linked" string="Employee ID"/>
+                                <field name="cust_id_linked" class="oe_inline"></field>
+                            </div>
+
+                            <field name="available_amount_pharma" attrs="{'invisible': [('pay_type', '=', False)]}"
+                                   string="Available balance" options="{'no_create': True}"/>
+
+                            <field name="cust_details" invisible="1"></field>
+                            <field name="referred_by" domain="[('is_company', '=', False)]" context="{'default_company_type':'person','form_view_ref':'droga_pharma.pharma_partner_view'}"
+                                   attrs="{'readonly': [('state', 'in', ('done'))]}"></field>
+                            <field name="manual_price_pharma" attrs="{'readonly': [('state', 'in', ('done'))]}"></field>
+                            <field name="show_invoice_button_pharma" invisible="1"></field>
+                            <field name="partner_invoice_id" groups="account.group_delivery_invoice_address"
+                                   context="{'default_type':'invoice'}" options='{"always_reload": True}'/>
+                            <field name="partner_shipping_id" groups="account.group_delivery_invoice_address"
+                                   context="{'default_type':'delivery'}" options='{"always_reload": True}'/>
+                        </group>
+                        <group name="order_details">
+                            <field name="phone_no" readonly="1" string="Phone No"></field>
+                            <field name="Vat_no" readonly="1" string="Tin No"></field>
+                            <field name="cust_availed_payment_term_ids" invisible="1"></field>
+                            <field name="payment_term_id"
+                                   domain="[('id','in',cust_availed_payment_term_ids),('used_under', 'in', ('BT','PC'))]"
+                                   options="{'no_open':True,'no_create': True}"/>
+                            <div class="o_td_label">
+                                <label for="date_order" string="Order Date"/>
+
+                            </div>
+                            <field name="date_order" nolabel="1"/>
+                            <field name="wareh" readonly="1" string="Pharmacy branch"
+                                   options="{'no_open':True,'no_create': True}"/>
+                            <field name="mature_amount_pharma" style="color:red"
+                                   attrs="{'invisible': [('show_invoice_button_pharma', '=', False)]}"></field>
+                            <field name="show_update_pricelist" invisible="1"/>
+                            <label for="pricelist_id" invisible="1" groups="product.group_product_pricelist"/>
+                            <div groups="product.group_product_pricelist" invisible="1" class="o_row">
+                                <field name="pricelist_id" options="{'no_open':True,'no_create': True}"/>
+                                <button name="action_update_prices" type="object"
+                                        string=" Update Prices"
+                                        help="Recompute all prices based on this pricelist"
+                                        class="btn-link mb-1 px-0" icon="fa-refresh"
+                                        confirm="This will update all unit prices based on the currently set pricelist."
+                                        attrs="{'invisible': ['|', ('show_update_pricelist', '=', False), ('state', 'in', ['sale', 'done', 'cancel'])]}"/>
+                            </div>
+                            <field name="company_id" invisible="1"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="pricelist_id" invisible="1"/>
+                            <field name="tax_country_id" invisible="1"/>
+
+                        </group>
+                    </group>
+                    <field name="cust_details" invisible="1"></field>
+                    <hr attrs="{'invisible': [('cust_details', '=', False)]}"></hr>
+                    <group>
+                        <group>
+                            <field name="cust_details" invisible="1"></field>
+                            <field name="dob" attrs="{'invisible': [('cust_details', '=', False)]}"></field>
+                            <field name="sex" attrs="{'invisible': [('cust_details', '=', False)]}"></field>
+                        </group>
+                        <group>
+                            <field name="cust_details" invisible="1"></field>
+                            <field name="age" attrs="{'invisible': [('cust_details', '=', False)]}"></field>
+                            <field name="weight" attrs="{'invisible': [('cust_details', '=', False)]}"></field>
+                        </group>
+
+
+                    </group>
+                    <notebook>
+                        <page string="Order Lines" name="order_lines">
+                            <field
+                                    name="order_line"
+                                    widget="section_and_note_one2many"
+                                    mode="kanban"
+                                    attrs="{'readonly': [('state', 'in', ('done','cancel'))]}"
+                            >
+                                <form>
+                                    <field name="display_type" invisible="1"/>
+                                    <!--
+                                        We need the sequence field to be here for new lines to be added at the correct position.
+                                        TODO: at some point we want to fix this in the framework so that an invisible field is not required.
+                                    -->
+                                    <field name="sequence" invisible="1"/>
+                                    <field name="available_qty" invisible="1"/>
+                                    <field name="product_uom_category_id" invisible="1"/>
+                                    <group>
+                                        <group attrs="{'invisible': [('display_type', '!=', False)]}"
+                                               style="font-size:11pt">
+                                            <field name="product_updatable" invisible="1"/>
+                                            <field name="product_id" options="{'no_open':True,'no_create': True}"
+                                                   domain="[('order_type','in',('IM','WS','BT','PH','ALL')),('sale_ok', '=', True), '|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]"
+                                                   context="{'partner_id':parent.partner_id, 'quantity':product_uom_pharma_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'company_id': parent.company_id}"
+                                                   attrs="{
+                                                'readonly': [('product_updatable', '=', False)],
+                                                'required': [('display_type', '=', False)],
+                                            }"
+                                                   force_save="1"
+                                                   widget="many2one_barcode"
+                                            />
+                                            <field name="product_type" invisible="1"/>
+                                            <field name="invoice_status" invisible="1"/>
+                                            <field name="qty_to_invoice" invisible="1"/>
+                                            <field name="qty_delivered_method" invisible="1"/>
+                                            <field name="price_total" invisible="1"/>
+                                            <field name="price_tax" invisible="1"/>
+                                            <field name="price_subtotal" invisible="1"/>
+                                            <field name="product_uom_readonly" invisible="1"/>
+                                            <label for="product_uom_pharma_qty"/>
+                                            <div class="o_row" name="ordered_qty">
+                                                <field name="product_uom_pharma_qty"></field>
+                                                <field
+                                                        context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'uom_qty_change':True, 'company_id': parent.company_id}"
+                                                        name="product_uom_qty" invisible="1"/>
+                                                <strong>Unit</strong>
+                                                <field name="product_uom" invisible="1" groups="!uom.group_uom"/>
+                                                <field name="product_uom_pharma_measure_descr" readonly="1"/>
+                                                <field
+                                                        name="product_uom" invisible="1"
+                                                        force_save="1" options="{'no_open':True,'no_create': True}"
+                                                        readonly="1"
+                                                        groups="uom.group_uom"
+                                                        class="oe_no_button"
+                                                />
+                                            </div>
+                                            <label for="qty_delivered" string="Delivered"
+                                                   attrs="{'invisible': [('parent.state', 'not in', ['sale', 'done'])]}"/>
+                                            <div name="delivered_qty"
+                                                 attrs="{'invisible': [('parent.state', 'not in', ['sale', 'done'])]}">
+                                                <field name="qty_delivered"
+                                                       attrs="{'readonly': [('qty_delivered_method', '!=', 'manual')]}"/>
+                                            </div>
+                                            <label for="qty_invoiced" string="Invoiced"
+                                                   attrs="{'invisible': [('parent.state', 'not in', ['sale', 'done'])]}"/>
+                                            <div name="invoiced_qty"
+                                                 attrs="{'invisible': [('parent.state', 'not in', ['sale', 'done'])]}">
+                                                <field name="qty_invoiced"
+                                                       attrs="{'invisible': [('parent.state', 'not in', ['sale', 'done'])]}"/>
+                                            </div>
+                                            <field name="product_packaging_id"
+                                                   attrs="{'invisible': [('product_id', '=', False)]}"
+                                                   options="{'no_open':True,'no_create': True}"
+                                                   context="{'default_product_id': product_id, 'tree_view_ref':'product.product_packaging_tree_view', 'form_view_ref':'product.product_packaging_form_view'}"
+                                                   groups="product.group_stock_packaging"/>
+
+                                            <label for="discount" invisible="1"
+                                                   groups="product.group_discount_per_so_line"/>
+                                            <div name="discount" invisible="1"
+                                                 groups="product.group_discount_per_so_line">
+                                                <field name="discount" class="oe_inline" invisible="1"/>
+                                            </div>
+                                            <!--
+                                                We need the sequence field to be here
+                                                because we want to be able to overwrite the default sequence value in the JS
+                                                in order for new lines to be added at the correct position.
+                                                NOTE: at some point we want to fix this in the framework so that an invisible field is not required.
+                                            -->
+                                            <field name="sequence" invisible="1"/>
+                                        </group>
+                                        <group attrs="{'invisible': [('display_type', '!=', False)]}"
+                                               style="font-size:11pt">>
+                                            <field name="disc_applied" invisible="1"></field>
+                                            <label for="price_unit" string="Unit price"/>
+                                            <div class="o_row">
+                                                <field name="price_unit" readonly="1"/>
+                                                <strong>Taxes</strong>
+                                                <field name="tax_id" widget="many2many_tags"
+                                                       readonly="1"/>
+                                            </div>
+                                            <field name="disc_applied" invisible="1"></field>
+                                        </group>
+                                        <hr></hr>
+                                        <group>
+                                            <field name="tracking" invisible="1"></field>
+                                            <field name="lot_id" attrs="{'readonly': [('tracking', '!=', 'lot')]}"
+                                                   options="{'no_open':True,'no_create': True}"
+                                                   domain="[('product_id', '=', product_id)]"></field>
+                                        </group>
+                                    </group>
+                                    <field name="state" invisible="1"/>
+                                    <field name="company_id" invisible="1"/>
+                                </form>
+                                <tree
+                                        string="Sales Order Lines"
+                                        editable="bottom"
+                                >
+                                    <control>
+                                        <create name="add_product_control" string="Add a product"/>
+                                        <create name="add_section_control" string="Add a section"
+                                                context="{'default_display_type': 'line_section'}"/>
+                                        <create name="add_note_control" string="Add a note"
+                                                context="{'default_display_type': 'line_note'}"/>
+                                    </control>
+                                    <field name="available_qty" invisible="1"/>
+                                    <field name="sequence" widget="handle"/>
+                                    <!-- We do not display the type because we don't want the user to be bothered with that information if he has no section or note. -->
+                                    <field name="display_type" invisible="1"/>
+                                    <field name="product_uom_category_id" invisible="1"/>
+                                    <field name="product_type" invisible="1"/>
+                                    <field name="product_updatable" invisible="1"/>
+                                    <field
+                                            name="product_id"
+                                            attrs="{
+                                        'readonly': [('product_updatable', '=', False)],
+                                        'required': [('display_type', '=', False)],
+                                    }"
+                                            force_save="1"
+                                            context="{
+                                        'partner_id': parent.partner_id,
+                                        'quantity': product_uom_qty,
+                                        'pricelist': parent.pricelist_id,
+                                        'uom':product_uom,
+                                        'company_id': parent.company_id,
+                                        'default_lst_price': price_unit,
+                                        'default_description_sale': name
+                                    }"
+                                            options="{'no_open':True,'no_create': True}"
+                                            domain="[('sale_ok', '=', True), '|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]"
+                                            widget="sol_product_many2one"
+                                    />
+                                    <field name="product_template_id"
+                                           string="Product"
+                                           invisible="1"
+                                           attrs="{
+                                        'readonly': [('product_updatable', '=', False)],
+                                        'required': [('display_type', '=', False)],
+                                    }"
+                                           context="{
+                                        'partner_id': parent.partner_id,
+                                        'quantity': product_uom_qty,
+                                        'pricelist': parent.pricelist_id,
+                                        'uom':product_uom,
+                                        'company_id': parent.company_id,
+                                        'default_list_price': price_unit,
+                                        'default_description_sale': name
+                                    }"
+                                           options="{
+                                        'no_open': True,
+                                    }"
+                                           domain="[('sale_ok', '=', True), '|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]"
+                                           widget="sol_product_many2one"/>
+                                    <field name="name" widget="section_and_note_text" optional="show"/>
+                                    <field name="analytic_distribution" widget="analytic_distribution"
+                                           optional="hide"
+                                           groups="analytic.group_analytic_accounting"
+                                           options="{'product_field': 'product_id', 'business_domain': 'sale_order'}"/>
+                                    <field
+                                            name="product_uom_qty"
+                                            decoration-info="(not display_type and invoice_status == 'to invoice')"
+                                            decoration-bf="(not display_type and invoice_status == 'to invoice')"
+                                            context="{
+                                        'partner_id': parent.partner_id,
+                                        'quantity': product_uom_qty,
+                                        'pricelist': parent.pricelist_id,
+                                        'uom': product_uom,
+                                        'company_id': parent.company_id
+                                    }"
+                                    />
+                                    <field
+                                            name="qty_delivered"
+                                            decoration-info="(not display_type and invoice_status == 'to invoice')"
+                                            decoration-bf="(not display_type and invoice_status == 'to invoice')"
+                                            string="Delivered"
+                                            attrs="{
+                                        'column_invisible': [('parent.state', 'not in', ['sale', 'done'])],
+                                        'readonly': [('qty_delivered_method', '!=', 'manual')]
+                                    }"
+                                            optional="show"
+                                    />
+                                    <field name="qty_delivered_method" invisible="1"/>
+                                    <field name="disc_applied" invisible="1"></field>
+                                    <field
+                                            name="qty_invoiced"
+                                            decoration-info="(not display_type and invoice_status == 'to invoice')"
+                                            decoration-bf="(not display_type and invoice_status == 'to invoice')"
+                                            string="Invoiced"
+                                            attrs="{'column_invisible': [('parent.state', 'not in', ['sale', 'done'])]}"
+                                            optional="show"
+                                    />
+                                    <field name="qty_to_invoice" invisible="1"/>
+                                    <field name="product_uom_readonly" invisible="1"/>
+                                    <field name="product_uom" invisible="1" groups="!uom.group_uom"/>
+                                    <field
+                                            name="product_uom"
+                                            force_save="1"
+                                            string="UoM"
+                                            attrs="{
+                                        'readonly': [('product_uom_readonly', '=', True)],
+                                        'required': [('display_type', '=', False)],
+                                    }"
+                                            context="{'company_id': parent.company_id}"
+                                            groups="uom.group_uom"
+                                            options='{"no_open": True}'
+                                            optional="show"
+                                    />
+                                    <field
+                                            name="customer_lead"
+                                            optional="hide"
+                                            attrs="{'readonly': [('parent.state', 'not in', ['draft', 'sent', 'sale'])]}"
+                                    />
+                                    <field name="product_packaging_qty"
+                                           attrs="{'invisible': ['|', ('product_id', '=', False), ('product_packaging_id', '=', False)]}"
+                                           groups="product.group_stock_packaging" optional="show"/>
+                                    <field name="product_packaging_id"
+                                           attrs="{'invisible': [('product_id', '=', False)]}"
+                                           context="{'default_product_id': product_id, 'tree_view_ref':'product.product_packaging_tree_view', 'form_view_ref':'product.product_packaging_form_view'}"
+                                           groups="product.group_stock_packaging" optional="show"/>
+                                    <field
+                                            name="price_unit"
+                                            attrs="{'readonly': [('qty_invoiced', '&gt;', 0)]}"
+                                    />
+                                    <field
+                                            name="tax_id"
+                                            widget="many2many_tags"
+                                            options="{'no_create': True}"
+                                            domain="[('type_tax_use','=','sale'),('company_id','=',parent.company_id), ('country_id', '=', parent.tax_country_id)]"
+                                            context="{'active_test': True}"
+                                            readonly="1"
+                                            optional="show"
+                                    />
+                                    <field name="discount" string="Disc.%" groups="product.group_discount_per_so_line"
+                                           optional="show" widget="sol_discount"/>
+                                    <field name="is_downpayment" invisible="1"/>
+                                    <field name="price_subtotal" widget="monetary"
+                                           groups="account.group_show_line_subtotals_tax_excluded"
+                                           attrs="{'invisible': [('is_downpayment', '=', True)]}"/>
+                                    <field name="price_total" widget="monetary"
+                                           groups="account.group_show_line_subtotals_tax_included"
+                                           attrs="{'invisible': [('is_downpayment', '=', True)]}"/>
+                                    <field name="state" invisible="1"/>
+                                    <field name="invoice_status" invisible="1"/>
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="price_tax" invisible="1"/>
+                                    <field name="company_id" invisible="1"/>
+                                </tree>
+                                <kanban class="o_kanban_mobile">
+                                    <field name="name"/>
+                                    <field name="product_id"/>
+                                    <field name="product_uom_qty"/>
+                                    <field name="product_uom"/>
+                                    <field name="price_subtotal"/>
+                                    <field name="price_total"/>
+                                    <field name="available_qty"/>
+                                    <field name="price_tax" invisible="1"/>
+                                    <field name="price_total" invisible="1"/>
+                                    <field name="price_unit"/>
+                                    <field name="state" invisible="1"/>
+                                    <field name="phar_cont_price"/>
+                                    <field name="disc_applied"/>
+                                    <field name="phar_cont_price_marginc"/>
+                                    <field name="manual_price_pharma"/>
+                                    <field name="display_type"/>
+                                    <field name="tax_id" invisible="1"/>
+                                    <field name="company_id" invisible="1"/>
+                                    <templates>
+                                        <t t-name="kanban-box">
+                                            <div t-attf-class="oe_kanban_card oe_kanban_global_click ps-0 pe-0 {{ record.display_type.raw_value ? 'o_is_' + record.display_type.raw_value : '' }}">
+                                                <t t-if="!record.display_type.raw_value">
+                                                    <div class="row g-0">
+                                                        <div class="col-2 pe-3">
+                                                            <img t-att-src="kanban_image('product.product', 'image_128', record.product_id.raw_value)"
+                                                                 t-att-title="record.product_id.value"
+                                                                 t-att-alt="record.product_id.value"
+                                                                 style="max-width: 100%;"/>
+                                                        </div>
+                                                        <div class="col-10">
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <strong t-out="record.product_id.value"/>
+                                                                </div>
+                                                                <div class="col-auto">
+                                                                    <t t-set="line_price"
+                                                                       t-value="record.price_subtotal.value"
+                                                                       groups="account.group_show_line_subtotals_tax_excluded"/>
+                                                                    <t t-set="line_price"
+                                                                       t-value="record.price_total.value"
+                                                                       groups="account.group_show_line_subtotals_tax_included"/>
+                                                                    <strong class="float-end text-end"
+                                                                            t-out="line_price"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+
+                                                                <div class="col-12 text-muted">
+                                                                    Quantity:
+                                                                    <t t-out="record.product_uom_qty.value"/>
+                                                                    <![CDATA[&nbsp;]]>
+                                                                    <t t-out="record.product_uom.value"/>
+                                                                </div>
+                                                                <div class="col-12 text-muted">
+                                                                    Available:
+                                                                    <t t-out="record.available_qty.value"/>
+                                                                </div>
+                                                                <div class="col-12 text-muted">
+                                                                    Unit Price:
+                                                                    <t t-out="record.price_unit.value"/>
+                                                                </div>
+                                                                <div class="col-12 text-muted"
+                                                                     attrs="{'invisible': [('manual_price_pharma', '=', False),('disc_applied','=',0)]}">
+                                                                    Unit Price default:
+                                                                    <t t-out="record.phar_cont_price.value"/>
+                                                                </div>
+                                                                <div class="col-12 text-muted"
+                                                                     attrs="{'invisible': [('manual_price_pharma', '=', False)]}">
+                                                                    Discount margin:
+                                                                    <t t-out="record.phar_cont_price_marginc.value"/>
+                                                                </div>
+                                                                <div class="col-12 text-muted"
+                                                                     attrs="{'invisible': ['|',('disc_applied','=',0),('manual_price_pharma', '=', True)]}">
+                                                                    Discount margin:
+                                                                    <t t-out="record.disc_applied.value*-1" />%
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </t>
+                                                <t t-if="record.display_type.raw_value === 'line_section' || record.display_type.raw_value === 'line_note'">
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <t t-out="record.name.value"/>
+                                                        </div>
+                                                    </div>
+                                                </t>
+                                            </div>
+                                        </t>
+                                    </templates>
+                                </kanban>
+                            </field>
+                            <group name="note_group" col="6" class="mt-2 mt-md-0">
+                                <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                                    <field name="tax_totals" widget="account-tax-totals-field" nolabel="1" colspan="2"
+                                           readonly="1"/>
+                                </group>
+
+                                <div class="clearfix"/>
+                            </group>
+                        </page>
+                    </notebook>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </sheet>
+            </form>
+
+        </field>
+    </record>
+
+    <record id="droga_sales_order_pharmacy_action" model="ir.actions.act_window">
+        <field name="name">Sales order</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">
+            {'default_partner_custom':8584,'default_order_from':'PH','default_payment_term_id':11,'search_default_today_sales':1}
+        </field>
+        <field name="domain">[('order_from','like','PH'),('has_pharma_access','=',True)]</field>
+        <field name="search_view_id" ref="droga_sales_pharmacy_search_to_invoice"></field>
+        <field name="view_ids" eval="[(5, 0, 0),
+        (0, 0, {'view_mode': 'tree', 'view_id': ref('view_order_tree_pharma_no_invoice')}),
+         (0, 0, {'view_mode': 'form', 'view_id': ref('view_order_form_pharma')})]"/>
+    </record>
+
+    <record id="droga_sales_pharmacy_action_to_invoice" model="ir.actions.act_window">
+        <field name="name">Sales invoice</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">
+            {'default_payment_term_id':11,'default_order_from':'PH','search_default_to_invoice':1,'search_default_today_sales':1}
+        </field>
+        <field name="domain">[('order_from','like','PH'),('has_pharma_access','=',True),('invoice_status','in',('to invoice','invoiced'))]
+        </field>
+        <field name="search_view_id" ref="droga_sales_pharmacy_search_to_invoice"></field>
+        <field name="view_ids" eval="[(5, 0, 0),
+        (0, 0, {'view_mode': 'tree', 'view_id': ref('view_order_tree_pharma_to_invoice')}),
+         (0, 0, {'view_mode': 'form', 'view_id': ref('view_order_form_pharma')})]"/>
+    </record>
+
+</odoo>
+

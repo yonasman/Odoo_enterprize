@@ -1,0 +1,281 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <record id="droga_fleet_request_tree_action" model="ir.actions.act_window">
+            <field name="name">Fleet request</field>
+            <field name="res_model">droga.fleet.request</field>
+            <field name="view_mode">tree,form,kanban</field>
+        </record>
+        <record id="droga_fleet_request_tree_action_user_only" model="ir.actions.act_window">
+            <field name="name">Fleet request</field>
+            <field name="res_model">droga.fleet.request</field>
+            <field name="view_mode">tree,form,kanban</field>
+            <field name="domain">[('create_uid','=',uid)]</field>
+        </record>
+        <record id="droga_fleet_request_form" model="ir.ui.view">
+            <field name="name">Fleet Request</field>
+            <field name="model">droga.fleet.request</field>
+            <field name="arch" type="xml">
+                <form string="Fleet Request">
+                    <header>
+                        <field name="status" widget="statusbar"
+                               statusbar_visible="draft,submitted,approved,assigned,completed"/>/>
+
+                        <button name="submit_fleet_request" string="Submit" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('status', '!=', 'draft')]}"
+                        />
+
+
+                        <button name="accept_request" string="Accept Request" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('status', '!=', 'submitted')]}"
+                                groups="droga_fleet.droga_fleet_manager"/>
+
+                        <button name="reject_request" string="Reject Request" type="object" class="btn-danger"
+                                attrs="{'invisible': [('status', '!=', 'submitted')]}"
+                                groups="droga_fleet.droga_fleet_manager"/>
+
+
+                        <button name="driver_assigned" string="Assign Driver" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('status', '!=', 'approved')]}"
+                                groups="droga_fleet.droga_fleet_manager"
+                        />
+
+
+                        <button name="reject_driver" string="Cancel Driver Assignment" type="object" class="btn-danger"
+                                attrs="{'invisible': [('status', '!=', 'approved')]}"
+                                groups="droga_fleet.droga_fleet_manager"/>
+
+                        <button name="driver_assigned_queue" string="Assign Driver" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('status', '!=', 'queued')]}"
+                                groups="droga_fleet.droga_fleet_manager"
+                        />
+
+                        <button name="reject_driver_queue" string="Cancel Driver Assignment" type="object"
+                                class="btn-danger"
+                                attrs="{'invisible': [('status', '!=', 'queued')]}"
+                                groups="droga_fleet.droga_fleet_manager"/>
+
+                        <button name="completed" string="Mark As Completed" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('status', '!=', 'assigned')]}"
+                                groups="droga_fleet.droga_fleet_manager"
+                        />
+
+
+                    </header>
+                    <sheet>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+
+                        <group>
+
+                            <group>
+                                <field name="sale_origin" invisible="1"></field>
+                                <field name="requested_by" attrs="{'readonly': [('status', '!=', 'draft')]}"/>
+                                <field name="request_type"
+                                       attrs="{'readonly': ['|',('status', '!=', 'draft'),('sale_origin','!=',False)]}"/>
+                                <field name="company" attrs="{'readonly': [('status', '!=', 'draft')]}"/>
+                                <field name="sale_origin" readonly="1"
+                                       attrs="{'invisible': [('sale_origin', '=', False)]}"/>
+
+                            </group>
+                            <group>
+                                <field name="date" readonly="1"/>
+                                <field name="purpose" attrs="{'readonly': [('status', '!=', 'draft')]}"/>
+                                <field name="department" attrs="{'readonly': [('status', '!=', 'draft')]}"
+                                />
+                            </group>
+                        </group>
+
+                        <br/>
+                        <br/>
+                        <h4>Request Details</h4>
+                        <hr/>
+
+
+                        <notebook>
+                            <page string="Requests">
+                                <field name="task_ids">
+                                    <tree editable="bottom">
+                                        <field name="request_type" invisible="1"/>
+                                        <field name="status" invisible="1"/>
+
+
+                                        <field name="requested_for"
+                                               attrs="{'readonly':[('parent.status', '!=', 'draft')] , 'column_invisible' : [('parent.request_type', '!=', 'employee_transportation')]}"/>
+                                        <field name="delivered_to"
+                                               attrs="{'readonly':[('parent.status', '!=', 'draft')] ,  'column_invisible' : [('parent.request_type', '!=', 'resource_transportation')]}"/>
+                                        <field name="resource_name"
+                                               attrs="{'readonly':[('parent.status', '!=', 'draft')] ,  'column_invisible' : [('parent.request_type', '!=', 'resource_transportation')]}"/>
+                                        <field name="amount" string="Quantity"
+                                               attrs="{'readonly':[('parent.status', '!=', 'draft')] ,  'column_invisible' : [('parent.request_type', '!=', 'resource_transportation')] }"/>
+
+                                        <field name="from_location"
+                                               attrs="{'readonly':[('parent.status', '!=', 'draft')]}"/>
+                                        <field name="to_location"
+                                               attrs="{'readonly':[('parent.status', '!=', 'draft')]}"/>
+                                        <field name="service_time"
+                                               attrs="{'readonly':[('parent.status', '!=', 'draft')]}"/>
+                                        <field name="comment" attrs="{'readonly':[('parent.status', '!=', 'draft')]}"/>
+
+                                        <field name="vehicle" options="{'no_create': True, 'no_open': True}"
+                                               attrs="{'readonly':[('parent.status', '!=', 'approved')]}"
+                                               domain="[('available', '=', True)]"
+                                               groups="droga_fleet.droga_fleet_manager"/>
+                                        <field name="chauffeur_drivers" options="{'no_create': True, 'no_open': True}"
+                                               attrs="{'readonly':[('parent.status', '!=', 'approved')]}"
+                                               groups="droga_fleet.droga_fleet_manager"/>
+
+                                        <field name="time_taken"
+                                               attrs="{'readonly':[('parent.status', '!=', 'draft')]}"
+                                               groups="droga_fleet.droga_fleet_manager"/>
+
+                                    </tree>
+                                </field>
+
+                            </page>
+                        </notebook>
+
+
+                    </sheet>
+
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+
+
+                </form>
+            </field>
+        </record>
+
+
+        <record id="droga_fleet_request_tree" model="ir.ui.view">
+            <field name="name">fleet.request.tree.view</field>
+            <field name="model">droga.fleet.request</field>
+            <field name="arch" type="xml">
+
+                <tree string="Fleet Requests">
+
+
+                    <field name="name"/>
+                    <field name="requested_by"/>
+                    <field name="request_type"/>
+                    <field name="requested_for" string="Delivered To/ Requested For"/>
+
+                    <field name="resource_name" string="Resource to be Transported"/>
+                    <field name="amount" string="Quantity"/>
+
+                    <field name="chauffeur" string="Assigned Driver"/>
+                    <field name="vehicle_used"/>
+                    <field name="travel_log"/>
+                    <field name="date"/>
+                    <field name="status"
+                           decoration-success="status == 'completed'"
+                           decoration-info="status == 'assigned'"
+                           decoration-muted="status =='queued'"
+                           decoration-primary="status == 'approved'"
+                           decoration-danger="status == 'cancelled'"
+                           widget="badge"/>
+
+
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="droga_fleet_request_kanban" model="ir.ui.view">
+            <field name="name">fleet.request.kanban.view</field>
+            <field name="model">droga.fleet.request</field>
+            <field name="arch" type="xml">
+
+                <kanban class="o_kanban_mobile" sample="1">
+                    <field name="name"/>
+                    <field name="requested_by"/>
+                    <field name="request_type"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_global_click">
+                                <div class="o_kanban_image">
+                                </div>
+                                <div class="oe_kanban_details">
+                                    <strong class="o_kanban_record_title">
+                                        Requested BY:
+                                    </strong>
+                                    <field name="requested_by"/>
+                                    <br/>
+                                    <hr/>
+
+                                    <strong class="o_kanban_record_title">
+                                        Request Type:
+                                    </strong>
+                                    <field name="request_type"/>
+                                    <br/>
+                                    <hr/>
+
+                                    <strong class="o_kanban_record_title">
+                                        Fleet Request Number:
+                                    </strong>
+                                    <field name="name"/>
+                                    <br/>
+                                    <hr/>
+
+
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+
+            </field>
+        </record>
+
+    </data>
+
+    <data>
+        <record id="view_cancel_reason_wizard_form" model="ir.ui.view">
+            <field name="name">cancel.reason.wizard.form</field>
+            <field name="model">cancel.reason.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Cancel Reason">
+                    <group>
+                        <group>
+                            <field name="rejection_reason"/>
+
+
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="confirm_cancel" string="Confirm" type="object" class="btn-primary"/>
+                        <button name="cancel" string="Cancel" type="object" class="btn-secondary"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record id="action_cancel_reason_wizard" model="ir.actions.act_window">
+            <field name="name">Cancel Reason Wizard</field>
+            <field name="res_model">cancel.reason.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+
+        <record id="view_employee_form_inherit" model="ir.ui.view">
+            <field name="name">hr.employee.form.inherit</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='study_school']" position="after">
+                    <field name="driver_license_type"/>
+                </xpath>
+
+            </field>
+        </record>
+
+
+    </data>
+
+
+</odoo>

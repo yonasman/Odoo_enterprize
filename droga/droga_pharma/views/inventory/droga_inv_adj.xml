@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="droga_stock_adjustment_request_form_pharma" model="ir.ui.view">
+        <field name="model">droga.stock.adjustment.request</field>
+        <field name="name">Stock Adjustment</field>
+        <field name="arch" type="xml">
+            <form delete="0">
+                <header>
+                    <button name="requestp"
+                            attrs="{'invisible': [('state', 'not in', ('draft'))]}"
+                            string="Request" type="object" class="oe_highlight" data-hotkey="v"/>
+                    <button name="stmgp_approve"
+                            attrs="{'invisible': [('state', 'not in', ('stmgp'))]}"
+                            groups="droga_pharma.pharma_supply_chain_manager"
+                            string="Approve" type="object" class="oe_highlight" data-hotkey="v"/>
+                    <button name="finp_approve"
+                            attrs="{'invisible': [('state', 'not in', ('finmgp'))]}"
+                            groups="droga_pharma.pharma_fin"
+                            string="Approve" type="object" class="oe_highlight" data-hotkey="v"/>
+                    <button name="amend"
+                            attrs="{'invisible': [('state', 'not in', ('stmgp','finmgp','mtmg'))]}"
+                            groups="droga_inventory.pharma_supply_chain_manager,droga_pharma.pharma_fin"
+                            string="Amend" type="object" class="oe_highlight btn-warning" data-hotkey="v"/>
+                    <button name="action_cancel"
+                            attrs="{'invisible': [('state', 'not in', ('draft'))]}"
+                            string="Cancel" type="object" class="oe_highlight" data-hotkey="v"/>
+                    <button name="action_open_adj"
+                            attrs="{'invisible': [('state', 'not in', ('waiting','processed'))]}"
+                            string="Open adjustement" groups="droga_inventory.inv_prod_fin,droga_pharma.pharma_fin" type="object" class="oe_highlight" data-hotkey="v"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,stmgp,finmgp,waiting,processed"/>
+                </header>
+                <sheet>
+                    <group string="Stock Adjustment Request Form">
+                        <group>
+                            <field name="to_correct_ref" options="{'no_create':True,'no_open':True}"/>
+                            <field name="request_date_time" readonly="1"/>
+                            <field name="remark"/>
+                        </group>
+                        <group>
+                            <field name="source_location_id" domain="['|',('complete_name','like','Partners/'),'|',('has_access','=',True),('con_type','=','DIL')]" options="{'no_create':True,'no_open':True}"/>
+                            <field name="dest_location_id" domain="['|',('complete_name','like','Partners/'),'|',('has_access','=',True),('con_type','=','DIL')]" options="{'no_create':True,'no_open':True}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Order Line">
+                            <field name="stock_adjustment_detail_entries">
+                                <tree editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="product_uom"/>
+                                    <field name="qty"/>
+                                    <field name="product_uom_category_id" invisible="1"></field>
+                                    <field name="lot_ser_no" domain="[('product_id','=',product_id)]"/>
+                                    <field name="expiry_date"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                    <!--                Chatter-->
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids" options="{'post_refresh': 'recipients'}"/>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="droga_stock_adjustment_request_form_pharma_inherit" model="ir.ui.view">
+        <field name="name">droga.stock.adjustment.request.inherit</field>
+        <field name="model">droga.stock.adjustment.request</field>
+        <field name="inherit_id" ref="droga_inventory.droga_stock_adjustment_request_form"/>
+        <field name="arch" type="xml">
+            <button name="request" position="after">
+                <button name="stmgp_approve"
+                            attrs="{'invisible': [('state', 'not in', ('stmgp'))]}"
+                            groups="droga_pharma.pharma_supply_chain_manager"
+                            string="Approve" type="object" class="oe_highlight" data-hotkey="v"/>
+                    <button name="finp_approve"
+                            attrs="{'invisible': [('state', 'not in', ('finmgp'))]}"
+                            groups="droga_pharma.pharma_fin"
+                            string="Approve" type="object" class="oe_highlight" data-hotkey="v"/>
+                    <button name="amend"
+                            attrs="{'invisible': [('state', 'not in', ('stmgp','finmgp','mtmg'))]}"
+                            groups="droga_inventory.pharma_supply_chain_manager,droga_pharma.pharma_fin"
+                            string="Amend" type="object" class="oe_highlight btn-warning" data-hotkey="v"/>
+                    <button name="action_open_adj"
+                            attrs="{'invisible': [('state', 'not in', ('waiting','processed'))]}"
+                            string="Open adjustement" groups="droga_inventory.inv_prod_fin,droga_pharma.pharma_fin" type="object" class="oe_highlight" data-hotkey="v"/>
+            </button>
+        </field>
+    </record>
+
+    <record id="droga_stock_adjustment_request_tree_pharma" model="ir.ui.view">
+        <field name="model">droga.stock.adjustment.request</field>
+        <field name="name">Stock Adjustment request</field>
+        <field name="arch" type="xml">
+            <tree delete="0">
+                <field name="name"/>
+                <field name="to_correct_ref"/>
+                <field name="operation_type"/>
+                <field name="source_location_id"/>
+                <field name="dest_location_id"/>
+                <field name="request_date_time"/>
+                <field name="state" decoration-warning="state in('waiting')"
+                       decoration-success="state == 'processed'" widget="badge"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_stock_adjustment_request_view_id_pharma" model="ir.actions.act_window">
+        <field name="name">Stock adjustment request</field>
+        <field name="res_model">droga.stock.adjustment.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">['|',('has_access','=',True),('create_uid','=',uid)]</field>
+        <field name="context">
+            {'default_order_from':'PH'}</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('droga_stock_adjustment_request_tree_pharma')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('droga_stock_adjustment_request_form_pharma')})]"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create Your First Stock Adjustment Request
+            </p>
+        </field>
+    </record>
+    <menuitem id="stock_adjustment_pharma"
+              name="Stock adjustment request"
+              parent="droga_pharma.droga_pharma_inventory"
+              sequence="4"
+              groups="droga_pharma.pharma_dp_admin,droga_pharma.pharma_br_admin,droga_pharma.pharma_di_admin,droga_pharma.pharma_supply_chain_manager,droga_pharma.pharma_fin"
+              action="droga_stock_adjustment_request_view_id_pharma"/>
+</odoo>

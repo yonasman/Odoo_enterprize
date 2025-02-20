@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--actions -->
+    <record id="purchase_form_local_finance_action" model="ir.actions.act_window">
+        <field name="name">Purchase Orders</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">tree,kanban,form,pivot,graph,calendar,activity</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('purchase.purchase_order_view_tree')}),
+            (0, 0, {'view_mode': 'kanban', 'view_id': ref('purchase.purchase_order_view_kanban_without_dashboard')}),
+        ]"/>
+        <field name="domain">[('request_type','=','Local')]</field>
+        <field name="search_view_id" ref="purchase.purchase_order_view_search"/>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No purchase order found. Let's create one!
+            </p>
+            <p>
+                Once you ordered your products to your supplier, confirm your request for quotation and it will turn
+                into a purchase order.
+            </p>
+        </field>
+    </record>
+
+    <record id="purchase_form_foreign_finance_action" model="ir.actions.act_window">
+        <field name="name">Purchase Orders</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">tree,kanban,form,pivot,graph,calendar,activity</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('purchase.purchase_order_view_tree')}),
+            (0, 0, {'view_mode': 'kanban', 'view_id': ref('purchase.purchase_order_view_kanban_without_dashboard')}),
+        ]"/>
+        <field name="domain">[('request_type','=','Foregin')]</field>
+        <field name="search_view_id" ref="purchase.purchase_order_view_search"/>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No purchase order found. Let's create one!
+            </p>
+            <p>
+                Once you ordered your products to your supplier, confirm your request for quotation and it will turn
+                into a purchase order.
+            </p>
+        </field>
+    </record>
+
+
+    <!--menus -->
+    <menuitem id="droag_account_request_froms" name="Approvals" sequence="30"
+              parent="account_accountant.menu_accounting" groups="account.group_account_manager">
+        <menuitem id="droag_account_payment_request_froms" name="Payment Request" sequence="1"
+                  groups="account.group_account_manager">
+
+            <menuitem id="droga_account_payment_request_menu" name="Payment Request"
+                      action="droga_account_payment_request_action" groups="account.group_account_manager"
+                      sequence="1"/>
+            <!--<menuitem id="droga_account_payment_request_urgent_menu" name="Payment Request Urgent" action="droga_account_payment_request_urgent_action" groups="account.group_account_manager" sequence="2"/>
+            <menuitem id="droga_account_payment_request_withoutpo_menu" name="Payment Request Without PO" action="droga_account_payment_request_withoutpo_action" groups="account.group_account_manager" sequence="3"/>-->
+
+
+        </menuitem>
+    </menuitem>
+
+    <menuitem id="droga_account_check_followup_menu" name="Check Followup" action="droga_account_check_followup_action"
+              groups="account.group_account_manager" parent="account_accountant.menu_accounting" sequence="10"/>
+
+    <menuitem id="droga_account_transaction_type_menu" name="Transaction Type" action="account_transaction_type_action"
+              groups="account.group_account_manager" parent="account.account_account_menu" sequence="1"/>
+
+    <menuitem id="droga_sales_branch_address_view_menu" name="Branch Address"
+              action="droga_sales_branch_address_view_action"
+              groups="account.group_account_manager" parent="account.account_account_menu" sequence="2"/>
+
+    <menuitem id="droga_purchase_order_finance" parent="account.menu_finance_payables" name="Purchase Order"
+              groups="account.group_account_manager" sequence="900">
+        <menuitem id="droga_purchase_order_local_finance_menu" name="Local" sequence="3"
+                  action="purchase_form_local_finance_action"
+                  groups="account.group_account_manager"/>
+        <menuitem id="droga_purchase_order_foreign_finance_menu" name="Foreign" sequence="3"
+                  action="purchase_form_foreign_finance_action"
+                  groups="account.group_account_manager"/>
+    </menuitem>
+
+    <!-- withholding follow-up report -->
+    <menuitem id="droga_reciveables_report" parent="account.menu_finance_receivables" name="Reports"
+              groups="account.group_account_manager" sequence="1000">
+        <menuitem id="droga_account_payment_customer_report_tree_menu" name="Payment Followup"
+                  action="action_account_payments_customer_reports"
+                  groups="account.group_account_manager" sequence="1"/>
+        <menuitem id="droga_withholding_customer_followup_menu" name="Withholding Followup"
+                  action="droga_withholding_customer_followup_action"
+                  groups="account.group_account_manager" sequence="2"/>
+        <menuitem id="droga_account_move_crv_report_tree_menu" name="CRV List Report"
+                  action="droga_account_move_crv_report_tree_action"
+                  groups="account.group_account_manager" sequence="3"/>
+    </menuitem>
+
+
+    <menuitem id="droga_payables_report" parent="account.menu_finance_payables" name="Reports"
+              groups="account.group_account_manager" sequence="1000">
+        <menuitem id="droga_account_payment_vendor_report_tree_menu" name="Payment Followup"
+                  action="action_account_payments_vendor_reports"
+                  groups="account.group_account_manager" sequence="1"/>
+        <menuitem id="droga_withholding_vendor_followup_menu" name="Withholding Followup"
+                  action="droga_withholding_vendor_followup_action"
+                  groups="account.group_account_manager" sequence="2"/>
+
+
+    </menuitem>
+
+
+    <menuitem id="droga_account_withholding_report" parent="account.menu_finance_reports" name="Reports"
+              groups="account.group_account_manager">
+        <menuitem id="droga_account_withholding_report_menu" name="Withholding Report"
+                  action="droga_finance_reports_withholding_excel_action" groups="account.group_account_manager"
+                  sequence="1"/>
+
+        <menuitem id="droga_account_customer_outstanding_balance_report_menu" name="Customer Outstanding Report - Excel"
+                  action="droga_finance_reports_outstanding_balance_excel_action" groups="account.group_account_manager"
+                  sequence="2"/>
+
+        <menuitem id="droga_account_customer_outstanding_balance_report_tree_menu" name="Customer Outstanding Report"
+                  action="droga_finance_reports_outstanding_invoice_balance_tree_action"
+                  groups="account.group_account_manager"
+                  sequence="3"/>
+
+        <menuitem id="droga_account_payment_report_tree_menu" name="Payment Report"
+                  action="action_account_payments_reports"
+                  groups="account.group_account_manager"
+                  sequence="4"/>
+
+        <menuitem id="droga_trial_balance_report_tree_menu" name="Ledger detail by Cost Center"
+                  action="view_move_line_trial_balance_action"
+                  groups="account.group_account_manager"
+                  sequence="5"/>
+
+        <menuitem id="droga_trial_balance_report_by_analytics_tree_menu" name="Trial Balance by Analytics"
+                  action="view_trial_balance_by_analytics_action"
+                  groups="account.group_account_manager"
+                  sequence="6"/>
+
+
+    </menuitem>
+
+    <!-- check setting menu-->
+    <menuitem id="droga_check_setting_finance_menu" name="Check Setting" sequence="4"
+              action="check_setting_action"
+              groups="account.group_account_manager" parent="account.account_banks_menu"/>
+
+
+</odoo>

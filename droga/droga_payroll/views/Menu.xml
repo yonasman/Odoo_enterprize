@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <menuitem id="droga_hr_payroll_pd_menu" name="Payment and Deductions"
+              groups="hr.group_hr_user" parent="hr_work_entry_contract_enterprise.menu_hr_payroll_root" sequence="61">
+
+        <menuitem id="hr_payroll_payment_deduction_menu" name="Payment and Deductions"
+                  action="hr_payroll_payment_deduction_action"
+                  groups="hr.group_hr_user" sequence="1"/>
+
+        <menuitem id="hr_payroll_rate_tree_menu" name="Rates"
+                  action="hr_payroll_rate_tree_action"
+                  groups="hr.group_hr_user" sequence="2"/>
+
+        <menuitem id="hr_payroll_variable_payment_tree_menu" name="Variable Payments"
+                  action="hr_payroll_variable_payment_tree_action"
+                  groups="hr.group_hr_user" sequence="3"/>
+    </menuitem>
+
+     <menuitem id="menu_hr_payslip_line_tree" name="Payslip Lines"
+              parent="hr_payroll.menu_hr_payroll_report"
+              action="action_hr_payslip_line_tree_action"/>
+
+
+</odoo>

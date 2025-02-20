@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="droga_crm_reports_visit_plan_excel_action" model="ir.actions.act_window">
+        <field name="name">Visit plan - Excel</field>
+        <field name="res_model">droga.crm.reports.visit.log</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="droga_crm_reports_visit_plan_excel_form" model="ir.ui.view">
+        <field name="name">droga.crm.reports.visit.log.form</field>
+        <field name="model">droga.crm.reports.visit.log</field>
+        <field name="arch" type="xml">
+            <form string="" delete="0">
+                <group>
+                    <field name="visit" string="Visit" options="{'no_create':True,'no_open':True}"></field>
+                    <field name="week_num" options="{'no_create':True,'no_open':True}"></field>
+                </group>
+                <footer>
+                    <button name="action_get_xls" string="Get Excel" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <menuitem
+            id="menu_visit_reports"
+            name="Reports"
+            parent="crm.crm_menu_root"
+            sequence="19"/>
+
+    <menuitem
+            id="droga_sales_mr_waiter_report_menu"
+            name="Sales waiter report"
+            action="droga_sales.droga_sales_waiteraction"
+            parent="droga_crm.menu_visit_reports"
+            groups="crm_mr"
+            sequence="17"/>
+
+    <menuitem
+            id="menu_excel_vist_reports"
+            name="Excel reports"
+            parent="menu_visit_reports"
+            sequence="25"/>
+
+    <menuitem
+            id="droga_crm_reports_visit_plan_excel_menu"
+            name="Visit plan - Excel"
+            action="droga_crm_reports_visit_plan_excel_action"
+            parent="menu_excel_vist_reports"
+            groups="crm_mr"
+            sequence="11"/>
+</odoo>

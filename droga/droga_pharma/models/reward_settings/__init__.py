@@ -1,0 +1,2 @@
+from . import droga_pharma_referral_reward,droga_pharma_reward_gain_settings,\
+    droga_pharma_reward_issue_settings,droga_pharma_high_value_purchase_reward,droga_pharma_breast_feed_reward_contact_type,droga_discount_per_branch_group

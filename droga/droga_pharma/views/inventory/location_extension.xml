@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="droga_pharma_location_type" model="ir.ui.view">
+        <field name="name">Location type extension</field>
+        <field name="model">stock.location</field>
+        <field name="inherit_id" ref="stock.view_location_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/group/group/field[@name='usage']" position="after">
+                <field name="parent_loc_type" invisible="1"></field>
+                <field name="pharmacy_location_type" attrs="{'invisible': [('parent_loc_type', '!=', 'PH')]}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="droga_view_production_lot_view_tree" model="ir.ui.view">
+        <field name="name">droga.stock.production.lot.tree.inherit.product.expiry</field>
+        <field name="model">stock.lot</field>
+        <field name="inherit_id" ref="stock.view_production_lot_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='create_date']" position="before">
+                <field name="expiration_date"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="droga_pharma_stock_warehouse_disp_extension" model="ir.ui.view">
+        <field name="name">stock.warehouse.inherited.has.dispensary</field>
+        <field name="model">stock.warehouse</field>
+        <field name="inherit_id" ref="stock.view_warehouse"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/group/group/field[@name='code']" position="after">
+                <field name="wh_type" invisible="1"></field>
+                <field name="has_dispensary_location" attrs="{'invisible': [('wh_type', '!=', 'PH')]}"/>
+                <field name="linked_analytic" domain="[('plan_id', '=',2)]" options="{'no_create':True,'no_open':True}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

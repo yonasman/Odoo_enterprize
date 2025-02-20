@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="droga_tender_uom_action" model="ir.actions.act_window">
+        <field name="name">UOM registry</field>
+        <field name="res_model">droga.tender.uom</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <record id="droga_tender_uom_tree" model="ir.ui.view">
+        <field name="name">droga.tender.uom.tree</field>
+        <field name="model">droga.tender.uom</field>
+        <field name="arch" type="xml">
+            <tree create="1" string="" delete="0" editable="top">
+                <field name="uom_name"></field>
+                <field name="status"></field>
+            </tree>
+        </field>
+    </record>
+
+    <menuitem
+            id="droga_tender_uom_menu"
+            name="UOM Registry"
+            action="droga_tender_uom_action"
+            parent="tender_settings_menu"
+            sequence="14"/>
+</odoo>

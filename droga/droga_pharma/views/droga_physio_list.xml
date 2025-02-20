@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="droga_physio_list_action" model="ir.actions.act_window">
+        <field name="name">Physiotherapist registry</field>
+        <field name="res_model">droga.physiotherapist.list</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="droga_physio_list_view_tree" model="ir.ui.view">
+        <field name="name">droga.physiotherapist.list.view.tree</field>
+        <field name="model">droga.physiotherapist.list</field>
+        <field name="arch" type="xml">
+            <tree string="" delete="0">
+                <field name="physiotherapist_name"></field>
+                <field name="branch_w"></field>
+                <field name="status"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_physio_list_view_form" model="ir.ui.view">
+        <field name="name">droga.physiotherapist.list.view.form</field>
+        <field name="model">droga.physiotherapist.list</field>
+        <field name="arch" type="xml">
+            <form string="" delete="0">
+                <sheet>
+                    <group>
+                        <field name="physiotherapist_name" options="{'no_create':True,'no_open':True}"></field>
+                        <field name="branch_w"></field>
+                        <field name="status"></field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <menuitem
+            id="droga_physio_settings_menu"
+            name="Settings"
+            parent="droga_pharma.physio_main_menu"
+            groups="physio_admin"
+            sequence="101"/>
+
+    <menuitem
+            id="droga_physio_list_menu"
+            name="Physiotherapist Registry"
+            action="droga_physio_list_action"
+            parent="droga_physio_settings_menu"
+            groups="physio_admin"
+            sequence="18"/>
+</odoo>

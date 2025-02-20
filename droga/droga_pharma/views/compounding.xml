@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="droga_pharma_compounding_tree" model="ir.ui.view">
+        <field name="name">droga.pharma.compounding.tree</field>
+        <field name="model">droga.pharma.compounding</field>
+        <field name="arch" type="xml">
+            <tree string="" create="1" delete="0">
+                <field name="item_to_prepare"></field>
+                <field name="calc_applied"/>
+                <field name="mixing_inst"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="droga_pharma_compounding_form" model="ir.ui.view">
+        <field name="name">droga.pharma.compounding.form</field>
+        <field name="model">droga.pharma.compounding</field>
+        <field name="arch" type="xml">
+            <form string="Compounding" delete="0">
+                <sheet>
+                    <group string="Compounded item">
+                        <group>
+                            <field name="item_to_prepare" domain="[('detailed_type', '=','service')]" options="{'no_create':True,'no_open':True}"></field>
+                            <field name="calc_applied"/>
+                            <field name="lb_prec"/>
+                            <field name="container_used"/>
+                        </group>
+                        <group>
+                            <field name="lb_expiry_date"/>
+                            <field name="mixing_inst"/>
+                            <field name="lb_dur"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Compounding detail">
+                            <field name="comp_detail">
+                                <tree editable="bottom">
+                                    <field name="ingredient" required="1" options="{'no_create':True,'no_open':True}"/>
+                                    <field name="product_uom_category_id" invisible="1"/>
+                                    <field name="qty"/>
+                                    <field name="product_uom"/>
+                                    <field name="uom_remark"></field>
+                                </tree>
+                            </field>
+                        </page>
+
+                    </notebook>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="droga_pharma_compounding_action" model="ir.actions.act_window">
+        <field name="name">Items compounding composition</field>
+        <field name="res_model">droga.pharma.compounding</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

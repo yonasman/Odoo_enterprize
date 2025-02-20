@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="droga_report_total_tender" model="ir.ui.view">
+            <field name="name">droga.report.total.tender</field>
+            <field name="model">droga.tender.master</field>
+            <field name="arch" type="xml">
+                <tree string="" create="false" delete="false" expand="1">
+                    <field name="customer" ></field>
+                    <field name="customer_type"></field>
+                    <field name="ten_id" string="Tender ID"></field>
+                    <button icon="fa-edit" string="" type="object"
+                                                name="open_tender" class="oe_stat_button"/>
+                    <field name="item_types"></field>
+                    <field name="posted_date_gre" string="Floated date"></field>
+                    <field name="closing_date_gre" string="Closing date"></field>
+                    <field name="bid_security_amount_char"></field>
+                    <field name="bid_doc_purch_price"></field>
+                    <field name="phone_add"></field>
+                </tree>
+            </field>
+        </record>
+
+        <record id="droga_tender_report_total_tenders" model="ir.actions.act_window">
+            <field name="name">Total tenders</field>
+            <field name="res_model">droga.tender.master</field>
+            <field name="view_mode">tree</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('droga_report_total_tender')})]"/>
+        </record>
+</odoo>

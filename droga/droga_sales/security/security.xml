@@ -1,0 +1,74 @@
+<odoo>
+     <record model="ir.module.category" id="sales_management">
+             <field name="name">Sales</field>
+             <field name="description">User access level for sales module</field>
+             <field name="sequence">20</field>
+        </record>
+
+
+    <record id="sales_admin" model="res.groups">
+        <field name="name">Droga sales Admin, discount rate admin</field>
+        <field name="category_id" ref="sales_management"/>
+    </record>
+
+    <record id="sales_price_change_admin" model="res.groups">
+        <field name="name">Droga price change workflow approver</field>
+        <field name="category_id" ref="sales_management"/>
+    </record>
+
+    <record id="sales_import_final_approve" model="res.groups">
+        <field name="name">Droga import sales final workflow approver</field>
+        <field name="category_id" ref="sales_management"/>
+    </record>
+
+    <record id="sales_droga_export_approver" model="res.groups">
+        <field name="name">Droga export sales workflow approver</field>
+        <field name="category_id" ref="sales_management"/>
+    </record>
+
+    <record id="sales_import_approve_admin" model="res.groups">
+        <field name="name">Droga import sales workflow approver</field>
+        <field name="category_id" ref="sales_management"/>
+    </record>
+
+    <record id="sales_wholesale_approve_admin" model="res.groups">
+        <field name="name">Droga wholesale sales workflow approver</field>
+        <field name="category_id" ref="sales_management"/>
+    </record>
+
+    <record id="sales_wholesale_invoicer" model="res.groups">
+        <field name="name">Droga wholesale invoicer</field>
+        <field name="category_id" ref="sales_management"/>
+    </record>
+    <record id="ema_invoicer" model="res.groups">
+        <field name="name">EMA invoicer</field>
+        <field name="category_id" ref="sales_management"/>
+    </record>
+    <record id="payment_term_update" model="res.groups">
+        <field name="name">Payment term update access</field>
+        <field name="category_id" ref="sales_management"/>
+    </record>
+    <record id="sales_import_invoicer" model="res.groups">
+        <field name="name">Droga import invoicer</field>
+        <field name="category_id" ref="sales_management"/>
+    </record>
+
+     <record id="maraki_pos_access" model="res.groups">
+        <field name="name">Maraki POS Access</field>
+        <field name="category_id" ref="sales_management"/>
+    </record>
+
+    <record id="analytic_tax_access" model="res.groups">
+        <field name="name">Analytic tax access</field>
+        <field name="category_id" ref="sales_management"/>
+    </record>
+
+    <record model="ir.rule" id="droga_sales_cost_of_sales_rule">
+        <field name="name">Cost of sales multi-company</field>
+        <field name="model_id" ref="model_droga_sales_cost_of_sales"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>
+
+

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="droga_sales_discount_per_branch_group" model="ir.ui.view">
+        <field name="name">droga.price.discount.per.branch.group.tree</field>
+        <field name="model">droga.price.discount.per.branch.group</field>
+        <field name="arch" type="xml">
+            <tree delete="0">
+                <field name="prod_grp" widget="many2many_tags" options="{'no_create':True,'no_open':True}"></field>
+                        <field name="branch" widget="many2many_tags" options="{'no_create':True,'no_open':True}"></field>
+                        <field name="percent" digits="[2, 10]"></field>
+                        <field name="status"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_sales_discount_per_branch_group_search" model="ir.ui.view">
+        <field name="name">droga.price.discount.per.branch.group.search</field>
+        <field name="model">droga.price.discount.per.branch.group</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="prod_grp" options="{'no_create':True,'no_open':True}"></field>
+                        <field name="branch" options="{'no_create':True,'no_open':True}"></field>
+                        <field name="percent" digits="[2, 10]"></field>
+                        <field name="status"></field>
+            </search>
+        </field>
+    </record>
+
+    <record id="droga_sales_discount_per_branch_group_form" model="ir.ui.view">
+        <field name="name">droga.price.discount.per.branch.group.form</field>
+        <field name="model">droga.price.discount.per.branch.group</field>
+        <field name="arch" type="xml">
+            <form delete="0">
+                <sheet>
+                    <group>
+                        <field name="prod_grp" widget="many2many_tags"  options="{'no_create':True,'no_open':True}"></field>
+                        <field name="branch" widget="many2many_tags" options="{'no_create':True,'no_open':True}"></field>
+                        <field name="percent" digits="[2, 10]"></field>
+                        <field name="status"></field>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="droga_sales_discount_per_branch_group_action" model="ir.actions.act_window">
+        <field name="name">Discount per branch and group</field>
+        <field name="res_model">droga.price.discount.per.branch.group</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids"
+               eval="[(5, 0, 0),(0, 0, {'view_mode': 'tree', 'view_id': ref('droga_sales_discount_per_branch_group')})]"/>
+        <field name="search_view_id" ref="droga_sales_discount_per_branch_group_search"></field>
+
+    </record>
+</odoo>

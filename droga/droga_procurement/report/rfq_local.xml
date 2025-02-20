@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <!-- action for offer analysis report -->
+
+    <record id="droga_purchase_offer_analysis_local_report_pivot_action" model="ir.actions.report">
+        <field name="name">Offer Analysis Sheet Pivot</field>
+        <field name="model">droga.purchase.request.rfq.local</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">droga_procurement.droga_purchase_offer_analysis_local_report</field>
+        <field name="report_file">droga_procurement.droga_purchase_offer_analysis_local_report</field>
+        <field name="print_report_name">'Offer Analysis Report - %s' % (object.name)
+        </field>
+        <field name="binding_model_id" ref="model_droga_purchase_request_rfq_local"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="droga_purchase_offer_analysis_local_report_action" model="ir.actions.report">
+        <field name="name">Offer Analysis Sheet</field>
+        <field name="model">droga.purchase.request.rfq.local</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">droga_procurement.droga_purchase_offer_analysis1_local_report</field>
+        <field name="report_file">droga_procurement.droga_purchase_offer_analysis1_local_report</field>
+        <field name="print_report_name">'Offer Analysis Report - %s' % (object.name)
+        </field>
+        <field name="binding_model_id" ref="model_droga_purchase_request_rfq_local"/>
+        <field name="binding_type">report</field>
+    </record>
+
+
+    <template id="droga_purchase_offer_analysis_local_report" name="Offer Analysis Sheet">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-foreach="docs" t-as="o">
+
+
+                    <!-- get unique items -->
+                    <t t-set="suppliers" t-value="set(o.rfq_lines.mapped('supplier_id'))"/>
+                    <t t-set="products" t-value="set(o.rfq_lines.mapped('product_id'))"/>
+                    <t t-set="supplier_orders" t-value="[]"/>
+
+                    <t t-set="supplier_count" t-value="len(suppliers)"/>
+
+
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <h2>Offer Analysis Sheet #
+                            <span t-field="o.name"/>
+                        </h2>
+
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-3 bm-2">
+                                <strong>Purchase Request No:</strong>
+                                <p t-field="o.purchase_request_id.name" class="m-0"/>
+                            </div>
+
+                            <div class="col-3 bm-2">
+                                <strong>Date:</strong>
+                                <p t-field="o.date" class="m-0"/>
+                            </div>
+
+                        </div>
+                        <br/>
+
+
+                        <table style="width:100%" class="table table-hover table-sm table-pos-info">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th name="th_no">
+                                        <strong class="small">No</strong>
+                                    </th>
+                                    <th name="th_description">
+                                        <strong class="small">Description</strong>
+                                    </th>
+
+
+                                    <t t-foreach="suppliers" t-as="supplier">
+                                        <th colspan="3" class="text-center">
+                                            <strong class="small" t-esc="supplier.name"/>
+                                        </th>
+                                    </t>
+
+                                </tr>
+                                <tr>
+                                    <th colspan="2">
+                                    </th>
+                                    <t t-foreach="suppliers" t-as="supplier">
+                                        <th>
+                                            <strong class="small float-right">Unit Price</strong>
+                                        </th>
+                                        <th>
+                                            <strong class="small float-right">Qty</strong>
+                                        </th>
+                                        <th>
+                                            <strong class="small float-right">Total Price</strong>
+                                        </th>
+                                    </t>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="products" t-as="product">
+                                    <tr colspan="2">
+                                        <td>
+                                            <span t-esc="product_index + 1"/>
+                                        </td>
+
+                                        <td>
+                                            <span t-esc="product.name" class="small"/>
+                                        </td>
+
+
+                                        <t t-set="supplier_offer_count" t-value="0"/>
+
+                                        <t t-foreach="o.rfq_lines" t-as="line">
+
+
+                                            <div t-if="line.product_id.id == product.id">
+
+                                                <t t-set="supplier_offer_count" t-value="supplier_offer_count + 1"/>
+
+
+                                                <t t-if="line.winner=='Yes'">
+                                                    <t t-set="style"
+                                                       t-value="'background-color:#E3E8E8;font-weight: bold;'"/>
+                                                </t>
+                                                <t t-if="line.winner=='No'">
+                                                    <t t-set="style" t-value="'color:black'"/>
+                                                </t>
+
+                                                <td t-att-style="style">
+                                                    <span t-esc="'{0:,.2f}'.format(line.unit_price)"
+                                                          class="small float-left"/>
+                                                </td>
+                                                <td t-att-style="style">
+                                                    <span t-esc="line.product_qty"
+                                                          class="small float-left"/>
+                                                </td>
+                                                <td t-att-style="style">
+                                                    <span t-esc="'{0:,.2f}'.format(line.total_price)"
+                                                          class="small float-left"/>
+                                                </td>
+                                            </div>
+                                        </t>
+
+
+                                        <!-- if there is a suppliers not submitted an offer for the item fill the row with empty data -->
+                                        <t t-if="supplier_offer_count!=supplier_count">
+
+                                            <!--get the difference-->
+                                            <t t-set="supplier_empty" t-value="supplier_count-supplier_offer_count"/>
+
+                                            <t t-foreach="range(supplier_empty)" t-as="l">
+                                                <td>
+                                                    <span class="small">-</span>
+                                                </td>
+                                                <td>
+                                                    <span class="small">-</span>
+                                                </td>
+                                                <td>
+                                                    <span class="small">-</span>
+                                                </td>
+                                            </t>
+
+                                        </t>
+
+
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+
+                        <br></br>
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-3 bm-2">
+                                <strong>Prepared By:</strong>
+                                <p t-field="o.create_uid.name" class="m-0"/>
+                            </div>
+
+                            <div class="col-3 bm-2">
+                                <strong>Checked By:</strong>
+                                <t t-foreach="o.approvals" t-as="approver">
+                                    <t t-if="approver.rule_id.method=='checked'">
+                                        <p t-esc="approver.user_id.name" class="m-0"/>
+
+                                    </t>
+
+                                </t>
+
+                            </div>
+
+                        </div>
+
+                        <br></br>
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-12 bm-2">
+                                <strong>Remark</strong>
+                                <p t-field="o.remark" class="m-0"/>
+                            </div>
+                        </div>
+
+                        <br></br>
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-12 bm-2">
+                                <strong>Technical remark</strong>
+                                <p t-field="o.technical_remark" class="m-0"/>
+                            </div>
+                        </div>
+                        <br></br>
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-6 bm-2">
+
+
+                                <table style="width:100%" class="table table-hover table-sm table-pos-info">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <td>Name of Committee</td>
+                                            <td>Signature</td>
+                                        </tr>
+                                    </thead>
+                                    <t t-foreach="o.approvals" t-as="approver">
+                                        <t t-if="approver.rule_id.method=='committee_approval'">
+                                            <tr>
+                                                <td height="35">
+                                                    <span t-esc="approver.user_id.name"/>
+
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                        </t>
+                                    </t>
+                                    <t t-foreach="o.procurement_committee" t-as="committee1">
+                                        <tr>
+                                            <td height="35">
+                                                <span t-esc="committee1.name"/>
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                    </t>
+
+                                </table>
+
+                            </div>
+                        </div>
+                        <br></br>
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-3 bm-2">
+                                <strong>Approved By:</strong>
+                                <t t-foreach="o.approvals" t-as="approver">
+                                    <t t-if="approver.rule_id.method=='ceo_approval'">
+                                        <tr>
+                                            <td height="35">
+                                                <span t-esc="approver.user_id.name"/>
+
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                    </t>
+                                </t>
+                            </div>
+
+                            <div class="col-3 bm-2">
+                                <strong>Authorized By:</strong>
+                                <!--<p t-field="o.create_uid.name" class="m-0"/>-->
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- offer analysis report -->
+    <template id="droga_purchase_offer_analysis1_local_report" name="Offer Analysis Sheet">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-foreach="docs" t-as="o">
+
+
+                    <!-- get unique items -->
+                    <t t-set="suppliers" t-value="set(o.rfq_lines.mapped('supplier_id'))"/>
+                    <t t-set="products" t-value="set(o.rfq_lines.mapped('product_id'))"/>
+                    <t t-set="supplier_orders" t-value="[]"/>
+                    <t t-set="line_counter" t-value="1"/>
+
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <h3>Offer Analysis Sheet #
+                            <span t-field="o.name"/>
+                        </h3>
+
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-3 bm-2">
+                                <strong>Purchase Request No:</strong>
+                                <p t-field="o.purchase_request_id.name" class="m-0"/>
+                            </div>
+
+                            <div class="col-3 bm-2">
+                                <strong>Date:</strong>
+                                <p t-field="o.date" class="m-0"/>
+                            </div>
+
+                        </div>
+                        <br/>
+
+
+                        <table style="width:100%" class="table table-hover table-sm table-pos-info">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th name="th_no">
+                                        <strong class="small">No</strong>
+                                    </th>
+                                    <th name="th_description">
+                                        <strong class="small">Description</strong>
+                                    </th>
+                                    <th name="th_quantity">
+                                        <strong class="small">Qty</strong>
+                                    </th>
+                                    <th name="th_uom">
+                                        <strong class="small">UoM</strong>
+                                    </th>
+                                    <th name="th_unit_price">
+                                        <strong class="small float-right">Unit Price</strong>
+                                    </th>
+                                    <th name="th_total_price">
+                                        <strong class="small float-right">Total Price</strong>
+                                    </th>
+                                    <th class="text-center">
+                                        <strong class="small">Winner</strong>
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+                            <tbody>
+                                <t t-foreach="products" t-as="product">
+                                    <tr>
+                                        <td colspan="7">
+
+                                            <strong t-esc="product.name"/>
+
+                                        </td>
+                                    </tr>
+
+                                    <t t-foreach="o.rfq_lines" t-as="line">
+                                        <t t-if="product.id==line.product_id.id">
+
+
+                                            <tr>
+                                                <td>
+                                                    <span t-esc="line_counter" class="small"/>
+                                                </td>
+                                                <td>
+                                                    <span t-esc="line.supplier_id.name" class="small"/>
+                                                </td>
+                                                <td>
+                                                    <span t-esc="line.product_qty" class="small"/>
+                                                </td>
+                                                <td>
+                                                    <span t-esc="line.product_uom.name" class="small"/>
+                                                </td>
+                                                <td>
+                                                    <span t-esc="'{0:,.2f}'.format(line.unit_price)"
+                                                          class="small float-right"/>
+                                                </td>
+                                                <td>
+                                                    <span t-esc="'{0:,.2f}'.format(line.total_price)"
+                                                          class="small float-right"/>
+                                                </td>
+                                                <td class="text-center">
+                                                    <t t-if="line.winner=='Yes'">
+                                                        <span t-esc="line.winner" class="small"/>
+
+                                                    </t>
+
+                                                    <t t-else="">
+                                                        <span t-esc="line.winner" class="small"/>
+                                                    </t>
+
+                                                </td>
+                                            </tr>
+                                            <t t-set="line_counter" t-value="line_counter+1"/>
+
+                                        </t>
+
+                                    </t>
+                                    <t t-set="line_counter" t-value="1"/>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <br></br>
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-3 bm-2">
+                                <strong>Prepared By:</strong>
+                                <p t-field="o.create_uid.name" class="m-0"/>
+                            </div>
+
+                            <div class="col-3 bm-2">
+                                <strong>Checked By:</strong>
+
+                            </div>
+
+                        </div>
+
+                        <br></br>
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-12 bm-2">
+                                <strong>Remark</strong>
+                                <p t-field="o.remark" class="m-0"/>
+                            </div>
+                        </div>
+
+                        <br></br>
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-12 bm-2">
+                                <strong>Technical remark</strong>
+                                <p t-field="o.technical_remark" class="m-0"/>
+                            </div>
+                        </div>
+                        <br></br>
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-6 bm-2">
+                                <t t-foreach="request.env['droga.purhcase.committee'].search([])" t-as="committees">
+                                    <table style="width:100%" class="table table-hover table-sm table-pos-info">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <td>Name of Committee</td>
+                                                <td>Signature</td>
+                                            </tr>
+                                        </thead>
+                                        <t t-foreach="committees.names" t-as="committee">
+                                            <tr>
+                                                <td>
+                                                    <span t-esc="committee.name"/>
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                        </t>
+                                        <t t-foreach="o.procurement_committee" t-as="committee1">
+                                            <tr>
+                                                <td>
+                                                    <span t-esc="committee1.name"/>
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                        </t>
+
+                                    </table>
+                                </t>
+                            </div>
+                        </div>
+                        <br></br>
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-3 bm-2">
+                                <strong>Approved By:</strong>
+                                <!--<p t-field="o.create_uid.name" class="m-0"/>-->
+                            </div>
+
+                            <div class="col-3 bm-2">
+                                <strong>Authorized By:</strong>
+                                <!--<p t-field="o.create_uid.name" class="m-0"/>-->
+                            </div>
+
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="droga_pharma_stock_card_inq_action" model="ir.actions.act_window">
+        <field name="name">Stock card</field>
+        <field name="res_model">droga.pharma.stock.card.inquiry</field>
+        <field name="view_mode">form</field>
+    </record>
+
+    <record id="droga_pharma_stock_card_inq_form" model="ir.ui.view">
+        <field name="name">droga.pharma.stock.card.inquiry.form</field>
+        <field name="model">droga.pharma.stock.card.inquiry</field>
+        <field name="arch" type="xml">
+            <form string="Stock card" delete="0">
+                <sheet>
+                   <group string="Stock card">
+                        <group>
+                            <field name="warehouse" domain="[('has_access','=',True)]" options="{'no_create':True,'no_open':True}"></field>
+                            <field name="date_from"></field>
+                        </group>
+                        <group>
+                            <field name="product" options="{'no_create':True,'no_open':True}" domain="['|', ('active', '=', False), ('active', '=', True)]"></field>
+                            <field name="date_to"></field>
+                        </group>
+                       <button name="load_results" type="object" string="Load results"/>
+                    </group>
+
+                    <notebook>
+                        <page string="Transactions">
+                            <field name="results"
+                                   attrs="{'readonly':1}">
+                                <tree editable="false">
+                                    <field name="date"/>
+                                    <field name="doc_no"/>
+                                    <field name="fs_no"/>
+                                    <field name="rece_from"/>
+                                    <field name="qty_rec"/>
+                                    <field name="qty_iss"/>
+                                    <field name="loss_adj"/>
+                                    <field name="bal"/>
+                                    <field name="uom"/>
+                                    <field name="batch_no"/>
+                                    <field name="exp_date"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+</odoo>

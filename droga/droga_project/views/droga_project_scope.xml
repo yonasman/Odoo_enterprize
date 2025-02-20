@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="view_project_project_tree" model="ir.ui.view">
+            <field name="name">project.view_project_project_tree_scop</field>
+            <field name="model">project.scope.version</field>
+            <field name="arch" type="xml">
+                <tree string="">
+                    <field name="name"></field>
+                    <field name="version_no"></field>
+                    <field name="version_date"></field>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="view_project_project_form" model="ir.ui.view">
+            <field name="name">project.view_project_project_form_scop</field>
+            <field name="model">project.scope.version</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <notebook>
+                            <page string="Project Scope">
+                                <group col="1">
+                                    <group>
+                                        <field name="intro_text"/>
+                                    </group>
+
+                                    <group string="Project objectives"></group>
+                                        <field name="objectives_data">
+                                            <tree editable="bottom">
+                                                <field name="obj" string="Objectives"/>
+                                            </tree>
+                                        </field>
+
+
+                                    <group string="Project deliverables"></group>
+                                    <field name="deliverables_data">
+                                        <tree editable="bottom">
+
+                                            <field name="deliverables" string="Deliverable"/>
+                                            <field name="capacity"/>
+                                            <field name="remark"/>
+
+                                        </tree>
+                                    </field>
+
+                                    <group string="Project constraints"></group>
+                                    <field name="constraints_data">
+                                        <tree editable="bottom">
+                                            <field name="type"/>
+                                            <field name="descr"/>
+                                            <field name="project_start_date"/>
+                                            <field name="launch"/>
+                                            <field name="project_end_date"/>
+                                            <field name="project_constraints"/>
+                                        </tree>
+                                    </field>
+
+                                    <group string="Project tasks"></group>
+                                    <field name="task_data">
+                                        <tree editable="bottom">
+
+                                            <field name="tasks" string="Task"/>
+
+
+                                        </tree>
+                                    </field>
+
+                                    <group string="Project out of scopes"></group>
+                                    <field name="out_of_scope_data">
+                                        <tree editable="bottom">
+
+                                            <field name="out_of_scope"/>
+                                            <field name="descr"/>
+
+
+                                        </tree>
+                                    </field>
+
+                                    <group string="Project Assumptions"></group>
+                                    <field name="assumption_data">
+                                        <tree editable="bottom">
+                                            <field name="assumption" string="Assumption"/>
+                                            <field name="desc"/>
+
+
+                                        </tree>
+                                    </field>
+
+                                    <group string="Project Approvals"></group>
+                                    <field name="approval_data">
+                                        <tree editable="bottom">
+
+                                            <field name="stake_holder"/>
+                                            <field name="role"/>
+                                            <field name="date_submitted"/>
+                                            <field name="date_received"/>
+
+
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="project_button_tree_inherit" model="ir.ui.view">
+            <field name="name">droga.project.tree.inherit.project</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.view_project"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='user_id']" position="after">
+                    <button icon="fa-credit-card-alt" type="object" string="Project scopes" name="project_versions"
+                            class="oe_stat_button"></button>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+
+</odoo>

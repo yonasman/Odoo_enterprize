@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="inv_uom_manager" model="res.groups">
+        <field name="name">Unit of measure manager</field>
+        <field name="category_id" ref="base.module_category_inventory_inventory"/>
+    </record>
+
+    <record id="inventory_dm" model="res.groups">
+        <field name="name">Delivery and distribution manager</field>
+        <field name="category_id" ref="base.module_category_inventory_inventory"/>
+        <field name="implied_ids" eval="[(4, ref('stock.group_stock_user'))]"/>
+    </record>
+    <record id="inventory_stk" model="res.groups">
+        <field name="name">Storekeeper</field>
+        <field name="category_id" ref="base.module_category_inventory_inventory"/>
+        <field name="implied_ids" eval="[(4, ref('stock.group_stock_user'))]"/>
+    </record>
+    <record id="inventory_core" model="res.groups">
+        <field name="name">Core products register</field>
+        <field name="category_id" ref="base.module_category_inventory_inventory"/>
+        <field name="implied_ids" eval="[(4, ref('stock.group_stock_user'))]"/>
+    </record>
+    <record id="pharmacy_price_change" model="res.groups">
+        <field name="name">Pharmacy price controller</field>
+        <field name="category_id" ref="base.module_category_inventory_inventory"/>
+        <field name="implied_ids" eval="[(4, ref('stock.group_stock_user'))]"/>
+    </record>
+
+    <record id="droga_prod_app" model="res.groups">
+        <field name="name">Product registration approver</field>
+        <field name="category_id" ref="base.module_category_inventory_inventory"/>
+        <field name="implied_ids" eval="[(4, ref('stock.group_stock_user'))]"/>
+    </record>
+
+    <record id="inv_prod_mi_manager" model="res.groups">
+        <field name="name">Product register access medical items (pharmacy, import and ws)</field>
+        <field name="category_id" ref="base.module_category_inventory_inventory"/>
+    </record>
+    <record id="inv_prod_sc_manager" model="res.groups">
+        <field name="name">Product register access services</field>
+        <field name="category_id" ref="base.module_category_inventory_inventory"/>
+    </record>
+    <record id="inv_prod_os_manager" model="res.groups">
+        <field name="name">Product register access office supplies</field>
+        <field name="category_id" ref="base.module_category_inventory_inventory"/>
+    </record>
+    <record id="inv_prod_ex_manager" model="res.groups">
+        <field name="name">Product register access Export items</field>
+        <field name="category_id" ref="base.module_category_inventory_inventory"/>
+    </record>
+    <record id="inv_prod_fin_wf" model="res.groups">
+        <field name="name">Finance inventory workflow approver</field>
+        <field name="category_id" ref="base.module_category_inventory_inventory"/>
+    </record>
+    <record id="inv_prod_fin_wareloc" model="res.groups">
+        <field name="name">Finance inventory warehouse and location controler</field>
+        <field name="category_id" ref="base.module_category_inventory_inventory"/>
+    </record>
+    <record id="inv_prod_fin" model="res.groups">
+        <field name="name">Finance inventory controller</field>
+        <field name="category_id" ref="base.module_category_inventory_inventory"/>
+    </record>
+    <record id="marketing_manager" model="res.groups">
+        <field name="name">Droga Marketing manager (samples approver)</field>
+        <field name="category_id" ref="base.module_category_inventory_inventory"/>
+    </record>
+    <record id="stores_manager" model="res.groups">
+        <field name="name">Droga Stores manager import</field>
+        <field name="category_id" ref="base.module_category_inventory_inventory"/>
+    </record>
+    <record id="stores_manager_ws" model="res.groups">
+        <field name="name">Droga Stores manager wholesale</field>
+        <field name="category_id" ref="base.module_category_inventory_inventory"/>
+    </record>
+    <record id="inventory_report" model="res.groups">
+        <field name="name">Reporting read only</field>
+        <field name="category_id" ref="base.module_category_inventory_inventory"/>
+        <field name="implied_ids" eval="[(4, ref('stock.group_stock_user'))]"/>
+    </record>
+    <record id="stock_out_notification" model="res.groups">
+        <field name="name">Stock out notification</field>
+        <field name="category_id" ref="base.module_category_inventory_inventory"/>
+        <field name="implied_ids" eval="[(4, ref('stock.group_stock_user'))]"/>
+    </record>
+
+    <record model="ir.rule" id="droga_product_group_company">
+        <field name="name">Product groups multi-company</field>
+        <field name="model_id" ref="model_product_category"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record model="ir.rule" id="droga_inventory_consignment_report">
+        <field name="name">Consignment</field>
+        <field name="model_id" ref="model_droga_inventory_consignment_report"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record model="ir.rule" id="droga_stock_out_group_company">
+        <field name="name">Stockout model multi-company</field>
+        <field name="model_id" ref="model_product_availability_pharmacy"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>
+
+
+<!--
+    This is where you will create your groups.
+        ir.module.category is the module category
+        res.groups are the module user groups, they will refer to the master module category
+
+        For menu access, simply add groups="", in the menu definition
+        The csv file is a set of access rules for models
+            The format it takes is
+                id,                                 name,                 model_id:id,                     group_id:id,perm_read,perm_write,perm_create,perm_unlink
+                "id of the access" can be anything, model.model models id,model_name replace name . with _,1,1,1,1
+-->

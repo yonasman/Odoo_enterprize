@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <!-- Form View -->
+        <record id="view_registered_product_form" model="ir.ui.view">
+            <field name="name">registered.product.form</field>
+            <field name="model">registered.product</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="company"/>
+                                <field name="actual_sample"/>
+                                <field name="batch_number"/>
+                                <field name="date_of_submission"/>
+                            </group>
+                            <group>
+
+                                <field name="product" widget="many2many_tags"/>
+                                <field name="eris_no"/>
+                                <field name="debit_note_request"/>
+
+                            </group>
+
+                            <field name="payment_details">
+                                <tree editable="top">
+                                    <field name="payment_status"/>
+                                    <field name="date"/>
+
+                                </tree>
+                            </field>
+
+                        </group>
+                    </sheet>
+
+                       <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+
+                </form>
+            </field>
+        </record>
+
+        <!-- Tree View -->
+        <record id="view_registered_product_tree" model="ir.ui.view">
+            <field name="name">registered.product.tree</field>
+            <field name="model">registered.product</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="company"/>
+                    <field name="product"/>
+                    <field name="eris_no"/>
+                    <field name="debit_note_request"/>
+                    <field name="actual_sample"/>
+                    <field name="batch_number"/>
+                    <field name="date_of_submission"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_registered_product" model="ir.actions.act_window">
+            <field name="name">Product Quality Control</field>
+            <field name="res_model">registered.product</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo>

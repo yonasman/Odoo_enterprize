@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="droga_crm_customer_settings_prod_group_action" model="ir.actions.act_window">
+        <field name="name">Product groups</field>
+        <field name="res_model">droga.crm.settings.prod_group</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="droga_crm_customer_prod_group_view_tree" model="ir.ui.view">
+        <field name="name">droga.crm.settings.prod_group.view.tree</field>
+        <field name="model">droga.crm.settings.prod_group</field>
+        <field name="arch" type="xml">
+            <tree string="" editable="top" delete="0">
+                <field name="prod_group"></field>
+                <field name="parent_group"></field>
+                <field name="status"></field>
+            </tree>
+        </field>
+    </record>
+
+
+
+
+    <record id="droga_crm_customer_prod_group_registry_view_tree" model="ir.ui.view">
+        <field name="name">droga.crm.settings.prod_group.registry.view.tree</field>
+        <field name="model">product.template</field>
+        <field name="arch" type="xml">
+            <tree string="" create="0" editable="top" delete="0">
+                <field name="name" readonly="1"></field>
+                <field name="default_code" readonly="1"></field>
+                <field name="crm_group" options="{'no_create':True,'no_open':True}"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_crm_customer_settings_prod_group_registry_action" model="ir.actions.act_window">
+        <field name="name">Products</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">tree</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('droga_crm_customer_prod_group_registry_view_tree')})]"/>
+        <field name="context">{"search_default_group_unregistered":1}</field>
+    </record>
+
+    <menuitem
+        id="product_settings_sub_menu"
+        name="Product settings"
+        parent="crm.crm_menu_config"
+        sequence="25"/>
+
+    <menuitem
+        id="droga_crm_prod_settings_group"
+        name="Product groups"
+        action="droga_crm_customer_settings_prod_group_action"
+        parent="product_settings_sub_menu"
+        sequence="18"/>
+
+    <menuitem
+        id="droga_crm_prod_settings_prods_group"
+        name="Products"
+        action="droga_crm_customer_settings_prod_group_registry_action"
+        parent="product_settings_sub_menu"
+        sequence="17"/>
+
+</odoo>

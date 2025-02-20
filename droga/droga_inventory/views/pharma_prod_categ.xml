@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="droga_prod_categ_pharma_view_action" model="ir.actions.act_window">
+        <field name="name">Pharmacy group registry</field>
+        <field name="res_model">droga.prod.categ.pharma</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="droga_prod_categ_pharma_view_tree" model="ir.ui.view">
+        <field name="name">droga.prod.categ.pharma.view.tree</field>
+        <field name="model">droga.prod.categ.pharma</field>
+        <field name="arch" type="xml">
+            <tree string="" editable="top" delete="0">
+                <field name="categ" required="True"></field>
+                <field name="id_sequence" required="True"></field>
+                <field name="id_counter" readonly="1"></field>
+                <field name="taxes_id" widget="many2many_tags"></field>
+            </tree>
+        </field>
+    </record>
+
+
+    <menuitem
+        id="droga_prod_categ_pharma_view_menu"
+        name="Pharmacy group registry"
+        action="droga_prod_categ_pharma_view_action"
+        parent="stock.menu_stock_config_settings"
+        sequence="18"/>
+</odoo>

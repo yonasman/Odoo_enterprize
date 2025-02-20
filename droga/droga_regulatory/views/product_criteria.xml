@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+    <record id="view_medicine_form" model="ir.ui.view">
+        <field name="name">medicine.form</field>
+        <field name="model">product.criteria</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="product_demand"/>
+                            <field name="level_of_professionals"/>
+                            <field name="can_be_substituted"/>
+                            <field name="manufactured_locally"/>
+                            <field name="used_for_chronic_disease"/>
+                            <field name="government_priority"/>
+                            <field name="registered_competitors"/>
+                            <field name="efda_gmp_approval"/>
+
+                        </group>
+
+                        <group>
+
+                            <field name="prevalence_of_indication"/>
+                            <field name="number_of_dose"/>
+                            <field name="market_usage"/>
+                            <field name="unique_specialty_medicine"/>
+                            <field name="future_demand"/>
+                            <field name="demand_varies_by_season"/>
+                            <field name="expensive_medicine"/>
+                            <field name="program_medicine"/>
+                            <field name="storage_mechanism"/>
+
+                        </group>
+
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_medicine_tree" model="ir.ui.view">
+        <field name="name">medicine.tree</field>
+        <field name="model">product.criteria</field>
+        <field name="arch" type="xml">
+
+            <tree>
+                <field name="product_demand"/>
+                <field name="level_of_professionals"/>
+                <field name="can_be_substituted"/>
+                <field name="manufactured_locally"/>
+                <field name="used_for_chronic_disease"/>
+                <field name="government_priority"/>
+                <field name="registered_competitors"/>
+                <field name="efda_gmp_approval"/>
+                <field name="prevalence_of_indication"/>
+                <field name="number_of_dose"/>
+                <field name="market_usage"/>
+                <field name="unique_specialty_medicine"/>
+                <field name="future_demand"/>
+                <field name="demand_varies_by_season"/>
+                <field name="expensive_medicine"/>
+                <field name="program_medicine"/>
+                <field name="storage_mechanism"/>
+            </tree>
+        </field>
+    </record>
+    </data>
+<record id="action_medicine" model="ir.actions.act_window">
+    <field name="name">Medicine</field>
+    <field name="res_model">product.criteria</field>
+    <field name="view_mode">tree,form</field>
+</record>
+</odoo>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.menu" id="hr_holidays.menu_hr_holidays_root">
+        <field name="name">Leave Management</field>
+    </record>
+    <menuitem id="droga_hr_job_grade_menu" name="Job Grades" action="droga_hr_job_grade_action"
+              groups="hr.group_hr_user" parent="hr.menu_config_recruitment" sequence="9"/>
+    <menuitem id="droga_hr_job_salary_payment_menu" name="Payment Types" action="droga_hr_job_salary_payment_action"
+              groups="hr.group_hr_user" parent="hr.menu_config_recruitment" sequence="10"/>
+
+
+    <menuitem id="droga_hr_letter_config_menu" name="Letter"
+              groups="hr.group_hr_user" parent="hr.menu_human_resources_configuration" sequence="100">
+        <menuitem id="droga_hr_letter_types_menu" name="Letter Types" action="droga_hr_letter_types_action"
+                  groups="hr.group_hr_user" sequence="1"/>
+    </menuitem>
+
+
+    <menuitem id="droag_hr_request_froms" name="Approvals" sequence="30"
+              parent="hr.menu_hr_root" groups="hr.group_hr_user">
+        <menuitem id="droga_hr_head_count_request_menu" name="Head Count Request"
+                  action="droga_hr_head_count_request1_action" groups="hr.group_hr_user"
+                  sequence="1"/>
+
+        <menuitem id="droga_hr_lettter_request_menu" name="Letter Requests"
+                  action="droga_hr_letter_requests_action" groups="hr.group_hr_user"
+                  sequence="2"/>
+
+
+
+
+
+    </menuitem>
+
+    <menuitem id="hr_attendance_reports" name="Reports" sequence="3"
+              parent="hr_attendance.menu_hr_attendance_root" groups="hr.group_hr_user">
+
+        <menuitem id="hr_attendance_absence_report_menu" name="Attendance Report"
+                  action="hr_attendance_absence_report_action" groups="hr.group_hr_user"
+
+                  sequence="1"/>
+
+        <menuitem id="hr_attendance_over_time_report_menu" name="Over Time Report"
+                  action="hr_attendance_over_time_report_action" groups="hr.group_hr_user"
+                  sequence="2"/>
+    </menuitem>
+
+    <menuitem id="hr_division_job_menu" name="Divisions" action="view_hr_division_job_action"
+              groups="hr.group_hr_user" parent="hr.menu_config_employee" sequence="100"/>
+
+
+
+</odoo>

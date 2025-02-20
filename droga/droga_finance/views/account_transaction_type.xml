@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <!-- action for transaction type -->
+    <record id="account_transaction_type_action" model="ir.actions.act_window">
+        <field name="name">Transaction Type</field>
+        <field name="res_model">account.transaction.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+           Transaction Type
+            </p>
+        </field>
+    </record>
+
+    <!-- tree view transaction type -->
+    <record id="account_transaction_type_view_tree" model="ir.ui.view">
+        <field name="name">account.transaction.type.view.tree</field>
+        <field name="model">account.transaction.type</field>
+        <field name="arch" type="xml">
+            <tree string="Transaction Type">
+                <field name="name" />
+                <field name="assignment" />
+                <field name="description" />
+                <field name="company_id" />
+            </tree>
+        </field>
+    </record>
+
+    <!-- form view transaction type -->
+    <record id="account_transaction_type_view_form" model="ir.ui.view">
+        <field name="name">account.transaction.type.view.form</field>
+        <field name="model">account.transaction.type</field>
+        <field name="arch" type="xml">
+            <form string="Transaction Type">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" />
+                            <field name="assignment" />
+                            <field name="transaction_type" />
+                        </group>
+                        <group>
+                            <field name="description" />
+                            <field name="payment_method" />
+                            <field name="company_id" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Posting Cycles">
+                            <field name="posting_cycles" mode="tree">
+                                <tree editable="bottom">
+                                    <field name="fiscal_year" />
+                                    <field name="sequence" />
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+     <!-- rule for filtering data specific data -->
+    <record model="ir.rule" id="droga_account_transaction_type_rule">
+        <field name="name">Transaction Type multi-company</field>
+        <field name="model_id" ref="model_account_transaction_type"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="droga_pharma_follow_up_form" model="ir.ui.view">
+        <field name="name">droga.pharma.mtm.follow_up.form</field>
+        <field name="model">droga.pharma.mtm.follow_up</field>
+        <field name="arch" type="xml">
+            <form string="" delete="0">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="date_follow_up"></field>
+                            <field name="time"></field>
+                            <field name="current_status"></field>
+                        </group>
+                        <group>
+                            <field name="plan"/>
+                            <field name="referral"/>
+                        </group>
+                    </group>
+                    <hr></hr>
+                    <group string="Assessment, plan and recommendations">-->
+                        <field name="asses_care_plan"></field>
+                        <field name="recs_inter"></field>
+                    </group>
+                    <notebook>
+                        <page string="MTM Detail">
+                            <field name="from_sales_order" invisible="1"></field>
+                            <field name="follow_up_detail" mode="tree">
+                                <tree editable="bottom" create="1">
+                                    <field name="drug_therapy_problem"></field>
+                                    <field name="drug_therapy_cause"></field>
+                                    <field name="intervention" attrs="{'invisible': [('parent.from_sales_order', '=', True)]}"></field>
+                                    <field name="intervention_implemented" attrs="{'invisible': [('parent.from_sales_order', '=', True)]}"></field>
+                                    <field name="outcome" attrs="{'invisible': [('parent.from_sales_order', '=', True)]}"/>
+                                    <field name="remark"></field>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                    <hr></hr>
+                    <group>
+                        <field name="eff_saf_med"></field>
+                        <field name="int_imple"></field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

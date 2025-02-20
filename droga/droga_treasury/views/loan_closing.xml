@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+<record id="account_loan_closing_view_tree" model="ir.ui.view">
+        <field name="name">account.loan.view.tree</field>
+        <field name="model">account.loan</field>
+        <field name="arch" type="xml">
+            <tree string="Loan">
+                <field name="name"/>
+                
+
+                <field name="loan_type"/>
+                <field name="anual_interest_rate"/>
+                <field name="loan_amount"/>
+                
+                
+                
+                 
+                            
+            </tree>
+        </field>
+    </record>
+
+     <record id="account_loan_closing_view_form" model="ir.ui.view">
+        <field name="name">account_loan.view.form</field>
+        <field name="model">account.loan</field>
+        <field name="arch" type="xml">
+            <form string="">
+                
+                <sheet>
+                   
+ <!-- you can display child data like code below -->
+                            <field name="monthly_closing_ids" >
+                                <tree  create="0" delete="0" write="0">
+                                   <field name="acount_monthly_closing_id"/>
+            <field name="name"/>
+            
+            <field name="et_year" />
+                                   
+            <field name="Principal_payment"  invisible='1'/>
+            <field name="Interest_payment"  invisible='1'/>
+                                    
+            <field name="interest"/>
+            <field name="penality"/>
+            <field name="post"/>
+            <field name="recipt"  invisible='1'/>
+             <button  type="object" name="compute_post" string="Post"
+                        class="oe_stat_button" icon="fa-file-text"/>
+
+
+
+                                </tree>
+                            </field>
+                            
+              
+
+            </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record> 
+    <record id="account_loan_closingt_action" model="ir.actions.act_window">
+        <field name="name">Monthly</field>
+        <field name="res_model">account.loan</field>
+        <!-- <field name="view_type">form</field> -->
+        <field name="view_mode">tree,form</field>
+    
+    </record>
+    
+    <record id="account_loan_closing_form_action" model="ir.actions.act_window.view">
+           <field name="view_mode">form</field>
+           <field name="view_id" ref="account_loan_closing_view_form" />
+           <field name="act_window_id" ref="account_loan_closingt_action" />
+    </record> 
+    <record id="account_loan_closing_tree_action" model="ir.actions.act_window.view">
+           <field name="view_mode">tree</field>
+           <field name="view_id" ref="account_loan_closing_view_tree" />
+           <field name="act_window_id" ref="account_loan_closingt_action" />
+    </record>
+    <menuitem
+        id="bank_loan_closingt_menu"
+        name="Monthly Closings"
+        sequence="10"
+        action="account_loan_closingt_action"
+        parent="bank_loan_menu"
+       />
+</odoo>

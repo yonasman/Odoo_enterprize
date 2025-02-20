@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+     <record id="droga_inventory_reward_issue_view_form" model="ir.ui.view">
+        <field name="name">droga.inventory.reward.issue.view.form</field>
+        <field name="model">droga.inventory.consignment.issue</field>
+        <field name="arch" type="xml">
+            <form string="Reward issue" delete="0">
+                <header>
+                    <!-- Sales and crm header part  -->
+                    <field name="menu_from" invisible="1"></field>
+                    <button name="dispense_products"
+                            attrs="{'invisible': [('state', 'not in', ('draft'))]}"
+                            string="Dispense items" type="object" class="oe_highlight" data-hotkey="v"/>
+
+                    <field name="state" widget="statusbar" statusbar_visible="draft,processed"/>
+
+                </header>
+                <sheet>
+                    <group string="Reward items issue">
+                        <group>
+                            <field name="customer"
+                                   readonly="1"></field>
+                            <field name="issue_type" required="True"
+                                   readonly="1"></field>
+                            <field name="remark"></field>
+                        </group>
+                        <group>
+                            <field name="issue_date"
+                                   readonly="1"></field>
+                            <field name="cons_ref" attrs="{'invisible': [('cons_ref', '=', False)]}"
+                                   widget="many2many_tags" readonly="1"></field>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Product Details">
+                            <field name="state" invisible="1"></field>
+                            <field name="detail_entries"
+                                   attrs="{'readonly': [('state', 'in', ('waiting','reject','cancel','done'))]}">
+                                <tree create="0" delete="0">
+                                    <field name="company_id" invisible="1"/>
+                                    <field name="product_id" required="1" options="{'no_create':True,'no_open':True}"
+                                           context="{'default_detailed_type': 'product'}"/>
+                                    <field name="product_uom" invisible="1"></field>
+                                    <field name="product_uom_pharma" options="{'no_create':True,'no_open':True}"/>
+                                    <field name="product_uom_category_id" invisible="1"/>
+                                    <field name="state" invisible="1"/>
+                                    <field name="product_uom_qty" string="Quantity"/>
+                                    <field name="warehouse_id"
+                                           string="Issuer warehouse" options="{'no_create':True,'no_open':True}"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                    </notebook>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

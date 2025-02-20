@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- form view -->
+    <record id="inherit_for_hr_job_form" model="ir.ui.view">
+        <field name="name">Jobs</field>
+        <field name="model">hr.job</field>
+        <field name="inherit_id" ref="hr.view_hr_job_form"/>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//page[@name='recruitment_page']" position="before">
+                <page string="Salary Structure">
+                    <group>
+                        <field name="job_grade" options="{'no_create':True,'no_open':True}"/>
+                    </group>
+                    <field name="salary_structure" mode="tree">
+                        <tree>
+                            <field name="name" width="40"/>
+                            <field name="date_from" width="15"/>
+                            <field name="date_to" width="15"/>
+                            <field name="state" width="30"/>
+                        </tree>
+                    </field>
+                </page>
+
+            </xpath>
+        </field>
+    </record>
+
+    <!-- form view for hr.job.salary-->
+    <record id="droga_hr_job_salary_form_view" model="ir.ui.view">
+        <field name="name">hr.job.salary</field>
+        <field name="model">hr.job.salary</field>
+        <field name="arch" type="xml">
+            <form string="Salary Structure">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <group>
+                            <field name="date_from" required="1"/>
+                            <field name="date_to" required="1"/>
+                        </group>
+                        <group>
+                            <field name="state"/>
+                            <field name="currency"/>
+                            <field name="company_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Detail">
+
+                            <field name="salary_detail" mode="tree">
+                                <tree editable="bottom">
+                                    <field name="payment_type" width="20" options="{'no_create':True,'no_open':True}"/>
+                                    <field name="date_from" width="20" required="1"/>
+                                    <field name="date_to" width="20"/>
+                                    <field name="amount" width="20"/>
+                                    <field name="state" width="20"/>
+                                    <field name="write_uid"/>
+                                    <field name="write_date"/>
+
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <!-- hr job grade tree view -->
+    <record id="droga_hr_job_grade_tree_view" model="ir.ui.view">
+        <field name="name">Job Grade</field>
+        <field name="model">hr.job.grade</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+                <field name="description"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--action for hr job grade -->
+    <record id="droga_hr_job_grade_action" model="ir.actions.act_window">
+        <field name="name">Job Grade</field>
+        <field name="res_model">hr.job.grade</field>
+        <field name="view_mode">tree</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+</odoo>

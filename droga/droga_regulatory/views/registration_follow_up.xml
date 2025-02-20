@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <!-- Form View -->
+        <record id="view_registration_form" model="ir.ui.view">
+            <field name="name">registration.model.form</field>
+            <field name="model">registration.model</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="add_to_registered" string="Add to Registered" type="object" class="oe_highlight"
+                        attrs="{'invisible': [('is_registered', '=', True)]}"/>
+                    </header>
+                    <sheet>
+                         <h4>Registered Variants</h4>
+                        <group>
+                           <group>
+                                <field name="is_a_variant_of" widget="many2many_tags"/>
+                           </group>
+                            <group>
+                                 <field name="has_variants"  widget="many2many_tags"/>
+                            </group>
+
+                        </group>
+                        <br></br><hr/><hr/>
+
+                        <group>
+
+                            <group>
+                                <field name="company_name"/>
+                                <field name="products"/>
+                                <field name="agency_agreement_linkage_date"/>
+                                <field name="registration_type"/>
+                                <field name="fee_attached"/>
+                                <field name="product_type"/>
+                                <field name="gmp_renewal_date"/>
+                                <field name="gmp_result"/>
+                                <field name="is_registered" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="country"/>
+                                <field name="receiving_dossier_date"/>
+                                <field name="final_comment_received"/>
+                                <field name="submission_date"/>
+                                <field name="registration_no"/>
+                                <field name="application_type"/>
+                                <field name="gmp_paid_date"/>
+                                <field name="sterile"/>
+
+                            </group>
+
+
+                        </group>
+                        <hr/>
+                        <br/>
+                        <group>
+                            <group>
+                                <br/>
+                                <h2>Evaluation</h2>
+                                <field name="evaluation">
+                                    <tree editable="top">
+                                        <field name="evaluation_comment"/>
+                                        <field name="sent_date"/>
+
+                                    </tree>
+                                </field>
+
+                            </group>
+                            <group>
+                                <br/>
+                                <h2>Follow Up</h2>
+                                <field name="follow_up">
+                                    <tree editable="top">
+                                        <field name="status"/>
+                                        <field name="date"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Quality Control" attrs="{'invisible': [('sterile', '=', False)]}">
+                                <group>
+                                    <group>
+                                        <field name="actual_sample"/>
+                                        <field name="batch_number"/>
+                                        <field name="date_of_submission"/>
+                                    </group>
+                                    <group>
+
+                                        <field name="eris_no"/>
+                                        <field name="debit_note_request"/>
+
+                                    </group><br/><br/><br/>
+
+                                    <field name="payment_details">
+                                        <tree editable="top">
+                                            <field name="payment_status"/>
+                                            <field name="date"/>
+
+                                        </tree>
+                                    </field>
+
+                                </group>
+                            </page>
+
+                        </notebook>
+                    </sheet>
+
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+
+                </form>
+            </field>
+        </record>
+
+        <!-- Tree View -->
+        <record id="view_registration_tree" model="ir.ui.view">
+            <field name="name">registration.model.tree</field>
+            <field name="model">registration.model</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="company_name"/>
+                    <field name="country"/>
+                    <field name="submission_date"/>
+                    <field name="registration_no"/>
+                    <field name="product_type"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="droga_regulatory_company_registration" model="ir.ui.view">
+            <field name="name">company.registration.kanban.view</field>
+            <field name="model">registration.model</field>
+            <field name="arch" type="xml">
+
+                <kanban class="o_kanban_mobile" sample="1">
+                    <field name="company_name"/>
+                    <field name="products"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_global_click">
+                                <div class="o_kanban_image">
+                                </div>
+                                <div class="oe_kanban_details">
+                                    <strong class="o_kanban_record_title">
+                                        Company Name:
+                                    </strong>
+                                    <field name="company_name"/>
+                                    <br/>
+                                    <hr/>
+
+                                    <strong class="o_kanban_record_title">
+                                        These Products have been registered:
+                                    </strong>
+                                    <field name="products"/>
+                                    <br/>
+                                    <hr/>
+
+                                    <button name="set_activity_done" string="Mark as read" type="object" class="oe_highlight"/>
+
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+
+            </field>
+        </record>
+        <!-- Action -->
+        <record id="action_registration_follow_up" model="ir.actions.act_window">
+            <field name="name">Registrations</field>
+            <field name="res_model">registration.model</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+        <record id="create_registered_form" model="ir.ui.view">
+            <field name="name">create.registered.form</field>
+            <field name="model">create.registered.list</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+                            <field name="company_name"/>
+                            <field name="applicant"/>
+                            <field name="approval_date"/>
+                            <field name="registered_under"/>
+
+                        </group>
+                        <group>
+                            <field name="product_type"/>
+                            <field name="product_name"/>
+                            <field name="validity_date"/>
+                            <field name="product_type"/>
+                            <field name="pack_size"/>
+
+                        </group>
+                    </group>
+                    <group>
+                        <field name="remark"/>
+
+                    </group>
+
+                    <footer>
+                        <button name="create_registered" string="Confirm" type="object" class="oe_highlight"/>
+                    </footer>
+
+                </form>
+            </field>
+        </record>
+
+        <record id="view_registration_model_duplicate_tree" model="ir.ui.view">
+            <field name="name">registration.model.duplicate.tree</field>
+            <field name="model">registration.model.duplicate</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="company_name"/>
+                    <field name="products_to_be_registered"/>
+                </tree>
+            </field>
+        </record>
+
+    </data>
+</odoo>

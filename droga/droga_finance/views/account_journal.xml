@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+
+    <!-- tree view -->
+    <record id="droga_account_check_setting" model="ir.ui.view">
+        <field name="name">Check Print Setting</field>
+        <field name="model">droga.account.check.setting</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name" width="15"/>
+                <field name="name_width" width="15"/>
+                <field name="date_left_p" width="15"/>
+                <field name="date_top_p" width="15"/>
+                <field name="name_left_p" width="15"/>
+                <field name="name_top_p" width="15"/>
+                <field name="amount_left_p" width="15"/>
+                <field name="amount_top_p" width="15"/>
+                <field name="amount_word_left_p" width="15"/>
+                <field name="amount_world_top_p" width="15"/>
+                <field name="amount_word_width" width="15"/>
+                <field name="amount_word_width1" width="15"/>
+                <field name="amount_word_line_spacing" width="15"/>
+                <field name="status"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- account journal inherit -->
+    <record id="view_account_journal_form_inherit" model="ir.ui.view">
+        <field name="name">Account Journal Inherit</field>
+        <field name="model">account.journal</field>
+        <field name="priority" eval="1"/>
+        <field name="inherit_id" ref="account.view_account_journal_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='currency_id']" position="after">
+                <field name="check_setting" string="Check Setting" options="{'no_create':True,'no_open':True}"/>
+
+            </xpath>
+        </field>
+    </record>
+
+    <!--action for menu settings -->
+    <record id="check_setting_action" model="ir.actions.act_window">
+        <field name="name">Check Setting</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">droga.account.check.setting</field>
+        <field name="view_mode">tree</field>
+
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Check Setting
+            </p>
+
+        </field>
+    </record>
+
+
+</odoo>

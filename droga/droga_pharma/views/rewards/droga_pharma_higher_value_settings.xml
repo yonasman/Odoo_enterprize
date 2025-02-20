@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="droga_pharma_discount_high_value_action" model="ir.actions.act_window">
+        <field name="name">Discount settings per high value</field>
+        <field name="res_model">droga.pharma.high.value.pruchase</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="droga_pharma_discount_high_value_tree" model="ir.ui.view">
+        <field name="name">droga.pharma.high.value.pruchase.view.tree</field>
+        <field name="model">droga.pharma.high.value.pruchase</field>
+        <field name="arch" type="xml">
+            <tree string="" delete="0">
+                <field name="discount"></field>
+                <field name="from_amt"></field>
+                <field name="to_amt"></field>
+                <field name="status"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_pharma_discount_high_value_form" model="ir.ui.view">
+        <field name="name">droga.pharma.high.value.pruchase.view.form</field>
+        <field name="model">droga.pharma.high.value.pruchase</field>
+        <field name="arch" type="xml">
+            <form string="" delete="0">
+                <sheet>
+                    <group>
+                        <field name="from_amt"></field>
+                        <field name="to_amt"></field>
+                        <field name="prod_group" widget="many2many_tags" domain="[('avail_in_product_master', '=',True)]" options="{'no_create':True,'no_open':True}"></field>
+                        <field name="discount"></field>
+                        <field name="remark"></field>
+                        <field name="status"></field>
+                    </group>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

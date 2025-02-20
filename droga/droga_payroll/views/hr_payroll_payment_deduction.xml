@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- tree view -->
+     <record id="hr_payroll_payment_deduction_tree_view" model="ir.ui.view">
+        <field name="name">hr.payroll.payment.deduction</field>
+        <field name="model">hr.payroll.payment.deduction</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="contract_id"/>
+                <field name="employee_id"/>
+                <field name="input_type"/>
+                <field name="input_types" options="{'no_create':True,'no_open':True}"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="amount"/>
+                <field name="total_amount"/>
+                <field name="rem_amount" readonly="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- search -->
+    <record id="hr_payroll_payment_deduction_search_view" model="ir.ui.view">
+        <field name="name">hr.payroll.payment.deduction.search</field>
+        <field name="model">hr.payroll.payment.deduction</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="contract_id"/>
+                <field name="employee_id"/>
+                <field name="input_type"/>
+                <field name="input_types"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="amount"/>
+                <field name="total_amount"/>
+                <field name="rem_amount" readonly="1"/>
+            </search>
+        </field>
+    </record>
+
+      <!-- action for the tree view -->
+    <record id="hr_payroll_payment_deduction_action" model="ir.actions.act_window">
+        <field name="name">Payment and Deductions</field>
+        <field name="res_model">hr.payroll.payment.deduction</field>
+        <field name="view_mode">tree</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+        (0, 0, {'view_mode': 'tree', 'view_id': ref('hr_payroll_payment_deduction_tree_view')})]"/>
+    </record>
+</odoo>

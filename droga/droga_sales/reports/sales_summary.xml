@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="droga_sales_summary_view_tree" model="ir.ui.view">
+        <field name="name">sale.order.view.tree</field>
+        <field name="model">sale.order</field>
+        <field name="arch" type="xml">
+            <tree default_order='date_order,partner_id,name' string="" create="false" delete="false">
+                <field name="partner_id"></field>
+                <field name="cust_location"></field>
+                <field name="name"></field>
+                <field name="date_order" string="Date"></field>
+                <field name="order_type"></field>
+                <field name="payment_term_id"></field>
+                <field name="amount_total"></field>
+                <field name="state"></field>
+                <field name="invoice_status"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_sales_summary_search_tree" model="ir.ui.view">
+        <field name="name">sale.order.search.tree</field>
+        <field name="model">sale.order</field>
+        <field name="arch" type="xml">
+            <search string="Sales report">
+                <field name="partner_id"></field>
+                <field name="name"></field>
+                <field name="date_order" string="Date"></field>
+                <field name="order_type"></field>
+                <field name="payment_term_id"></field>
+                <field name="sales_initiator"></field>
+
+                <filter name="group_type" string="By customer" context="{'group_by':'partner_id'}"/>
+                <filter name="group_type" string="By location" context="{'group_by':'cust_location'}"/>
+                <filter name="group_type" string="By payment term" context="{'group_by':'payment_term_id'}"/>
+
+                <filter name="app_so" string="Sales orders" domain="[('state', '=', 'sale')]" />
+                <filter name="pro_so" string="Workflow pending SO" domain="[('state', '!=', 'sale')]" />
+
+                <separator/>
+
+                <filter string="Today sales"
+                        domain="[('date_order', '&gt;=', context_today().strftime('%Y-%m-%d')), ('date_order', '&lt;', (context_today() + relativedelta(days=1)).strftime('%Y-%m-%d'))]"
+                        name="today_sales"></filter>
+
+                <filter string="Current week sales"
+                    domain="[
+                        ('date_order', '>=', (datetime.datetime.combine(context_today() + relativedelta(weeks=-1,days=1,weekday=0), datetime.time(0,0,0)).to_utc()).strftime('%Y-%m-%d %H:%M:%S')),
+                        ('date_order', '&lt;', (datetime.datetime.combine(context_today() + relativedelta(days=1,weekday=0), datetime.time(0,0,0)).to_utc()).strftime('%Y-%m-%d %H:%M:%S'))]"
+                    name="current_week_sales"></filter>
+
+                <filter string="Previous week sales"
+                       domain="[('date_order', '&gt;=', ((context_today()+relativedelta(weeks=-2, days=1, weekday=0)).strftime('%%Y-%%m-%%d'))),
+                       ('date_order', '&lt;=', ((context_today()+relativedelta(weeks=-1, weekday=6)).strftime('%%Y-%%m-%%d')))]"
+                        name="previous_week_sales"></filter>
+
+                <filter string="Current month sales"
+                        domain="[('date_order','&lt;',(context_today()+relativedelta(months=1)).strftime('%%Y-%%m-01')),
+                        ('date_order','&gt;=',time.strftime('%%Y-%%m-01'))]"
+                        name="current_month_sales"></filter>
+
+                <filter string="Previous month sales"
+                        domain="[('date_order','&gt;=',(context_today()-relativedelta(months=1)).strftime('%%Y-%%m-01')),
+                        ('date_order','&lt;',time.strftime('%%Y-%%m-01'))]"
+                name="previous_month_sales"></filter>
+
+            </search>
+        </field>
+    </record>
+
+    <record id="droga_sales_summary_action" model="ir.actions.act_window">
+        <field name="name">Sales summary report</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('droga_sales_summary_view_tree')})]"/>
+        <field name="search_view_id" ref="droga_sales_summary_search_tree"></field>
+        <field name="domain">[('state', '!=', 'cancel'),('has_access','=',True)]</field>
+        <field name="context">{'search_default_today_sales': 1,'search_default_app_so':1}</field>
+    </record>
+
+
+    <menuitem
+            id="droga_sales_summary_report_menu"
+            name="Sales summary report"
+            action="droga_sales_summary_action"
+            parent="droga_sales.droga_sales_reports_menu"
+            groups="droga_crm.crm_sr,sales_team.group_sale_salesman"
+            sequence="17"/>
+</odoo>

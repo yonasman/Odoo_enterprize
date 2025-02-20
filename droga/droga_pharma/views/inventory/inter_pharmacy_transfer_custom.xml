@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="droga_pharma_inter_store_transfer_custom_action" model="ir.actions.act_window">
+            <field name="name">Transfers</field>
+            <field name="res_model">stock.picking</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">tree,kanban,form,calendar</field>
+            <field name="domain"></field>
+            <field name="context">{'show_title': True,'contact_display': 'partner_address', 'default_company_id': allowed_company_ids[0],'default_from_pharmacy_menu':True}</field>
+            <field name="search_view_id" ref="stock.view_picking_internal_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No transfer found. Let's create one!
+                </p><p>
+                    Transfers allow you to move products from one location to another.
+                </p>
+            </field>
+        </record>
+
+    <record id="stock_picking_transfer_button" model="ir.ui.view">
+        <field name="name">stock.picking.inherited.button.transfer</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="priority">100000</field>
+        <field name="arch" type="xml">
+
+            <xpath expr="//form/header/button[@name='action_cancel']" position="after">
+                <field name="show_set_to_draft" invisible="1"></field>
+                <button name="set_to_draft"
+                        attrs="{'invisible': ['|',('show_set_to_draft','=',True),('state','in',('done','cancel','draft','processed'))]}"
+                        string="Set to draft" type="object"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="stock_picking_inter_pharmacy_transfer_add" model="ir.ui.view">
+        <field name="name">stock.picking.inter.pharmacy.inherited.transfer</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="priority">100001</field>
+        <field name="arch" type="xml">
+
+            <xpath expr="//form/sheet/group/group/div" position="attributes">
+                <attribute name="attrs">{'invisible':[('from_pharmacy_menu', '=', True)]}</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/group/group/field[@name='partner_id']" position="attributes">
+                <attribute name="attrs">{'invisible':[('from_pharmacy_menu', '=', True)]}</attribute>
+            </xpath>
+
+            <xpath expr="//form/sheet/group/group/field[@name='picking_type_id']" position="replace">
+                <field name="from_pharmacy_menu" invisible="1"></field>
+                <field name="picking_type_id_pharmacy" domain="([('sequence_code','=','PMT'),('has_access','=',True)])" attrs="{'invisible': ['|',('hide_picking_type', '=', True),('from_pharmacy_menu','=','False')], 'readonly': [('state', '!=', 'draft')]}" options="{'no_create':True,'no_open':True}"/>
+                <field name="picking_type_id"  attrs="{'invisible': ['|',('hide_picking_type', '=', True),('from_pharmacy_menu','=','True')], 'readonly': [('state', '!=', 'draft')]}" options="{'no_create':True,'no_open':True}"/>
+            </xpath>
+            <xpath expr="//form/sheet/group/group/field[@name='picking_type_id']" position="attributes">
+                <attribute name="attrs">{'invisible': ['|',('hide_picking_type', '=', True),('from_pharmacy_menu', '=', True)]}</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/group/group/field[@name='picking_type_id_pharmacy']" position="attributes">
+                <attribute name="attrs">{'invisible': ['|',('hide_picking_type', '=', True),('from_pharmacy_menu', '=', False)]}</attribute>
+            </xpath>
+
+            <xpath expr="//form/sheet/group/group/field[@name='location_id'][2]" position="replace">
+                <field name="from_pharmacy_menu" invisible="1"></field>
+                <field name="location_id" groups="stock.group_stock_multi_locations" string="From location" domain="([('usage','=','internal'),('parent_loc_type','=','PH'),('has_access','=',True),('con_type','!=','SRL'),('pharmacy_location_type','in',('Store','Dispensary'))])"
+                       options="{'no_create':True,'no_open':True}" attrs="{'invisible':[('from_pharmacy_menu', '=', False)],'readonly':[('from_pharmacy_menu', '=', False)]}"/>
+            </xpath>
+
+
+            <xpath expr="//form/sheet/group/group/field[@name='location_dest_id'][2]" position="replace">
+                <field name="from_pharmacy_menu" invisible="1"></field>
+                <field name="location_dest_id" groups="stock.group_stock_multi_locations" string="To location" domain="([('usage','=','internal'),('parent_loc_type','=','PH'),('has_access','=',True),('con_type','!=','SRL'),('pharmacy_location_type','in',('Store','Dispensary'))])"
+                       options="{'no_create':True,'no_open':True}" attrs="{'invisible':[('from_pharmacy_menu', '=', False)],'readonly':[('from_pharmacy_menu', '=', False)]}"/>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

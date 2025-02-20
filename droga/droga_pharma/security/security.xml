@@ -1,0 +1,64 @@
+<odoo>
+    <record model="ir.module.category" id="pharma_management">
+        <field name="name">Pharmacy</field>
+        <field name="description">User access level for Pharmacy branches</field>
+        <field name="sequence">20</field>
+    </record>
+    <record id="pharma_br_admin" model="res.groups">
+        <field name="name">Pharmacy branch admin</field>
+        <field name="category_id" ref="pharma_management"/>
+    </record>
+    <record id="pharma_fin" model="res.groups">
+        <field name="name">Pharmacy finance manager</field>
+        <field name="category_id" ref="pharma_management"/>
+    </record>
+    <record id="pharma_dp_admin" model="res.groups">
+        <field name="name">Dispensing Pharmacist</field>
+        <field name="category_id" ref="pharma_management"/>
+    </record>
+
+    <record id="pharma_ip_admin" model="res.groups">
+        <field name="name">Invoicing Parmacist</field>
+        <field name="category_id" ref="pharma_management"/>
+    </record>
+
+    <record id="pharma_di_admin" model="res.groups">
+        <field name="name">DI (dispense and invoice) Pharmacist</field>
+        <field name="category_id" ref="pharma_management"/>
+    </record>
+
+      <record id="pharma_supply_chain_manager" model="res.groups">
+        <field name="name">Pharmacy supply Chain Manager</field>
+        <field name="category_id" ref="pharma_management"/>
+    </record>
+
+    <record id="pharma_settings_admin" model="res.groups">
+        <field name="name">Pharmacy settings administrator</field>
+        <field name="category_id" ref="pharma_management"/>
+    </record>
+
+    <record id="pharma_director" model="res.groups">
+        <field name="name">Pharmacy director</field>
+        <field name="category_id" ref="pharma_management"/>
+    </record>
+
+
+    <record model="ir.module.category" id="physio_management">
+             <field name="name">Physiotherapy</field>
+             <field name="description">Physiotherapy access level</field>
+             <field name="sequence">20</field>
+        </record>
+    <record id="physio_user_4k" model="res.groups">
+            <field name="name">Physio User</field>
+            <field name="category_id" ref="physio_management"/>
+        </record>
+    <record id="physio_user_4k_invoice" model="res.groups">
+            <field name="name">Physio Invoice</field>
+            <field name="category_id" ref="physio_management"/>
+        </record>
+    <record id="physio_admin" model="res.groups">
+        <field name="name">Physio Administrator</field>
+        <field name="category_id" ref="physio_management"/>
+    </record>
+</odoo>
+

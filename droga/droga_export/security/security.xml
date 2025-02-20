@@ -1,0 +1,18 @@
+<odoo>
+     <record model="ir.module.category" id="export_management">
+             <field name="name">Export</field>
+             <field name="description">User access level for Export module</field>
+             <field name="sequence">20</field>
+        </record>
+
+    <record id="export_user" model="res.groups">
+            <field name="name">Export User</field>
+            <field name="category_id" ref="export_management"/>
+        </record>
+    <record id="export_manager" model="res.groups">
+        <field name="name">Export Manager</field>
+        <field name="category_id" ref="export_management"/>
+        <field name="implied_ids" eval="[(4, ref('export_user'))]"/>
+    </record>
+</odoo>
+

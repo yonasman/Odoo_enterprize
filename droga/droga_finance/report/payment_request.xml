@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- action for sales report -->
+    <record id="droga_account_payment_request_report_action" model="ir.actions.report">
+        <field name="name">Payment Request</field>
+        <field name="model">droga.account.payment.request</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">droga_finance.droga_account_payment_request_report</field>
+        <field name="report_file">droga_finance.droga_account_payment_request_report</field>
+        <field name="print_report_name">'Payment Request - %s' % (object.name)
+        </field>
+        <field name="binding_model_id" ref="model_droga_account_payment_request"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="droga_account_payment_request_report" name="Purhcase Request">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-foreach="docs" t-as="o">
+                    <div class="page">
+                        <div class="oe_structure"/>
+
+
+                        <h2>Payment Request #
+                            <span t-field="o.name"/>
+                        </h2>
+
+                        <div id="informations" class="row mt32 mb32">
+
+                            <div class="col-2 bm-2">
+                                <strong>Department:</strong>
+                                <p t-field="o.department" class="m-0"/>
+                            </div>
+                            <div class="col-2 bm-2">
+                                <strong>Request Type:</strong>
+                                <p t-field="o.payment_type" class="m-0"/>
+                            </div>
+                            <div class="col-3 bm-2">
+                                <strong>Request Date:</strong>
+                                <p t-field="o.request_date" class="m-0"/>
+
+                            </div>
+
+                            <div class="col-3 bm-2">
+                                <strong>Due Date:</strong>
+                                <p t-field="o.payment_due_date" class="m-0"/>
+                            </div>
+
+                            <div class="col-2 bm-2">
+                                <strong>Print Date:</strong>
+                                <p class="m-0"
+                                   t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/>
+                            </div>
+
+
+                        </div>
+                        <br></br>
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-6 bm-2">
+                                <strong>Purpose:</strong>
+                                <p t-field="o.purpose" class="m-0"/>
+                            </div>
+
+                        </div>
+                        <br></br>
+                        <table class="table table-sm o_main_table">
+                            <thead>
+                                <tr>
+                                    <th name="th_no">
+                                        <strong>Pay To</strong>
+                                    </th>
+                                    <th name="th_description">
+                                        <strong>Currency</strong>
+                                    </th>
+                                    <th name="th_quantity" t-if="o.currency_id=='ETB'">
+                                        <strong>Amount</strong>
+                                    </th>
+                                    <th name="th_uom" t-if="o.currency_id=='ETB'">
+                                        <strong>Exchnage Rate</strong>
+                                    </th>
+                                    <th name="th_remark">
+                                        <strong>Total Amount ETB</strong>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <span t-field="o.pay_to" class="m-0"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="o.currency_id" class="m-0"/>
+                                    </td>
+                                    <td t-if="o.currency_id=='ETB'">
+                                        <span t-field="o.total_amount" class="m-0"/>
+                                    </td>
+                                    <td t-if="o.currency_id=='ETB'">
+                                        <span t-field="o.exchange_rate" class="m-0"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="o.total_amount_etb" class="m-0"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <br></br>
+
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-12 bm-2">
+                                <strong>Amount In word:</strong>
+                                <p t-field="o.amount_in_word" class="m-0"/>
+                            </div>
+
+                        </div>
+
+                        <br></br>
+                        <br></br>
+                        <br></br>
+                        <br></br>
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-3 bm-2">
+                                <strong>Prepared By:</strong>
+                                <p t-field="o.request_by" class="m-0"/>
+                            </div>
+                            <div class="col-3 bm-2">
+                                <strong>Approved By:</strong>
+                                <t t-foreach="o.approvals" t-as="approver">
+                                    <t t-if="approver.rule_id.method=='approve_request'">
+                                        <p t-esc="approver.user_id.name" class="m-0"/>
+
+                                    </t>
+
+                                </t>
+                            </div>
+                            <div class="col-3 bm-2">
+                                <strong>Budget Checked By:</strong>
+
+                                <t t-set="budget_approver"
+                                   t-value="request.env['droga.approver.name'].sudo().get_approver(o.id,'droga.account.payment.request','Budget Approved')"/>
+
+                                <p t-esc="budget_approver" class="m-0"/>
+
+                            </div>
+                            <div class="col-3 bm-2">
+                                <strong>Authorized By:</strong>
+                                <t t-foreach="o.approvals" t-as="approver">
+                                    <t t-if="approver.rule_id.method=='authorize_request'">
+                                        <p t-esc="approver.user_id.name" class="m-0"/>
+                                    </t>
+                                </t>
+                            </div>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+</odoo>

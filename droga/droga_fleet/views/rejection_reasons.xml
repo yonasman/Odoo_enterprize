@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+
+
+        <record id="fleet_request_rejection_tree_view" model="ir.ui.view">
+            <field name="name">fleet.request.rejection.tree.view</field>
+            <field name="model">fleet.request.rejection.reason.header</field>
+            <field name="arch" type="xml">
+                <tree editable="top">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="action_fleet_request_rejection_tree_view" model="ir.actions.act_window">
+            <field name="name">Fleet Request Rejection Reasons</field>
+            <field name="res_model">fleet.request.rejection.reason.header</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+    </data>
+</odoo>

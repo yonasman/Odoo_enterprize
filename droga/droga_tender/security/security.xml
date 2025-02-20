@@ -1,0 +1,40 @@
+<odoo>
+     <record model="ir.module.category" id="tender_management">
+             <field name="name">Tender</field>
+             <field name="description">User access level for Tender module</field>
+             <field name="sequence">20</field>
+        </record>
+
+    <record id="tender_user" model="res.groups">
+            <field name="name">Tender User</field>
+            <field name="category_id" ref="tender_management"/>
+        </record>
+    <record id="tender_alert_receiver" model="res.groups">
+            <field name="name">Tender Alert Receiver</field>
+            <field name="category_id" ref="tender_management"/>
+        </record>
+    <record id="tender_manager" model="res.groups">
+        <field name="name">Tender Manager</field>
+        <field name="category_id" ref="tender_management"/>
+        <field name="implied_ids" eval="[(4, ref('tender_user'))]"/>
+    </record>
+    <record id="bond_recepient" model="res.groups">
+        <field name="name">Tender bond request recipient</field>
+        <field name="category_id" ref="tender_management"/>
+        <field name="implied_ids" eval="[(4, ref('tender_user'))]"/>
+    </record>
+</odoo>
+
+
+<!--
+    This is where you will create your groups.
+        ir.module.category is the module category
+        res.groups are the module user groups, they will refer to the master module category
+
+        For menu access, simply add groups="", in the menu definition
+        The csv file is a set of access rules for models
+            The format it takes is
+                id,                                 name,                 model_id:id,                        group_id:id,perm_read,perm_write,perm_create,perm_unlink
+                "id of the access" can be anything, model.model models id,model_model replace models . with _,1,1,1,1
+
+-->

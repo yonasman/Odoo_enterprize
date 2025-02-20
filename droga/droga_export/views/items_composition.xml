@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="droga_export_items_composition_tree" model="ir.ui.view">
+        <field name="name">droga.export.items.composition.tree</field>
+        <field name="model">droga.export.items.composition</field>
+        <field name="arch" type="xml">
+            <tree string="" create="1">
+                <field name="def_code"></field>
+                <field name="item_desc"></field>
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="droga_export_items_composition_form" model="ir.ui.view">
+        <field name="name">droga.export.items.composition.form</field>
+        <field name="model">droga.export.items.composition</field>
+        <field name="arch" type="xml">
+            <form string="Items composition">
+                <sheet>
+                    <group string="Export items composition">
+                        <group>
+                            <field name="raw_item" options="{'no_create':True,'no_open':True}"></field>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Items composition">
+                            <field name="items_detail">
+                                <tree editable="bottom">
+                                    <field name="company_id" invisible="1"/>
+                                    <field name="item" required="1" options="{'no_create':True,'no_open':True}"/>
+                                    <field name="type"/>
+                                    <field name="rate_in_pct"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                    </notebook>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="droga_export_items_composition_form_action" model="ir.actions.act_window">
+        <field name="name">Export items composition</field>
+        <field name="res_model">droga.export.items.composition</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+            id="droga_export_items_composition_menu"
+            name="Export Items Composition"
+            action="droga_export_items_composition_form_action"
+            parent="sale.menu_sales_config"
+            sequence="40"/>
+</odoo>

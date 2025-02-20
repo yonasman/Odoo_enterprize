@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="droga_inventory_office_supplies_request_action" model="ir.actions.act_window">
+        <field name="name">Store Requisition</field>
+        <field name="res_model">droga.inventory.office.supplies.request</field>
+        <field name="view_mode">tree,form,kanban</field>
+    </record>
+
+    <!-- action for purchase request -->
+    <record id="droga_purchase_request_store_requsition_action" model="ir.actions.act_window">
+        <field name="name">Purchase Request</field>
+        <field name="res_model">droga.purchase.request.local</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+        (0, 0, {'view_mode': 'tree', 'view_id': ref('droga_procurement.droga_purchase_request_local_view_tree')}),
+         (0, 0, {'view_mode': 'form', 'view_id': ref('droga_procurement.droga_purchase_request_local_view_form')})]"/>
+        <field name="domain">[('store_request_id', '=', active_id)]</field>
+        <field name="context">{'default_store_request_id': active_id}</field>
+        <field name="target">current</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Purchase Request
+            </p>
+        </field>
+    </record>
+
+    <record id="droga_inventory_office_supplies_request_tree" model="ir.ui.view">
+        <field name="name">droga.inventory.office.supplies.request.tree</field>
+        <field name="model">droga.inventory.office.supplies.request</field>
+        <field name="arch" type="xml">
+            <tree string="" delete="0" duplicate="0">
+                <field name="name" string="Request Reference"/>
+                <field name="requested_by"/>
+                <field name="request_picking" invisible="1"/>
+                <field name="request_date"/>
+                <field name="department"/>
+                <field name="purpose"/>
+                <field name="state" decoration-warning="state in('submit')"
+                       decoration-info="state in('submit','verify','Budget Approval','waiting','processed')"
+                       decoration-danger="state == 'cancel'" decoration-success="state == 'done'" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- kanban view  procurement -->
+    <record id="droga_inventory_office_supplies_request_kanban" model="ir.ui.view">
+        <field name="name">Store Requisition</field>
+        <field name="model">droga.inventory.office.supplies.request</field>
+        <field name="arch" type="xml">
+            <kanban quick_create="false" create="true" edit="false" delete="false">
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                            <div class="o_kanban_record_top mb16">
+                                <!--<field name="priority" widget="priority"/>-->
+                                <div class="o_kanban_record_headings ms-1">
+                                    <strong class="o_kanban_record_title">
+                                        <span>
+                                            <field name="name"/>
+
+                                        </span>
+                                    </strong>
+                                </div>
+                                <strong>
+                                    <field name="total_amount" widget="monetary"/>
+                                </strong>
+                            </div>
+                            <div class="o_kanban_record_bottom">
+                                <div class="oe_kanban_bottom_left">
+                                    <span>
+                                        <field name="requested_by"/>
+                                        <field name="request_date"/>
+                                    </span>
+                                    <field name="activity_ids" widget="kanban_activity"/>
+                                </div>
+                                <div class="oe_kanban_bottom_right">
+                                    <field name="state" widget="label_selection"
+                                           options="{'classes': {'Approved': 'success', 'Draft': 'warning'}}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- search view -->
+    <record id="droga_inventory_office_supplies_request_search" model="ir.ui.view">
+        <field name="name">droga.inventory.office.supplies.request.view.search</field>
+        <field name="model">droga.inventory.office.supplies.request</field>
+        <field name="arch" type="xml">
+            <search string="">
+                <field name="name"/>
+                <field name="requested_by"/>
+                <field name="request_date"/>
+                <field name="department"/>
+                <field name="purpose"/>
+                <field name="state"/>
+                <separator/>
+                <filter name="submitted" string="Submitted" domain="[('state', '=', 'submit')]"/>
+                <filter name="verified" string="Verified" domain="[('state', '=', 'verify')]"/>
+                <filter name="budget" string="Budget Approved" domain="[('state', '=', 'Budget Approval')]"/>
+                <filter name="approved" string="Approved" domain="[('state', '=', 'done')]"/>
+                <filter name="canceled" string="Canceled" domain="[('state', '=', 'cancel')]"/>
+                <separator/>
+                <filter name="request_date" string="Request Date" date="request_date"/>
+
+                <group expand="0" string="Group By">
+                    <filter string="Department" name="department" domain="[]" context="{'group_by': 'department'}"/>
+                    <filter string="Request Date" name="request_date" domain="[]"
+                            context="{'group_by': 'request_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- store requisition form user -->
+    <record id="droga_inventory_office_supplies_request_form" model="ir.ui.view">
+        <field name="name">droga.inventory.office.supplies.request.form</field>
+        <field name="model">droga.inventory.office.supplies.request</field>
+        <field name="arch" type="xml">
+            <form string="Office supplies request" delete="0" duplicate="0">
+                <header>
+                    <button name="action_submit" states="draft" string="Submit" type="object" class="oe_highlight"
+                            data-hotkey="v"/>
+                    <button name="action_verify" states="submit" string="Verify" type="object" class="oe_highlight"
+                            data-hotkey="v"/>
+                    <button name="action_budget_check" type="object" states="verify" string="Budget Approved"
+                            id="budget_checked_request" class="oe_highlight" data-hotkey="v"/>
+                    <!--<button name="action_request" type="object" states="Budget Approval" string="Issue" id="action_request" class="oe_highlight" data-hotkey="v"/>-->
+                    <!--<button name="action_receive" attrs="{'invisible': [('id','=',None)]}" states="draft" string="Receive" type="object" class="oe_highlight" data-hotkey="v"/>-->
+
+                    <button name="action_cancel" states="draft" string="Cancel" type="object"
+                            class="oe_highlight btn-danger" data-hotkey="v"
+                            confirm="Are you sure you want to cancel the request? once it cancelled you can't modify the form"/>
+                    <button name="action_reject" type="object" states="submit,verify,Budget Approval" string="Reject"
+                            id="reject_request" data-hotkey="v" class="oe_highlight btn-warning"
+                            confirm="Are you sure you want to reject the request?"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_create_purchase_request" string="Create PR" type="object"
+                                class="oe_stat_button" icon="fa-arrows-v"
+                                attrs="{'invisible': [('state', 'not in', ('waiting','processed','done'))]}"/>
+                        <button name="%(droga_purchase_request_store_requsition_action)d" string="View PR" type="action"
+                                class="oe_stat_button" icon="fa-list"
+                                attrs="{'invisible': [('state', 'not in', ('waiting','processed','done'))]}"/>
+                    </div>
+                    <div class="oe_title">
+                        <span class="o_form_label">Store Requistion No</span>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="requested_by" options="{'no_create':True,'no_open':True}"
+                                   attrs="{'readonly': [('state', 'not in', ('draft'))]}"></field>
+                            <field name="request_picking" string="Request id" widget="many2many_tags" readonly="1"
+                                   invisible="1"/>
+                            <field name="department" options="{'no_create':True,'no_open':True}"
+                                   attrs="{'readonly': [('state', 'not in', ('draft'))]}"/>
+                            <field name="department_manager" readonly="1" invisible="1"/>
+                            <field name="branch" options="{'no_create':True,'no_open':True}" required="1"
+                                   attrs="{'readonly': [('state', 'not in', ('draft'))]}"/>
+                            <field name="request_type"/>
+                        </group>
+                        <group>
+                            <field name="approve_dept_manger" attrs="{'readonly': [('state', 'not in', ('draft'))]}"/>
+                            <field name="warehouse" attrs="{'readonly': [('state', 'not in', ('draft'))]}"
+                                   options="{'no_create':True,'no_open':True}" readonly="0" required="1"/>
+                            <field name="request_date" attrs="{'readonly': [('state', 'not in', ('draft'))]}"></field>
+                            <field name="product_type" attrs="{'readonly': [('state', 'not in', ('draft'))]}"
+                                   required="1"/>
+                            <field name="purpose" attrs="{'readonly': [('state', 'not in', ('draft'))]}"/>
+                            <field name="company_id" options="{'no_create':True,'no_open':True}"
+                                   attrs="{'readonly': [('state', 'not in', ('draft'))]}" invisible="1"/>
+                            <field name="total_amount" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Product Details">
+                            <field name="detail_entries"
+                                   attrs="{'readonly': [('state', 'in', ('waiting','reject','cancel','done'))]}">
+                                <tree editable="bottom">
+                                    <field name="company_id" invisible="1"/>
+                                    <field name="product_id" required="1" options="{'no_create':True,'no_open':True}"
+                                           width="40" context="{'default_detailed_type': 'product'}"
+                                           attrs="{'readonly': [('parent.state', 'not in', ('draft'))]}"/>
+                                    <field name="product_uom" width="10"
+                                           attrs="{'readonly': [('parent.state', 'not in', ('draft'))]}"/>
+                                    <field name="product_uom_category_id" invisible="1"
+                                           attrs="{'readonly': [('parent.state', 'not in', ('draft'))]}"/>
+                                    <field name="product_uom_qty" string="Qty" help="Quantity" width="10"
+                                           attrs="{'readonly': [('parent.state', 'not in', ('draft'))]}"/>
+
+                                    <field name="unit_price" width="10"
+                                           attrs="{'readonly': [('parent.state', 'not in', ('draft'))]}"/>
+                                    <field name="total_price" width="10"
+                                           attrs="{'readonly': [('parent.state', 'not in', ('draft'))]}"/>
+                                    <field name="budgetary_position" width="10" required="1"
+                                           options="{'no_create':True,'no_open':True}" string="Budget Category"/>
+                                    <field name="expense_account" width="10" options="{'no_create':True,'no_open':True}"
+                                           attrs="{'column_invisible': [('parent.state', 'not in', ('verify'))]}"
+                                           string="GL Account"/>
+                                    <field name="remaining_budget" width="10"
+                                           attrs="{'column_invisible': [('parent.state', 'not in', ('verify'))]}"
+                                           decoration-danger="total_price &gt; remaining_budget"
+                                           decoration-success="total_price &lt;= remaining_budget" widget="badge"/>
+                                    <field name="stock_balance" readonly="1" string="Stock Balance" width="10"/>
+                                    <field name="avaliable_qty" width="10"
+                                           attrs="{'column_invisible': [('parent.state', 'not in', ('Budget Approval'))]}"
+                                           string="Issue Qty"/>
+                                    <field name="unavilable_qty" invisible="1"/>
+
+                                    <!--
+                                    <field name="location_source_id" domain="([('usage','=','internal')])" string="Source location"/>
+                                    -->
+                                </tree>
+                            </field>
+                        </page>
+
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- store requisition form for warehouse manager -->
+    <record id="droga_inventory_office_supplies_request_warehouse_form" model="ir.ui.view">
+        <field name="name">droga.inventory.office.supplies.request.form</field>
+        <field name="model">droga.inventory.office.supplies.request</field>
+        <field name="arch" type="xml">
+            <form string="Office supplies request" delete="0" duplicate="0">
+                <header>
+                    <button name="action_submit" states="draft" string="Submit" type="object" class="oe_highlight"
+                            data-hotkey="v"/>
+                    <button name="action_verify" states="submit" string="Verify" type="object" class="oe_highlight"
+                            data-hotkey="v"/>
+                    <button name="action_budget_check" type="object" states="verify" string="Budget Approved"
+                            id="budget_checked_request" class="oe_highlight" data-hotkey="v"/>
+                    <button name="action_request" type="object" states="Budget Approval" string="Issue"
+                            id="action_request" class="oe_highlight" data-hotkey="v"/>
+                    <!--<button name="action_receive" attrs="{'invisible': [('id','=',None)]}" states="draft" string="Receive" type="object" class="oe_highlight" data-hotkey="v"/>-->
+
+                    <button name="action_cancel" states="draft" string="Cancel" type="object"
+                            class="oe_highlight btn-danger" data-hotkey="v"
+                            confirm="Are you sure you want to cancel the request? once it cancelled you can't modify the form"/>
+                    <button name="action_reject" type="object" states="submit,verify,Budget Approval" string="Reject"
+                            id="reject_request" data-hotkey="v" class="oe_highlight btn-warning"
+                            confirm="Are you sure you want to reject the request?"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_create_purchase_request" string="Create PR" type="object"
+                                class="oe_stat_button" icon="fa-file-text"
+                                attrs="{'invisible': [('state', 'not in', ('Budget Approval','waiting','processed','done'))]}"/>
+                        <button name="%(droga_purchase_request_store_requsition_action)d" string="View PR" type="action"
+                                class="oe_stat_button" icon="fa-list"
+                                attrs="{'invisible': [('state', 'not in', ('Budget Approval','waiting','processed','done'))]}"/>
+                    </div>
+                    <div class="oe_title">
+                        <span class="o_form_label">Store Requistion No</span>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="requested_by" options="{'no_create':True,'no_open':True}"
+                                   attrs="{'readonly': [('state', 'not in', ('draft'))]}"></field>
+                            <field name="request_picking" string="Request id" widget="many2many_tags" readonly="1"
+                                   invisible="1"/>
+                            <field name="department" options="{'no_create':True,'no_open':True}"
+                                   attrs="{'readonly': [('state', 'not in', ('draft'))]}"/>
+                            <field name="department_manager" readonly="1" invisible="1"/>
+                            <field name="branch" options="{'no_create':True,'no_open':True}" required="1"
+                                   attrs="{'readonly': [('state', 'not in', ('draft'))]}"/>
+                            <field name="request_type"/>
+                        </group>
+                        <group>
+                            <field name="approve_dept_manger" attrs="{'readonly': [('state', 'not in', ('draft'))]}"/>
+                            <field name="warehouse" attrs="{'readonly': [('state', 'not in', ('draft'))]}"
+                                   options="{'no_create':True,'no_open':True}" readonly="0" required="1"/>
+                            <field name="request_date" attrs="{'readonly': [('state', 'not in', ('draft'))]}"></field>
+                            <field name="product_type" attrs="{'readonly': [('state', 'not in', ('draft'))]}"
+                                   required="1"/>
+                            <field name="purpose" attrs="{'readonly': [('state', 'not in', ('draft'))]}"/>
+                            <field name="company_id" options="{'no_create':True,'no_open':True}"
+                                   attrs="{'readonly': [('state', 'not in', ('draft'))]}" invisible="1"/>
+                            <field name="total_amount" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Product Details">
+                            <field name="detail_entries"
+                                   attrs="{'readonly': [('state', 'in', ('waiting','reject','cancel','done'))]}">
+                                <tree editable="bottom">
+                                    <field name="company_id" invisible="1"/>
+                                    <field name="product_id" required="1" options="{'no_create':True,'no_open':True}"
+                                           width="40" context="{'default_detailed_type': 'product'}"
+                                           attrs="{'readonly': [('parent.state', 'not in', ('draft'))]}"/>
+                                    <field name="product_uom" width="10"
+                                           attrs="{'readonly': [('parent.state', 'not in', ('draft'))]}"/>
+                                    <field name="product_uom_category_id" invisible="1"
+                                           attrs="{'readonly': [('parent.state', 'not in', ('draft'))]}"/>
+                                    <field name="product_uom_qty" string="Qty" help="Quantity" width="10"
+                                           attrs="{'readonly': [('parent.state', 'not in', ('draft'))]}"/>
+
+                                    <field name="unit_price" width="10"
+                                           attrs="{'readonly': [('parent.state', 'not in', ('draft'))]}"/>
+                                    <field name="total_price" width="10"
+                                           attrs="{'readonly': [('parent.state', 'not in', ('draft'))]}"/>
+                                    <field name="budgetary_position" width="10" required="1"
+                                           options="{'no_create':True,'no_open':True}" string="Budget Category"/>
+                                    <field name="expense_account" width="10" options="{'no_create':True,'no_open':True}"
+                                           attrs="{'column_invisible': [('parent.state', 'not in', ('verify'))]}"
+                                           string="GL Account"/>
+                                    <field name="remaining_budget" width="10"
+                                           attrs="{'column_invisible': [('parent.state', 'not in', ('verify'))]}"
+                                           decoration-danger="total_price &gt; remaining_budget"
+                                           decoration-success="total_price &lt;= remaining_budget" widget="badge"/>
+                                    <field name="stock_balance" readonly="1" string="Stock Balance" width="10"/>
+                                    <field name="avaliable_qty" width="10"
+                                           attrs="{'column_invisible': [('parent.state', 'not in', ('Budget Approval'))]}"
+                                           string="Issue Qty"/>
+                                    <field name="unavilable_qty" invisible="1"/>
+
+                                    <!--
+                                    <field name="location_source_id" domain="([('usage','=','internal')])" string="Source location"/>
+                                    -->
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Picking List">
+                            <field name="request_picking">
+                                <tree create="0" edit="0">
+                                    <field name="name"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- rule for filtering data specific data -->
+    <record model="ir.rule" id="droga_store_request_rule">
+        <field name="name">Store Requisition multi-company</field>
+        <field name="model_id" ref="model_droga_inventory_office_supplies_request"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+
+    <!--action for store manager -->
+    <record id="droga_inventory_office_supplies_request_warehouse_action" model="ir.actions.act_window">
+        <field name="name">Store Requisition</field>
+        <field name="res_model">droga.inventory.office.supplies.request</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+        (0, 0, {'view_mode': 'tree', 'view_id': ref('droga_inventory_office_supplies_request_tree')}),
+         (0, 0, {'view_mode': 'form', 'view_id': ref('droga_inventory_office_supplies_request_warehouse_form')}),
+         (0, 0, {'view_mode': 'kanban', 'view_id': ref('droga_inventory_office_supplies_request_kanban')})]"/>
+        <field name="domain">[('request_type', '=', 'Local')]</field>
+        <field name="context">{'default_request_type': 'Local'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No Store requisition found!
+            </p>
+        </field>
+    </record>
+
+    <record id="droga_inventory_office_supplies_request_pharmacy_warehouse_action" model="ir.actions.act_window">
+        <field name="name">Store Requisition</field>
+        <field name="res_model">droga.inventory.office.supplies.request</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+        (0, 0, {'view_mode': 'tree', 'view_id': ref('droga_inventory_office_supplies_request_tree')}),
+         (0, 0, {'view_mode': 'form', 'view_id': ref('droga_inventory_office_supplies_request_warehouse_form')}),
+         (0, 0, {'view_mode': 'kanban', 'view_id': ref('droga_inventory_office_supplies_request_kanban')})]"/>
+        <field name="domain">[('request_type', '=', 'Pharmacy')]</field>
+        <field name="context">{'default_request_type': 'Pharmacy'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No Store requisition found!
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="droga_stock_office_supplies_request_menu" name="Store Requisition"
+              action="droga_inventory_office_supplies_request_warehouse_action" groups="base.group_user"
+              parent="stock.menu_stock_warehouse_mgmt"/>
+
+    <menuitem id="droga_stock_office_supplies_request_procurement_menu" name="Store Requisition"
+              action="droga_inventory_office_supplies_request_warehouse_action" groups="base.group_user"
+              parent="droga_procurement.droag_procurement_local" sequence="0"/>
+
+</odoo>

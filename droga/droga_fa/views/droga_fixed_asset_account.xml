@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- inherited asset form view -->
+    <record id="inherit_for_account_asset_form" model="ir.ui.view">
+        <field name="name">Asset</field>
+        <field name="model">account.asset</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@class='oe_title']" position="before">
+
+                <div class="oe_title">
+                    <label for="name" name="model_asset_number_label" string="Asset Code"/>
+                    <h1>
+                        <field name="asset_number" readonly="1"/>
+                    </h1>
+                </div>
+
+            </xpath>
+
+            <xpath expr="//field[@name='model_id']" position="after">
+                <field name="asset_sub_category" options="{'no_create':True,'no_open':True}"/>
+
+            </xpath>
+
+            <xpath expr="//button[@name='set_to_cancelled']" position="after">
+                <button type="object" name="generate_asset_id" string="Get Asset Code"
+                        attrs="{'invisible': [('asset_number', '=', True)]}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- tree view -->
+    <record id="inherit_for_account_asset_tree" model="ir.ui.view">
+        <field name="name">Asset</field>
+        <field name="model">account.asset</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_purchase_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="asset_number" readonly="1"/>
+
+            </xpath>
+
+
+        </field>
+    </record>
+
+    <!-- search  view -->
+    <record id="inherit_for_account_asset_search" model="ir.ui.view">
+        <field name="name">Asset</field>
+        <field name="model">account.asset</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="asset_number"/>
+
+            </xpath>
+        </field>
+    </record>
+
+    <!-- tree view -->
+    <record id="account_asset_sub_category_tree" model="ir.ui.view">
+        <field name="name">Asset</field>
+        <field name="model">account.asset.subcat</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="asset_cat" options="{'no_create':True,'no_open':True}"/>
+                <field name="sequence"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- rule for filtering data specific data -->
+    <record model="ir.rule" id="droga_asset_sub_category_rule">
+        <field name="name">Asset Sub Category multi-company</field>
+        <field name="model_id" ref="model_account_asset_subcat"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+
+</odoo>

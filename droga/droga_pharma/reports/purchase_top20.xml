@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="drop_top_supp_pharma_line_pharmacy_pivot" model="ir.ui.view">
+        <field name="name">droga.top.supp.pharma.pivot.pharmacy.invoice</field>
+        <field name="model">droga.top.supp.pharma</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="yr" type="col"/>
+                <field name="partner_id" type="row"/>
+                <field name="total_purchase" string="Amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- graph -->
+    <record id="drop_top_supp_pharma_line_pharmacy_graph" model="ir.ui.view">
+        <field name="name">droga.top.supp.pharma.graph.pharmacy</field>
+        <field name="model">droga.top.supp.pharma</field>
+        <field name="arch" type="xml">
+            <graph>
+                <field name="partner_id" type="col"/>
+                <field name="total_purchase" string="Amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    <record id="drop_top_supp_pharmas_detail_pharmacy_tree" model="ir.ui.view">
+        <field name="name">droga.top.supp.pharma.tree.pharmacy</field>
+        <field name="model">droga.top.supp.pharma</field>
+        <field name="arch" type="xml">
+            <tree string="Purchase order" delete="false" create="false">
+                <field name="partner_id"></field>
+                <field name="yr" string="Year"></field>
+                <field name="total_purchase"></field>
+                <field name="rank" string="Rank"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="drop_top_supp_pharmas_detail_pharmacy_search" model="ir.ui.view">
+        <field name="name">droga.top.supp.pharma.search.pharma.by.pharmacy</field>
+        <field name="model">droga.top.supp.pharma</field>
+        <field name="arch" type="xml">
+            <search string="Sales order">
+                <field name="partner_id"></field>
+                <field name="yr" string="Year"></field>
+                <field name="total_purchase"></field>
+                <field name="rank" string="Rank"></field>
+
+                <filter name="group_supp" string="Group by Supplier" context="{'group_by':'partner_id'}"/>
+                <filter name="group_year" string="Group by Year" context="{'group_by':'yr'}"/>
+
+            </search>
+        </field>
+    </record>
+
+    <record id="drop_top_supp_pharmas_detail_pharmacy_action" model="ir.actions.act_window">
+        <field name="name">Top 20 suppliers by year</field>
+        <field name="res_model">droga.top.supp.pharma</field>
+        <field name="view_mode">tree,pivot,graph</field>
+        <field name="limit">200</field>
+        <field name="search_view_id" ref="drop_top_supp_pharmas_detail_pharmacy_search"></field>
+        <field name="view_ids"
+                   eval="[(5, 0, 0),
+                          (0, 0, {'view_mode': 'graph', 'view_id': ref('drop_top_supp_pharma_line_pharmacy_graph')}),
+                          (0, 0, {'view_mode': 'pivot', 'view_id': ref('drop_top_supp_pharma_line_pharmacy_pivot')}),
+                          (0, 0, {'view_mode': 'tree', 'view_id': ref('drop_top_supp_pharmas_detail_pharmacy_tree')})]"/>
+    </record>
+
+</odoo>

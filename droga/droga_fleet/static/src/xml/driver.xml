@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="droga_fleet.Driver_location"
+       t-inherit="web.FormView" t-inherit-mode="primary" owl="1">
+
+
+        <xpath expr="//ActionMenus" position="after">
+            <button class="btn btn-info" type="button" t-on-click="onClickTestJavascript" groups="droga_fleet.droga_driver">
+              Confirm Delivery
+            </button>
+
+        </xpath>
+
+    </t>
+</templates>

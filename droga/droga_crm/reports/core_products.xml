@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="droga_crm_core_products_crm_tree" model="ir.ui.view">
+        <field name="name">droga.crm.core.products.list</field>
+        <field name="model">product.template</field>
+        <field name="arch" type="xml">
+            <tree string="" create="false" delete="false" expand="1">
+                <field name="name"></field>
+                <field name="default_code" string="Internal reference"></field>
+                <field name="list_price"></field>
+                <field name="categ_id"></field>
+                <field name="default_warehouse"></field>
+                <field name="average_month_consumption"></field>
+                <field name="average_month_consumption_phar"></field>
+                <field name="availability" invisible="1"></field>
+                <field name="availability" decoration-success="availability =='Available'" decoration-warning="availability =='Needs reordering'"
+                       decoration-danger="availability == 'Stock out'" widget="badge"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_crm_core_products_crm_search" model="ir.ui.view">
+        <field name="name">droga.crm.core.products.search</field>
+        <field name="model">product.template</field>
+        <field name="arch" type="xml">
+            <search string="Core products">
+                <field name="name"></field>
+                <field name="default_code" string="Internal reference"></field>
+                <field name="list_price"></field>
+                <field name="categ_id"></field>
+                <field name="default_warehouse"></field>
+                <field name="average_month_consumption"></field>
+                <field name="average_month_consumption_phar"></field>
+                <field name="availability"></field>
+                <filter name="core_products" string="Core products" domain="[('is_core_product', '=', True)]" />
+
+                <filter name="group_unregistered" string="CRM Group unregistered" domain="[('crm_group', '=', False)]" />
+
+                <separator/>
+
+                <filter name="available" string="Available" domain="[('availability', '=', 'Available')]" />
+                <filter name="needs_reordering" string="Needs reordering" domain="[('availability', '=', 'Needs reordering')]" />
+                <filter name="stock_out" string="Stock out" domain="[('availability', '=', 'Stock out')]" />
+                <filter name="group_categ" string="Category" context="{'group_by':'categ_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="droga_crm_core_products_crm_action" model="ir.actions.act_window">
+        <field name="name">Core products</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">tree</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('droga_crm_core_products_crm_tree')})]"/>
+        <field name="search_view_id" ref="droga_crm_core_products_crm_search"></field>
+        <field name="context">{"search_default_core_products":1}</field>
+    </record>
+
+    <menuitem
+            id="menu_inq_vist_reports"
+            name="Inquiries"
+            parent="menu_visit_reports"
+            sequence="24"/>
+
+    <menuitem
+            id="droga_crm_core_products_crm_menu"
+            name="Core products"
+            action="droga_crm_core_products_crm_action"
+            parent="menu_inq_vist_reports"
+            groups="crm_mr"
+            sequence="10"/>
+</odoo>

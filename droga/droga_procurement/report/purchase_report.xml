@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="inherit_for_purchase_report_tree" model="ir.ui.view">
+        <field name="name">Purchase Report</field>
+        <field name="model">purchase.report</field>
+        <field name="inherit_id" ref="purchase.purchase_report_view_tree"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='order_id']" position="after">
+                <field name="grns" widget="many2many_tags" optional="show"/>
+            </xpath>
+
+            <xpath expr="//field[@name='price_total']" position="after">
+                <field name="landed_cost" sum="landed_cost" optional="show"/>
+                <field name="po_and_lc_total" sum="po_and_lc_total" optional="show"/>
+            </xpath>
+
+        </field>
+    </record>
+
+
+</odoo>

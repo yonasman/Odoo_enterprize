@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+        <!-- action for purchase report -->
+    <record id="droga_purchase_request_local_report_action" model="ir.actions.report">
+        <field name="name">Purchase Request</field>
+        <field name="model">droga.purchase.request.local</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">droga_procurement.droga_purchase_request_local_report</field>
+        <field name="report_file">droga_procurement.droga_purchase_request_local_report</field>
+        <field name="print_report_name">'Purchase Request - %s' % (object.name)
+        </field>
+        <field name="binding_model_id" ref="model_droga_purchase_request_local"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="droga_purchase_request_local_report" name="Purchase Request">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-foreach="docs" t-as="o">
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <h2>Purchase Request #<span t-field="o.name"/>
+                        </h2>
+
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-3 bm-2">
+                                <strong>Requested By:</strong>
+                                <p t-field="o.request_by" class="m-0"/>
+                            </div>
+                            <div class="col-3 bm-2">
+                                <strong>Department:</strong>
+                                <p t-field="o.department" class="m-0"/>
+                            </div>
+                            <div class="col-3 bm-2">
+                                <strong>Branch:</strong>
+                                <p t-field="o.branch" class="m-0"/>
+                            </div>
+                            <div class="col-3 bm-2">
+                                <strong>Order Date:</strong>
+                                <p t-field="o.request_date" class="m-0"/>
+                            </div>
+
+                        </div>
+                        <br/>
+                        <div id="informations" class="row mt32 mb32">
+
+                            <div class="col-6 bm-2">
+                                <strong>Purpose:</strong>
+                                <p t-field="o.purpose" class="m-0"/>
+                            </div>
+                        </div>
+                        <br/>
+                        <table class="table table-sm o_main_table">
+                            <thead>
+                                <tr>
+                                    <th name="th_no">
+                                        <strong>No</strong>
+                                    </th>
+                                    <th name="th_description">
+                                        <strong>Description</strong>
+                                    </th>
+                                    <th name="th_quantity">
+                                        <strong>Qty</strong>
+                                    </th>
+                                    <th name="th_quantity">
+                                        <strong>Unit Price</strong>
+                                    </th>
+                                    <th name="th_quantity">
+                                        <strong>Total Price</strong>
+                                    </th>
+                                    <th name="th_uom">
+                                        <strong>UoM</strong>
+                                    </th>
+                                    <th name="th_remark">
+                                        <strong>Remark</strong>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <t t-foreach="o.purchase_request_lines" t-as="line">
+                                    <tr>
+                                        <td id="no">
+                                            <span t-esc="line_index + 1" />
+                                        </td>
+                                        <td id="product">
+                                            <span t-field="line.product_id"/>
+                                        </td>
+
+                                        <td id="qty">
+                                            <span t-field="line.product_qty"/>
+                                        </td>
+                                        <td id="qty">
+                                            <span t-field="line.unit_price"/>
+                                        </td>
+                                        <td id="qty">
+                                            <span t-field="line.total_price"/>
+                                        </td>
+                                        <td id="uom">
+                                            <span t-field="line.product_uom"/>
+                                        </td>
+                                        <td id="remark">
+                                            <span t-field="line.remark"/>
+                                        </td>
+                                    </tr>
+                                </t>
+
+                            </tbody>
+                        </table>
+                        <hr/>
+                        <div id="informations" class="row mt32 mb32">
+
+                            <t t-foreach="o.approvals" t-as="approval">
+                                <t t-if="approval.method == 'verify_request'">
+                                    <div class="col-6 bm-2">
+                                        <strong>Procurement Manager:</strong>
+                                        <span t-field="approval.user_id.name" class="m-0"/>
+                                        <br/>
+                                        <br/>
+                                        <strong>Date:</strong>
+                                        <span t-field="approval.create_date" class="m-0"/>
+
+                                    </div>
+                                </t>
+                                <t t-if="approval.method == 'approve_request'">
+                                    <div class="col-6 bm-2">
+
+                                        <strong>Approved By:</strong>
+                                        <span t-field="approval.user_id.name" class="m-0"/>
+                                        <br/>
+                                        <br/>
+                                        <strong>Date:</strong>
+                                        <span t-field="approval.create_date" class="m-0"/>
+
+
+                                    </div>
+                                </t>
+                            </t>
+
+                        </div>
+
+
+                    </div>
+                </t>
+            </t>
+        </t>
+
+    </template>
+
+    <!-- purchase request without price -->
+    <record id="droga_purchase_request_local_without_price_report_action" model="ir.actions.report">
+        <field name="name">Purchase Request - No Price</field>
+        <field name="model">droga.purchase.request.local</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">droga_procurement.droga_purchase_request_local_no_price_report</field>
+        <field name="report_file">droga_procurement.droga_purchase_request_local_no_price_report</field>
+        <field name="print_report_name">'Purchase Request Without Price - %s' % (object.name)
+        </field>
+        <field name="binding_model_id" ref="model_droga_purchase_request_local"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="droga_purchase_request_local_no_price_report" name="Purchase Request">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-foreach="docs" t-as="o">
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <h2>Purchase Request #<span t-field="o.name"/>
+                        </h2>
+
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-3 bm-2">
+                                <strong>Requested By:</strong>
+                                <p t-field="o.request_by" class="m-0"/>
+                            </div>
+                            <div class="col-3 bm-2">
+                                <strong>Department:</strong>
+                                <p t-field="o.department" class="m-0"/>
+                            </div>
+                            <div class="col-3 bm-2">
+                                <strong>Branch:</strong>
+                                <p t-field="o.branch" class="m-0"/>
+                            </div>
+                            <div class="col-3 bm-2">
+                                <strong>Order Date:</strong>
+                                <p t-field="o.request_date" class="m-0"/>
+                            </div>
+
+                        </div>
+                        <br/>
+                        <div id="informations" class="row mt32 mb32">
+
+                            <div class="col-6 bm-2">
+                                <strong>Purpose:</strong>
+                                <p t-field="o.purpose" class="m-0"/>
+                            </div>
+                        </div>
+                        <br/>
+                        <table class="table table-sm o_main_table">
+                            <thead>
+                                <tr>
+                                    <th name="th_no">
+                                        <strong>No</strong>
+                                    </th>
+                                    <th name="th_description">
+                                        <strong>Description</strong>
+                                    </th>
+                                    <th name="th_quantity">
+                                        <strong>Qty</strong>
+                                    </th>
+
+                                    <th name="th_uom">
+                                        <strong>UoM</strong>
+                                    </th>
+                                    <th name="th_remark">
+                                        <strong>Remark</strong>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <t t-foreach="o.purchase_request_lines" t-as="line">
+                                    <tr>
+                                        <td id="no">
+                                            <span t-esc="line_index + 1" />
+                                        </td>
+                                        <td id="product">
+                                            <span t-field="line.product_id"/>
+                                        </td>
+
+                                        <td id="qty">
+                                            <span t-field="line.product_qty"/>
+                                        </td>
+
+                                        <td id="uom">
+                                            <span t-field="line.product_uom"/>
+                                        </td>
+                                        <td id="remark">
+                                            <span t-field="line.remark"/>
+                                        </td>
+                                    </tr>
+                                </t>
+
+                            </tbody>
+                        </table>
+                        <hr/>
+                        <div id="informations" class="row mt32 mb32">
+
+                            <t t-foreach="o.approvals" t-as="approval">
+                                <t t-if="approval.method == 'verify_request'">
+                                    <div class="col-6 bm-2">
+                                        <strong>Procurement Manager:</strong>
+                                        <span t-field="approval.user_id.name" class="m-0"/>
+                                        <br/>
+                                        <br/>
+                                        <strong>Date:</strong>
+                                        <span t-field="approval.create_date" class="m-0"/>
+
+                                    </div>
+                                </t>
+                                <t t-if="approval.method == 'approve_request'">
+                                    <div class="col-6 bm-2">
+
+                                        <strong>Approved By:</strong>
+                                        <span t-field="approval.user_id.name" class="m-0"/>
+                                        <br/>
+                                        <br/>
+                                        <strong>Date:</strong>
+                                        <span t-field="approval.create_date" class="m-0"/>
+
+
+                                    </div>
+                                </t>
+                            </t>
+
+                        </div>
+
+
+                    </div>
+                </t>
+            </t>
+        </t>
+
+    </template>
+
+</odoo>

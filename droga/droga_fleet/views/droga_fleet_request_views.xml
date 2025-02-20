@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="droga_fleet_vehicle_custom" model="ir.ui.view">
+        <field name="name">Custom droga fleet vehicle</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[1]" position="attributes">
+                <attribute name='invisible'>1</attribute>
+            </xpath>
+            <!--        <page string="Tax Info" position="attributes">-->
+            <!--            <attribute name='invisible'>1</attribute>-->
+            <!--        </page>-->
+            <xpath expr="//field[@name='location']" position="after">
+                <field name="vehicle_status"/>
+                <field name="available"/>
+            </xpath>
+            <xpath expr="//field[@name='horsepower']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+            <xpath expr="//field[@name='horsepower_tax']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+            <xpath expr="//field[@name='co2_standard']" position="after">
+                <field name="cc"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page name="droga_rent_contract" string="Rent Contarct"
+                      attrs="{'invisible': [('vehicle_status', '!=', 'rented')] }">
+                    <group>
+                        <group>
+                            <field name="four_wheels"/>
+                            <field name="mud_flaps"/>
+                            <field name="spare_tire"/>
+                            <field name="radio_tape"/>
+                            <field name="wheel_screw"/>
+                            <field name="molded_carpet"/>
+                            <field name="car_jack"/>
+                            <field name="side_mirror"/>
+                            <field name="antenna"/>
+                        </group>
+                        <group>
+                            <field name="car_type"/>
+                            <field name="plate_number"/>
+                            <field name="fuel_amount"/>
+                            <field name="rent_type"/>
+                            <field name="with_driver"/>
+                            <field name="return_place"/>
+                            <field name="rent_fee"/>
+                            <field name="additional_info"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page name="droga_fleet_insurance" string="Insurance">
+                    <group>
+                        <group>
+                            <field name="bolo_renewal_date"
+                                   attrs="{'invisible': [('vehicle_status', '!=', 'owned')] }"/>
+                            <field name="bolo_due_date" attrs="{'invisible': [('vehicle_status', '!=', 'owned')] }"/>
+                        </group>
+                        <group>
+                            <field name="insurance_renewal_date"
+                                   attrs="{'invisible': [('vehicle_status', '!=', 'owned')] }"/>
+                            <field name="insurance_due_date"
+                                   attrs="{'invisible': [('vehicle_status', '!=', 'owned')] }"/>
+                        </group>
+                    </group>
+
+                            <field name="service_details">
+                                <tree>
+                                    <field name="service_due_date"/>
+                                     <field name="service_date"/>
+
+                                </tree>
+                            </field>
+
+                            <field name="contract_details" >
+                                <tree>
+                                    <field name="contract_renewal_date"/>
+                                     <field name="contract_due_date"/>
+
+                                </tree>
+                            </field>
+
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

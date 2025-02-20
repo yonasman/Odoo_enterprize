@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+
+    <!-- tree view -->
+    <record id="droga_hr_head_count_request_tree_view" model="ir.ui.view">
+        <field name="name">Head Count Request Tree View</field>
+        <field name="model">hr.head.count.request</field>
+        <field name="arch" type="xml">
+            <tree delete="0">
+                <field name="name"/>
+                <field name="requesting_department"/>
+                <field name="request_by"/>
+                <field name="request_date"/>
+                <field name="position_title"/>
+                <field name="education_level"/>
+                <field name="state" widget="badge" decoration-success="state == 'CEO'"
+                       decoration-danger="state == 'Cancelled'"
+                       decoration-warning="state in('Draft','Approved')"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form view -->
+    <record id="droga_hr_head_count_request_form_view" model="ir.ui.view">
+        <field name="name">Head Count Request Tree View</field>
+        <field name="model">hr.head.count.request</field>
+        <field name="arch" type="xml">
+            <form string="Head Count Request" create="0" delete="0">
+                <header>
+                    <button name="submit_request" type="object" string="Submit" class="oe_highlight"
+                            id="submit_request" data-hotkey="v"
+                            attrs="{'invisible':[('state','not in',('Draft'))]}"/>
+                    <button name="approve_request" type="object" states="Submitted" string="Approve"
+                            class="oe_highlight" id="approve_request1" data-hotkey="v"/>
+                    <button name="approve_request_ceo" type="object" states="Approved" string="Approve"
+                            class="oe_highlight" id="approve_request_ceo" data-hotkey="v"/>
+                    <button name="cancel_request" type="object" string="Cancel"
+                            id="cancel_request1" data-hotkey="v"
+                            confirm="Are you sure you want to cancel the request? once it cancelled you can't modify the form"
+                            class="oe_highlight btn-danger"
+                            attrs="{'invisible':['|',('requester','!=',False),('state','not in',('Draft','CEO'))]}"/>
+                    <button name="reject_request" type="object"
+                            string="Reject" id="reject_request1"
+                            confirm="Are you sure you want to reject the request?"
+                            data-hotkey="v" class="oe_highlight btn-warning"
+                            attrs="{'invisible':['|',('requester','=',True),('state','in',('Draft','CEO'))]}"
+                    />
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <span class="o_form_label">Request No</span>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="General Information">
+                            <field name="requesting_department" options="{'no_create':True,'no_open':True}"
+                                   string="Department" attrs="{'readonly': [('state', 'in', ('CEO', 'Cancelled'))]}"/>
+                            <field name="request_by" options="{'no_create':True,'no_open':True}"
+                                   attrs="{'readonly': [('state', 'in', ('CEO', 'Cancelled'))]}"/>
+                            <field name="request_date" attrs="{'readonly': [('state', 'in', ('CEO', 'Cancelled'))]}"/>
+                            <field name="position_type" attrs="{'readonly': [('state', 'in', ('CEO', 'Cancelled'))]}"/>
+                            <field name="desired_hiring_date"
+                                   attrs="{'readonly': [('state', 'in', ('CEO', 'Cancelled'))]}"/>
+                            <field name="work_location" attrs="{'readonly': [('state', 'in', ('CEO', 'Cancelled'))]}"/>
+                            <field name="requester" invisible="1"/>
+                        </group>
+                        <group string="Position Detail">
+                            <field name="position_title" attrs="{'readonly': [('state', 'in', ('CEO', 'Cancelled'))]}"/>
+                            <field name="working_condition"
+                                   attrs="{'readonly': [('state', 'in', ('CEO', 'Cancelled'))]}"/>
+                            <field name="working_hours"
+                                   attrs="{'invisible':[('working_condition','not in',('Full Time','Part Time'))]}"
+                            />
+                            <field name="hourly_rate"
+                                   attrs="{'invisible':[('working_condition','not in',('Part Time'))]}"/>
+                            <field name="contract_start_date"
+                                   attrs="{'invisible':[('working_condition','not in',('Contract'))]}"/>
+                            <field name="contract_end_date"
+                                   attrs="{'invisible':[('working_condition','not in',('Contract'))]}"/>
+                            <field name="company_id" options="{'no_create':True,'no_open':True}"
+                                   attrs="{'readonly': [('state', 'in', ('Approved', 'Cancelled'))]}" invisible="1"/>
+                        </group>
+                        <group string="Position Detail">
+                            <field name="supervisor" options="{'no_create':True,'no_open':True}"
+                                   attrs="{'readonly': [('state', 'in', ('CEO', 'Cancelled'))]}"/>
+                            <field name="recruitment_method"
+                                   attrs="{'readonly': [('state', 'in', ('CEO', 'Cancelled'))]}"/>
+                            <field name="approve_dept_manger"
+                                   attrs="{'readonly': [('state', 'in', ('CEO', 'Cancelled'))]}" invisible="1"/>
+                        </group>
+                        <group string="Position Detail">
+                            <field name="education_level"
+                                   attrs="{'readonly': [('state', 'in', ('CEO', 'Cancelled'))]}"/>
+                            <field name="education_level_desc" string="Specify"
+                                   attrs="{'readonly': [('state', 'in', ('CEO', 'Cancelled'))]}"/>
+                            <field name="work_experience"
+                                   attrs="{'readonly': [('state', 'in', ('CEO', 'Cancelled'))]}"/>
+
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- search view -->
+    <record id="droga_hr_head_count_request_search_view" model="ir.ui.view">
+        <field name="name">Head Count Request Search View</field>
+        <field name="model">hr.head.count.request</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="requesting_department"/>
+                <field name="request_date"/>
+                <field name="position_title"/>
+                <field name="education_level"/>
+                <field name="state"/>
+                <separator/>
+                <filter name="draft" string="Draft" domain="[('state', '=', 'Draft')]"/>
+                <filter name="approved" string="Approved" domain="[('state', 'in', ('Approved','CEO'))]"/>
+                <filter name="cancelled" string="Cancelled" domain="[('state', 'in', ('Cancelled'))]"/>
+                <separator/>
+                <filter name="request_date" string="Request Date" date="request_date"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- action for head count request -->
+    <record id="droga_hr_head_count_request1_action" model="ir.actions.act_window">
+        <field name="name">Head Count Request</field>
+        <field name="res_model">hr.head.count.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+        (0, 0, {'view_mode': 'tree', 'view_id': ref('droga_hr.droga_hr_head_count_request_tree_view')}),
+         (0, 0, {'view_mode': 'form', 'view_id': ref('droga_hr.droga_hr_head_count_request_form_view')})]"/>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Head Count Request
+            </p>
+        </field>
+    </record>
+
+</odoo>

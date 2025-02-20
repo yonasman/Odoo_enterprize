@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="droga_sales_discount_per_type_tree" model="ir.ui.view">
+        <field name="name">droga.price.discount.per.type.tree</field>
+        <field name="model">droga.price.discount.per.type</field>
+        <field name="arch" type="xml">
+            <tree delete="0">
+                <field name="cust_type" options="{'no_create':True,'no_open':True}"></field>
+                <field name="product_group" options="{'no_create':True,'no_open':True}"></field>
+                <field name="percent"></field>
+                <field name="core_products_or_all"></field>
+                <field name="used_under"></field>
+                <field name="status"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_sales_discount_per_type_form" model="ir.ui.view">
+        <field name="name">droga.price.discount.per.type.form</field>
+        <field name="model">droga.price.discount.per.type</field>
+        <field name="arch" type="xml">
+            <form delete="0">
+                <sheet>
+                    <group>
+                        <field name="cust_type" options="{'no_create':True,'no_open':True}"></field>
+                        <field name="product_group"
+                               domain="[('complete_name','not like','All%'),('avail_in_product_master','=',True)]"
+                               options="{'no_create':True,'no_open':True}"></field>
+                        <field name="percent"></field>
+                        <field name="core_products_or_all"></field>
+                        <field name="used_under"></field>
+                        <field name="status"></field>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="droga_sales_discount_per_type_action" model="ir.actions.act_window">
+        <field name="name">Discount per cust. type</field>
+        <field name="res_model">droga.price.discount.per.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids"
+               eval="[(5, 0, 0),(0, 0, {'view_mode': 'tree', 'view_id': ref('droga_sales_discount_per_type_tree')})]"/>
+
+    </record>
+
+    <menuitem
+            id="droga_sales_discount_per_type_menu"
+            name="Sales discount per cust.type"
+            action="droga_sales_discount_per_type_action"
+            parent="account.account_invoicing_menu"
+            sequence="20"/>
+
+    <menuitem
+            id="droga_sales_discount_per_type_menu_sales"
+            name="Sales discount per cust.type"
+            action="droga_sales_discount_per_type_action"
+            parent="sale.menu_sales_config"
+            sequence="20"/>
+
+
+    <record id="droga_sales_discount_per_amount_tree" model="ir.ui.view">
+        <field name="name">droga.price.discount.per.amount.tree</field>
+        <field name="model">droga.price.discount.per.amount</field>
+        <field name="arch" type="xml">
+            <tree delete="0">
+                <field name="payment_term" options="{'no_create':True,'no_open':True}"></field>
+                <field name="from_amt"></field>
+                <field name="to_amt"></field>
+                <field name="percent"></field>
+                <field name="core_products_or_all"></field>
+                <field name="used_under"></field>
+                <field name="status"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_sales_discount_per_amount_form" model="ir.ui.view">
+        <field name="name">droga.price.discount.per.amount.form</field>
+        <field name="model">droga.price.discount.per.amount</field>
+        <field name="arch" type="xml">
+            <form delete="0">
+                <sheet>
+                    <group>
+                        <field name="payment_term" options="{'no_create':True,'no_open':True}"></field>
+                        <field name="from_amt"></field>
+                        <field name="to_amt"></field>
+                        <field name="percent"></field>
+                        <field name="core_products_or_all"></field>
+                        <field name="used_under"></field>
+                        <field name="status"></field>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="droga_sales_discount_per_amount_action" model="ir.actions.act_window">
+        <field name="name">Discount per sales amount</field>
+        <field name="res_model">droga.price.discount.per.amount</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids"
+               eval="[(5, 0, 0),(0, 0, {'view_mode': 'tree', 'view_id': ref('droga_sales_discount_per_amount_tree')})]"/>
+
+    </record>
+
+    <menuitem
+            id="droga_sales_discount_per_amount_menu"
+            name="Sales discount per sales amount"
+            action="droga_sales_discount_per_amount_action"
+            parent="account.account_invoicing_menu"
+            sequence="20"/>
+
+    <menuitem
+            id="droga_sales_discount_per_amount_menu_sales"
+            name="Sales discount per sales amount"
+            action="droga_sales_discount_per_amount_action"
+            parent="sale.menu_sales_config"
+            sequence="20"/>
+
+
+    <record id="droga_sales_discount_per_prod_qty_tree" model="ir.ui.view">
+        <field name="name">droga.price.discount.per.product.qty.tree</field>
+        <field name="model">droga.price.discount.per.product.qty</field>
+        <field name="arch" type="xml">
+            <tree delete="0">
+                <field name="payment_term" options="{'no_create':True,'no_open':True}"></field>
+                <field name="product" options="{'no_create':True,'no_open':True}"></field>
+                <field name="from_qty"></field>
+                <field name="to_qty"></field>
+                <field name="percent"></field>
+                <field name="used_under"></field>
+                <field name="status"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_sales_discount_per_prod_qty_form" model="ir.ui.view">
+        <field name="name">droga.price.discount.per.product.qty.form</field>
+        <field name="model">droga.price.discount.per.product.qty</field>
+        <field name="arch" type="xml">
+            <form delete="0">
+                <sheet>
+                    <group>
+                        <field name="payment_term" options="{'no_create':True,'no_open':True}"></field>
+                        <field name="product" options="{'no_create':True,'no_open':True}"></field>
+                        <field name="from_qty"></field>
+                        <field name="to_qty"></field>
+                        <field name="percent"></field>
+                        <field name="used_under"></field>
+                        <field name="status"></field>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="droga_sales_discount_per_prod_qty_action" model="ir.actions.act_window">
+        <field name="name">Discount per product quantity ordered</field>
+        <field name="res_model">droga.price.discount.per.product.qty</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids"
+               eval="[(5, 0, 0),(0, 0, {'view_mode': 'tree', 'view_id': ref('droga_sales_discount_per_prod_qty_tree')})]"/>
+
+    </record>
+
+    <menuitem
+            id="droga_sales_discount_per_prod_qty_menu"
+            name="Sales discount per product qty"
+            action="droga_sales_discount_per_prod_qty_action"
+            parent="account.account_invoicing_menu"
+            sequence="20"/>
+
+    <menuitem
+            id="droga_sales_discount_per_prod_qty_menu_sales"
+            name="Sales discount per product qty"
+            action="droga_sales_discount_per_prod_qty_action"
+            parent="sale.menu_sales_config"
+            sequence="20"/>
+
+
+    <record id="droga_sales_discount_per_prod_cust_tree" model="ir.ui.view">
+        <field name="name">droga.price.discount.per.product.customer.tree</field>
+        <field name="model">droga.price.discount.per.product.customer</field>
+        <field name="arch" type="xml">
+            <tree delete="0">
+                <field name="payment_term" options="{'no_create':True,'no_open':True}"></field>
+                <field name="product" options="{'no_create':True,'no_open':True}"></field>
+                <field name="cust" options="{'no_create':True,'no_open':True}"></field>
+                <field name="percent" digits="[2, 10]"></field>
+                <field name="used_under"></field>
+                <field name="status"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_sales_discount_per_prod_cust_search" model="ir.ui.view">
+        <field name="name">droga.price.discount.per.product.customer.search</field>
+        <field name="model">droga.price.discount.per.product.customer</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="payment_term" options="{'no_create':True,'no_open':True}"></field>
+                <field name="product" options="{'no_create':True,'no_open':True}"></field>
+                <field name="cust" options="{'no_create':True,'no_open':True}"></field>
+                <field name="percent"></field>
+                <field name="used_under"></field>
+                <field name="status"></field>
+            </search>
+        </field>
+    </record>
+
+    <record id="droga_sales_discount_per_prod_cust_form" model="ir.ui.view">
+        <field name="name">droga.price.discount.per.product.customer.form</field>
+        <field name="model">droga.price.discount.per.product.customer</field>
+        <field name="arch" type="xml">
+            <form delete="0">
+                <sheet>
+                    <group>
+                        <field name="payment_term" options="{'no_create':True,'no_open':True}"></field>
+                        <field name="product" options="{'no_create':True,'no_open':True}"></field>
+                        <field name="cust" options="{'no_create':True,'no_open':True}"></field>
+                        <field name="percent" digits="[2, 10]"></field>
+                        <field name="used_under"></field>
+                        <field name="status"></field>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="droga_sales_discount_per_prod_cust_action" model="ir.actions.act_window">
+        <field name="name">Discount per customer and product</field>
+        <field name="res_model">droga.price.discount.per.product.customer</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids"
+               eval="[(5, 0, 0),(0, 0, {'view_mode': 'tree', 'view_id': ref('droga_sales_discount_per_prod_cust_tree')})]"/>
+        <field name="search_view_id" ref="droga_sales_discount_per_prod_cust_search"></field>
+
+    </record>
+
+    <menuitem
+            id="droga_sales_discount_per_cust_prod_menu"
+            name="Sales discount per customer and product"
+            action="droga_sales_discount_per_prod_cust_action"
+            parent="account.account_invoicing_menu"
+            sequence="20"/>
+
+    <menuitem
+            id="droga_sales_discount_per_cust_prod_menu_sales"
+            name="Sales discount per customer and product"
+            action="droga_sales_discount_per_prod_cust_action"
+            parent="sale.menu_sales_config"
+            sequence="20"/>
+
+</odoo>

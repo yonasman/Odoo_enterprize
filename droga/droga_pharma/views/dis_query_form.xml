@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+
+    <record id="view_drug_information_query_tree" model="ir.ui.view">
+        <field name="name">drug.information.query.tree</field>
+        <field name="model">drug.information.query</field>
+        <field name="arch" type="xml">
+            <tree delete="0">
+                <field name="date"/>
+                <field name="requestor_name"/>
+                <field name="request_type"/>
+                <field name="diagnosis"/>
+                <field name="current_medications"/>
+                <field name="preferred_response_method"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- form view -->
+    <data>
+        <record id="view_drug_information_query_form" model="ir.ui.view">
+            <field name="name">drug.information.query.form</field>
+            <field name="model">drug.information.query</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+
+                        <button name="open_enquire_form" string="Enquire" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('state', '!=', 'enquiry')]}"/>
+
+                        <button name="open_respond_form" string="Respond" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('state', '!=', 'response')]}"/>
+
+                        <button name="open_feedback_form" string="Feedback" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('state', '!=', 'feedback')]}"/>
+
+                        <field name="state" widget="statusbar" statusbar_visible="enquiry,response,feedback"/>
+                    </header>
+
+                    <sheet string="Drug Information Query Form">
+
+                        <h3>Query</h3>
+                        <hr></hr>
+                        <notebook>
+                            <!-- Page 1 -->
+                            <page string="Requestor Information">
+                                <group>
+                                    <field name="date"/>
+                                    <field name="requestor_name"/>
+                                    <field name="physical_address"/>
+                                    <field name="tel_no"/>
+                                    <field name="email"/>
+                                    <field name="qualification"/>
+                                    <field name="contact_methods"/>
+                                </group>
+                            </page>
+
+                            <!-- Page 2 -->
+                            <page string="Patient Information">
+                                <group>
+                                    <group>
+                                        <field name="request_type"/>
+                                        <field name="patient_age"/>
+                                        <field name="patient_sex"/>
+                                        <field name="patient_weight"/>
+                                    </group>
+                                    <group>
+                                        <field name="diagnosis"/>
+                                        <field name="current_medications"/>
+                                        <field name="concurrent_medications"/>
+                                        <field name="allergies"/>
+                                        <field name="other_information"/>
+                                    </group>
+                                </group>
+
+
+                            </page>
+
+                            <!-- Page 3 -->
+                            <page string="Response Information">
+                                <group>
+                                    <group>
+                                        <field name="request_question"/>
+                                        <field name="preferred_response_method"/>
+                                        <field name="response_time"/>
+                                        <field name="referral_required"/>
+                                        <field name="additional_information"/>
+                                    </group>
+
+
+                                </group>
+                            </page>
+                        </notebook>
+
+                        <hr></hr>
+                        <h3>Response</h3>
+                        <hr></hr>
+
+                        <notebook>
+                            <!-- Page  -->
+                            <page string="Individual Info">
+
+                                <group>
+                                    <field name="disclaimer" widget="html" readonly="1"/>
+                                    <field name="reference_no_reponce"/>
+                                    <field name="date_reponce"/>
+                                    <field name="inquirer_name_reponce"/>
+                                    <field name="phone_no_reponce"/>
+                                    <field name="email_reponce"/>
+                                </group>
+                            </page>
+
+                            <!-- Page  -->
+
+                            <page string="Response">
+                                <group>
+                                    <group>
+                                        <field name="message_reponce"/>
+                                        <field name="question_reponce"/>
+                                        <field name="answer_reponce"/>
+                                    </group>
+                                    <group>
+                                        <field name="references_reponce"/>
+                                        <field name="add_info_reponce"/>
+                                        <field name="completed_by_reponce"/>
+                                    </group>
+                                </group>
+                            </page>
+
+                        </notebook>
+                        <hr></hr>
+                        <h3>FeedBack</h3>
+                        <hr></hr>
+
+                        <notebook>
+                            <!-- Page  -->
+                            <page string="Individual Info">
+                                <group>
+
+                                    <field name="intro" widget="html" readonly="1"/>
+
+
+                                    <field name="reference_no_feedback"/>
+                                    <field name="enquiry_date_feedback"/>
+                                    <field name="email_feedback"/>
+                                    <field name="message_feedback"/>
+                                </group>
+                            </page>
+                            <page string="Feedback Info">
+                                <group>
+                                    <group>
+
+                                        <field name="provision_of_information_feedback"/>
+                                        <field name="information_received_in_time_feedback"/>
+                                        <field name="thanks" widget="html" readonly="1"/>
+                                    </group>
+                                    <group>
+                                        <field name="presentation_of_information_feedback"/>
+                                        <field name="information_meet_expectation_feedback"/>
+                                        <field name="information_used_feedback"/>
+
+
+                                    </group>
+                                </group>
+
+                            </page>
+
+
+                        </notebook>
+                        <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                    </sheet>
+
+                </form>
+            </field>
+        </record>
+    </data>
+
+
+    <record id="action_drug_information_query" model="ir.actions.act_window">
+        <field name="name">Drug Information Query</field>
+        <field name="res_model">drug.information.query</field>
+        <field name="view_mode">tree,form</field>
+        <field name="target">current</field>
+    </record>
+
+</odoo>

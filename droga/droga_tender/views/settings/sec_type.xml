@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="droga_tender_settings_security_type_action" model="ir.actions.act_window">
+        <field name="name">Security registry</field>
+        <field name="res_model">droga.tender.settings.sec.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="droga_tender_settings_sec_type_view_tree" model="ir.ui.view">
+        <field name="name">droga.tender.settings.sec.type.view.tree</field>
+        <field name="model">droga.tender.settings.sec.type</field>
+        <field name="arch" type="xml">
+            <tree string="" delete="0">
+                <field name="sec_type_name"></field>
+                <field name="sec_type_descr"></field>
+                <field name="exp_status"></field>
+                <field name="status"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_tender_settings_sec_type_view_form" model="ir.ui.view">
+        <field name="name">droga.tender.settings.sec.type.view.form</field>
+        <field name="model">droga.tender.settings.sec.type</field>
+        <field name="arch" type="xml">
+            <form string="" delete="0">
+                <sheet>
+                    <group>
+                        <field name="sec_type_name"></field>
+                        <field name="sec_type_descr"></field>
+                        <field name="exp_status"></field>
+                        <field name="status"></field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <menuitem
+            id="droga_tender_settings_security_type"
+            name="Security Types Registry"
+            action="droga_tender_settings_security_type_action"
+            parent="tender_settings_menu"
+            sequence="14"/>
+</odoo>

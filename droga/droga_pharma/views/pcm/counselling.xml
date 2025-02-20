@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="sequence_counselling_session" model="ir.sequence">
+        <field name="name">Counselling Session Sequence</field>
+        <field name="code">droga.pharma.counselling.session.sequence</field>
+        <field name="prefix">COU/%(y)s/</field>
+        <field name="implementation">no_gap</field>
+    </record>
+
+    <record id="droga_pharma_counselling_action" model="ir.actions.act_window">
+        <field name="name">Counselling</field>
+        <field name="res_model">droga.pharma.counselling</field>
+        <field name="view_mode">tree,form</field>
+<!--        <field name="view_id" ref="droga_pharma_counselling_tree_view"/>-->
+    </record>
+
+    <record id="droga_pharma_counselling_tree_view_nocreate" model="ir.ui.view">
+        <field name="name">droga.pharma.counselling.tree</field>
+        <field name="model">droga.pharma.counselling</field>
+        <field name="arch" type="xml">
+            <tree string="Counselling" delete="0" create="0">
+                <field name="coun_code"></field>
+                <field name="counselling_cat"></field>
+                <field name="status"></field>
+                <field name="pharmacist_lev_understanding"></field>
+                <field name="ses_acceptance"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_counselling_view" model="ir.ui.view">
+        <field name="name">droga.pharma.counselling.view.tree</field>
+        <field name="model">droga.pharma.counselling</field>
+        <field name="arch" type="xml">
+            <tree string="Counselling" delete="0" create="0">
+                <field name="sales_origin"/>
+                <field name="client"/>
+                <field name="mobile"/>
+                <field name="counselling_cat"></field>
+                <field name="status"></field>
+                <field name="pharmacist_lev_understanding"></field>
+                <field name="ses_acceptance"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_pharma_counselling_form" model="ir.ui.view">
+        <field name="name">droga.pharma.counselling.form</field>
+        <field name="model">droga.pharma.counselling</field>
+        <field name="arch" type="xml">
+            <form string="" delete="0">
+                <sheet>
+                    <group string="Counselling">
+
+                        <group>
+                            <field name="coun_code" readonly="1"/>
+                            <field name="client"  readonly="1"></field>
+                            <field name="date" readonly="1"></field>
+                            <field name="mobile"/>
+                            <field name="gender"/>
+                            <field name="weight"/>
+                            <field name="height"/>
+                            <field name="bmi"/>
+                            <field name="bsa"/>
+                            <field name="dob" readonly="0"/>
+                            <field name="age"/>
+                            <field name="address"/>
+                            <field name="physician"/>
+                            <field name="status"></field>
+                            <field name="sales_origin" readonly="1"></field>
+                        </group>
+                        <group>
+                            <field name="counselling_cat"></field>
+                            <field name="description"/>
+                            <field name="pharmacist_lev_understanding"></field>
+                            <field name="counselling_given"></field>
+                            <field name="patient_lev_understanding"></field>
+                            <field name="assessment"/>
+                            <field name="ses_acceptance"></field>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Medication Info">
+                            <group>
+                                <group>
+                                    <field name="medical" readonly="0"></field>
+                                    <field name="medication_history" readonly="0"></field>
+                                </group>
+                                <group>
+                                    <field name="adr" readonly="0"></field>
+                                    <field name="immunization" readonly="0"></field>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="droga_pharma_counselling_view_action_nocreate" model="ir.actions.act_window">
+        <field name="name">Counselling session</field>
+        <field name="res_model">droga.pharma.counselling</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+        (0, 0, {'view_mode': 'tree', 'view_id': ref('droga_pharma_counselling_tree_view_nocreate')}),
+         (0, 0, {'view_mode': 'form', 'view_id': ref('droga_pharma_counselling_form')})]"/>
+<!--        <field name="view_id" ref="droga_counselling_view"/>-->
+    </record>
+
+</odoo>

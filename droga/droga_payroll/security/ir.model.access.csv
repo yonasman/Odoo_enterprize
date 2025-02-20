@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_droga_payroll_hr_payslip_run_report,hr.payslip.run.report,model_hr_payslip_run_report,base.group_user,1,1,1,1
+access_hr_payroll_payment_deduction,hr.payroll.payment.deduction,model_hr_payroll_payment_deduction,base.group_user,1,1,1,1
+access_hr_payroll_rate,hr.payroll.rate,model_hr_payroll_rate,base.group_user,1,1,1,1
+access_hr_payroll_variable_payment,hr.payroll.variable.payment,model_hr_payroll_variable_payment,base.group_user,1,1,1,1

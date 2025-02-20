@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        
+
+    <menuitem id="tender_main_menu" name="Tender" groups="tender_user" web_icon="droga_tender,static/description/icon.png"
+              sequence="10"/>
+
+    <menuitem id="tender_settings_menu" name="Settings" parent="tender_main_menu" groups="tender_manager"
+              sequence="99"/>
+
+
+    <menuitem id="tender_reports" name="Reports" parent="tender_main_menu" groups="tender_user"
+              sequence="98"/>
+
+
+
+    <record id="droga_tender_waiter_action" model="ir.actions.act_window">
+        <field name="name">Tender report</field>
+        <field name="res_model">sale.order.line</field>
+        <field name="view_mode">tree</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('droga_sales.droga_sales_waiter_view_tree')})]"/>
+        <field name="search_view_id" ref="droga_sales.droga_sales_waiter_search_tree"></field>
+        <field name="domain">[('state', '!=', 'cancel'),('has_access','=',True)]</field>
+        <field name="context">{'search_default_invoiced':1,'search_default_today_sales': 1}</field>
+    </record>
+
+    <menuitem
+            id="droga_tender_waiter_report_menu"
+            name="Sales summary report"
+            action="droga_tender_waiter_action"
+            parent="droga_tender.tender_reports"
+            groups="droga_tender.tender_user"
+            sequence="17"/>
+
+    <record id="droga_tender_matured_customers_action" model="ir.actions.act_window">
+        <field name="name">Matured customers</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('move_type','=','out_invoice'),'|',('sales_initiator','=like','Ten%'),('sales_initiator','=like','TEN%')]</field>
+        <field name="context">{"search_default_late":1}</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+        (0, 0, {'view_mode': 'tree', 'view_id': ref('account.view_out_invoice_tree')}),
+         (0, 0, {'view_mode': 'form', 'view_id': ref('droga_sales.account_read_only_sales')})]"/>
+
+    </record>
+
+    <menuitem id="matured_customer_invoices"
+              name="Open invoices"
+              action="droga_tender_matured_customers_action"
+              groups="droga_tender.tender_user"
+              parent="droga_tender.tender_reports"
+              sequence="60"/>
+
+    <menuitem
+            id="tender_core_products"
+            name="Core products"
+            action="droga_crm.droga_crm_core_products_crm_action"
+            parent="droga_tender.tender_reports"
+            groups="droga_tender.tender_user"
+            sequence="70"/>
+</odoo>

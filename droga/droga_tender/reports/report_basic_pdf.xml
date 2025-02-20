@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_report_droga_tender_master" model="ir.actions.report">
+        <field name="name">Tender master report</field>
+        <field name="model">droga.tender.master</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">droga_tender.tender_master_pdf_rep</field>
+        <field name="report_file">droga_tender.tender_master_pdf_rep</field>
+        <field name="binding_model_id" ref="model_droga_tender_master"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="tender_master_pdf_rep">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                                <t t-field="docs.media.media_name"></t>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

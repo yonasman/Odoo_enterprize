@@ -1,0 +1,94 @@
+<odoo>
+    <template id="report_prescription">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="droga_pharma.droga_pharma_header_layout">
+                </t>
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h4 style="margin-left: 30%">Prescription Paper(Copy)</h4>
+                        <div style="display: flex;">
+                            <p style="display: inline; margin-right: 25%; margin-left: 35%">For stock out use only</p>
+                            <p style="display: inline;">Code: <span t-field="doc.code"/></p>
+                        </div>
+                        <br/>
+                        <div style="display: flex;">
+                          <p style="display: inline; margin-right: 10%;">Institution's name: <span t-field="doc.institution"/></p>
+<!--                          <p style="display: inline;">Tel. NO: <span t-field="doc.tel"/></p>-->
+                        </div>
+                        <br/>
+                        <div style="display: flex;">
+                            <p style="display: inline; margin-right: 5%;">Patient's name: <span t-field="doc.patient_fullname"/></p>
+                            <p style="display: inline; margin-right: 5%;">Gender: <span t-field="doc.gender"/></p>
+                            <p style="display: inline; margin-right: 5%;">Age: <span t-field="doc.age"/></p>
+                            <p style="display: inline; margin-right: 5%;">Weight: <span t-field="doc.weight"/></p>
+                            <p style="display: inline; margin-right: 5%;">Height: <span t-field="doc.height"/></p>
+                            <p style="display: inline;">Card No.: <span t-field="doc.card_no"/></p>
+                        </div>
+                        <br/>
+                        <div style="display: flex; justify-content: space-between;">
+                            <p style="display: inline; margin-right: 5%;">Region: <span t-field="doc.region"/></p>
+                            <p style="display: inline; margin-right: 5%;">Zone/City/Subcity: <span t-field="doc.town"/></p>
+                            <p style="display: inline; margin-right: 5%;">Wereda: <span t-field="doc.wereda"/></p>
+                            <p style="display: inline; margin-right: 5%;">Kebele: <span t-field="doc.kebele"/></p>
+                            <p style="display: inline;">House No.: <span t-field="doc.house_no"/></p>
+                        </div>
+                        <br/>
+                        <div style="display: flex;">
+                            <p style="display: inline; margin-right: 10%;">Mobile: <span t-field="doc.mobile"/></p>
+                            <t t-if="doc.inpatient">
+                            <p style="display: inline; margin-right: 10%;"><span t-field="doc.inpatient"/></p></t>
+                        </div>
+                        <br/>
+                        <div style="display: flex;">
+                            <p>Diagnosis, if not ICD: <span t-field="doc.diagnosis"/></p>
+                        </div>
+
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Drug name, Stregnth, Frequency, Duration, How to use and other information</th>
+                                    <th>Quantity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+<!--                                <t t-set="total_price" t-value="0.0"/>-->
+                                <t t-foreach="doc.prescription_drugs" t-as="related_record">
+                                    <tr>
+                                        <td><t t-esc="related_record.drug"/></td>
+                                        <td><t t-esc="related_record.quantity"/></td>
+                                    </tr>
+<!--                                    <t t-set="total_price" t-value="total_price + related_record.price"/>-->
+                                </t>
+<!--                                <tr>-->
+<!--                                    <td style="padding-left: 70%; font-weight: bold;">Total Price</td>-->
+<!--                                    <td><t t-esc="total_price"/></td>-->
+<!--                                </tr>-->
+                            </tbody>
+                        </table>
+                        <br/>
+                        <h5>Transcriber:</h5>
+                        <div style="display: flex;">
+                           <p style="display: inline;">Name:</p>
+                            <span style="display: inline; " t-field="doc.transcriber"/>
+                        </div>
+                        <br/>
+                        <div style="display: flex;">
+                           <p style="display: inline;">Qualification:</p>
+                            <span style="display: inline; " t-field="doc.qualification"/>
+                        </div>
+                        <br/>
+                         <div style="display: flex;">
+                            <p style="display: inline;">Signature:</p>
+                            <span style="display: inline; width: 20px;">______________</span>
+                         </div>
+                        <br/>
+                        <p>NB: Transcriber must fill all the information written on the original prescription</p>
+                    </div>
+                    <t t-call="droga_pharma.droga_pharma_footer_layout">
+                    </t>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

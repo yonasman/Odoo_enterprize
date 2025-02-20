@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="droga_pharma_sales_line_pharmacy_pivot" model="ir.ui.view">
+        <field name="name">sale.order.line.pivot.pharmacy.invoice</field>
+        <field name="model">sale.order.line</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="name" type="row"/>
+                <field name="wareh" type="col"/>
+
+
+                <field name="invoiced_amt" string="Amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- graph -->
+    <record id="droga_pharma_sales_line_pharmacy_graph" model="ir.ui.view">
+        <field name="name">sale.order.line.graph.pharmacy.invoice</field>
+        <field name="model">sale.order.line</field>
+        <field name="arch" type="xml">
+            <graph>
+                <field name="name" />
+                <field name="wareh" />
+
+                <field name="invoiced_amt" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    <record id="droga_pharma_sales_detail_pharmacy_tree" model="ir.ui.view">
+        <field name="name">sale.order.line.tree.pharmacy.invoice</field>
+        <field name="model">sale.order.line</field>
+        <field name="arch" type="xml">
+            <tree string="Sales order" delete="false" create="false">
+                <field name="name" optional="hide"></field>
+                <field name="order_id"></field>
+                <field name="itemcode" string="Code"></field>
+                <field name="itemdesc" string="Description"></field>
+                <field name="qty_invoiced" sum="Total qty" string="Qauntity"></field>
+                <field name="price_unit" string="Unit price"></field>
+                <field name="invoiced_amt" sum="Total amt" string="Amount"></field>
+                <field name="wareh" string="Warehouse"></field>
+                <field name="date_order_det" string="Date"></field>
+                <button icon="fa-credit-card-alt" type="object" name="open_sales"
+                        class="oe_stat_button"></button>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_pharma_sales_detail_pharmacy_search" model="ir.ui.view">
+        <field name="name">sale.order.line.search.pharma.by.pharmacy</field>
+        <field name="model">sale.order.line</field>
+        <field name="arch" type="xml">
+            <search string="Sales order">
+                <field name="name"></field>
+                <field name="itemcode" string="Code"></field>
+                <field name="itemdesc" string="Description"></field>
+                <field name="qty_invoiced"></field>
+                <field name="price_unit"></field>
+                <field name="invoiced_amt"></field>
+                <field name="wareh"></field>
+                <field name="date_order_det"></field>
+
+                <filter string="Today sales"
+                        domain="[('date_order_det', '&gt;=', context_today().strftime('%Y-%m-%d')), ('date_order_det', '&lt;', (context_today() + relativedelta(days=1)).strftime('%Y-%m-%d'))]"
+                        name="today_sales"></filter>
+
+                <filter string="Yesterday sales"
+                        domain="[('date_order_det', '&gt;=', (context_today()-relativedelta(days=1)).strftime('%Y-%m-%d')), ('date_order_det', '&lt;', context_today().strftime('%Y-%m-%d'))]"
+                        name="yest_sales"></filter>
+
+                <filter string="Current week sales"
+                    domain="[
+                        ('date_order_det', '>=', (datetime.datetime.combine(context_today() + relativedelta(weeks=-1,days=1,weekday=0), datetime.time(0,0,0)).to_utc()).strftime('%Y-%m-%d %H:%M:%S')),
+                        ('date_order_det', '&lt;', (datetime.datetime.combine(context_today() + relativedelta(days=1,weekday=0), datetime.time(0,0,0)).to_utc()).strftime('%Y-%m-%d %H:%M:%S'))]"
+                    name="current_week_sales"></filter>
+
+                <filter string="Previous week sales"
+                       domain="[
+                    ('date_order_det', '&lt;', (context_today() + relativedelta(weeks=-1, weekday=6)).strftime('%Y-%m-%d 00:00:00')),
+                    ('date_order_det', '&gt;', (context_today() + relativedelta(weeks=-2, weekday=6)).strftime('%Y-%m-%d 00:00:00'))]"
+                        name="previous_week_sales"></filter>
+
+                <filter string="Current month sales"
+                        domain="[('date_order_det','&lt;',(context_today()+relativedelta(months=1)).strftime('%%Y-%%m-01')),
+                        ('date_order_det','&gt;=',time.strftime('%%Y-%%m-01'))]"
+                        name="current_month_sales"></filter>
+
+                <filter string="Previous month sales"
+                        domain="[('date_order_det','&gt;=',(context_today()-relativedelta(months=1)).strftime('%%Y-%%m-01')),
+                        ('date_order_det','&lt;',time.strftime('%%Y-%%m-01'))]"
+                name="previous_month_sales"></filter>
+
+                <separator/>
+
+                <filter name="group_pharmacy" string="Group by pharmacy" context="{'group_by':'wareh'}"/>
+
+                <searchpanel>
+                    <field name="wareh" string="Branches"/>
+                </searchpanel>
+
+            </search>
+        </field>
+    </record>
+
+    <record id="droga_pharma_sales_detail_pharmacy_action" model="ir.actions.act_window">
+        <field name="name">Sales order per pharmacy - Detail</field>
+        <field name="res_model">sale.order.line</field>
+        <field name="view_mode">tree,pivot,graph</field>
+        <field name="limit">200</field>
+        <field name="context">{'search_default_today_sales':1,'search_default_inv_printed':1}
+        </field>
+        <field name="domain">[('order_from','like','PH'),('has_pharma_access','=',True)]</field>
+        <field name="search_view_id" ref="droga_pharma_sales_detail_pharmacy_search"></field>
+        <field name="view_ids"
+                   eval="[(5, 0, 0),
+                          (0, 0, {'view_mode': 'graph', 'view_id': ref('droga_pharma_sales_line_pharmacy_graph')}),
+                          (0, 0, {'view_mode': 'pivot', 'view_id': ref('droga_pharma_sales_line_pharmacy_pivot')}),
+                          (0, 0, {'view_mode': 'tree', 'view_id': ref('droga_pharma_sales_detail_pharmacy_tree')})]"/>
+    </record>
+
+</odoo>

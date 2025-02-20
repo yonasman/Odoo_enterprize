@@ -1,0 +1,340 @@
+<odoo>
+    <record id="account_loan_action" model="ir.actions.act_window">
+        <field name="name">Loan</field>
+        <field name="res_model">account.loan</field>
+        <field name="view_mode">tree,form</field>
+        
+        <!-- <field name="context">{'search_default_remaining_days':}</field> -->
+    </record>
+
+    <!-- menu for Loan anagment -->
+   
+
+
+    <!--  tree view of the accoun loan m
+model-->
+<record id="account_loan_search" model="ir.ui.view">
+        <field name="name">account.loan.search</field>
+        <field name="model">account.loan</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="loan_amount"/>
+                <field name="contract_date"/>
+                <field name="payment_start_date"/>
+                <field name="state"/>
+                <field name="remaining_days"/>
+                <filter string="Archived" name="isactive" domain="[('isactive', '=',False)]"/>
+                 <filter string="Loan" name="isactive" domain="[('isactive', '=',True)]"/>
+                 <filter string="Recent" name="remaining_days" domain="[('remaining_days', '&lt;',15)]"/>
+                 <!-- <group expand="0" string="Group By">
+                    <filter string="Loan Type" name="loan_type" context="{'group_by': loan_type}"/>
+                    <filter string="Status" name="state" context="{'group_by': state}"/>
+                </group> -->
+            </search>
+        </field>
+    </record>
+    <record id="account_loan_view_tree" model="ir.ui.view">
+        <field name="name">account.loan.view.tree</field>
+        <field name="model">account.loan</field>
+        <field name="arch" type="xml" >
+            <tree string="Loan" default_order='id'>
+                <field name="name" />
+                
+
+                <field name="loan_type"/>
+                <field name="anual_interest_rate"/>
+                <field name="loan_amount"/>
+                <field name="state" widget="badge" decoration-success="state == 'active'"
+                decoration-info="state == 'draft'" decoration-danger= "state == 'overdue'"
+                />
+                
+                 <button  type="object" name="open_monthly" string="Monthly Closings"
+                        class="oe_stat_button" icon="fa-file-text"
+                      />
+                            
+            </tree>
+        </field>
+    </record>
+
+
+    <!--form view -->
+    <record id="account_loan_view_form" model="ir.ui.view">
+        <field name="name">account_loan.view.form</field>
+        <field name="model">account.loan</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <header>
+                    <button name="compute_schedule" string="Schedule" type="object" />
+                    <button name="compute_renew" string="Renew" type="object" />
+                    <button name="compute_done" string="Done" type="object" />
+
+                    <field name="state" widget="statusbar" nolabel="1" 
+                     decoration-success="state == 'active' or state == 'done'" decoration-info="state == 'draft' or state == 'overdue'"
+                    />
+
+                </header>
+                <sheet>
+
+
+
+                    <group>
+                        <group  >
+                            <field name="name"/>
+                            <field name="loan_amount"/>
+                            <field name="loan_statement_number"/>
+
+
+                        </group>
+                        <group >
+                            <field name="loan_type"/>
+                            <field name="contract_date"/>
+
+                            <field name="payment_start_date"/>
+
+
+                        </group>
+
+
+
+
+
+
+
+                    </group>
+                    <notebook>
+                        <page string="Setting">
+                        <notebook>
+                            <page name="name" string="Loan Information">
+                                <group >
+                                    <group name="name" string="">
+                                    <field name="loan_period_year"/>
+                                    <field name="payment"/>
+                                    <field name="payment_month"/>
+                                    <field name="anual_interest_rate"/>
+                                    </group>
+                                   
+                                    <group name ="name" >
+                                        <field name="total_number_of_payment"/>
+                                        <field name="schedule_numberof_payment"/>
+                                        <field name="remaining_days" attrs="{'invisible': [('remaining_days', '&lt;=', '0')]}"/>
+                                        <field name="overdue_days" attrs="{'invisible': [('remaining_days', '&gt;=', '0')]}"/>
+                                        <field name="next_payment_date"/>
+                                        <field name="daily_interest_rate"/>
+                                    </group>
+                                </group>
+                                
+                            </page>
+                            
+                        <page name="droga_renew" string="Penality Range">
+                            <field name="penality_range_ids">
+
+                                <tree editable="bottom">
+                                    <field name="name" width="20%"/>
+                                    <field name="num_days" width="20%"/>
+                                    <field name="anual_penality_rate" width="20%"/>
+                                    <field name="daily_penality_rate" width="20%"/>
+
+
+                                </tree>
+                            </field>
+
+
+                        </page>
+                        
+                       
+                        <page name="droga_renew" string="Renew">
+                            <field name="loan_renew_ids">
+
+                                <tree editable="bottom">
+                                    <field name="name" width="15%"/>
+                                    <field name="payment_amount" width="15%"/>
+                                    <field name="anual_interest_rate" width="10%"/>
+                                    <field name="anual_penality_rate" width="15%"/>
+                                    <field name="addtional_payment" width="15%"/>
+                                    <field name="renew_date" width="15%"/>
+                                    <field name="renew_start_date" width="15%"/>
+
+                                </tree>
+                            </field>
+
+
+                        </page>
+                        
+                        </notebook>
+                           
+
+                        </page>
+                        <page name="name" string="Cumulatives">
+                                 <group >
+                                    <group string="Cumulatives" width="45">
+                                        <field name="cumulative_balance"/>
+                                        <field name="cumulative_interest"/>
+                                        <field name="total_interest"/>
+                                        <field name="cumulative_penality"/>
+                                        <field name="total_penality"/>
+    
+                                    </group>
+                                    <group string="Opening Balance " width="55">
+
+                                        <field name="current_cumlative_balace"/>
+                                        <field name="current_cumlative_interest"/>
+                                        <field name="opening_date"/>
+                                        <field name="opening_payment_date"/>
+    
+    
+                                    </group>
+                                </group>
+                            </page>
+                            
+                        
+                        <page name="name" string="Schedule">
+                        <notebook string="">
+                        
+                      
+                          <page string="Interest">
+
+                            <field name="loan_interest_ids">
+                                <tree editable="bottom" create="0" delete="0">
+                                    <field name="daily_interest_amount"/>
+                                    <field name="daily_penality_amount"/>
+                                    <field name="daily_interest_total"/>
+
+                                    <field name="value_date"/>
+
+                                </tree>
+                            </field>
+
+                        </page>
+                            
+                    
+                        <page string="Payment Schedule">
+
+                            <field name="loan_schedule_ids">
+                                <tree editable="bottom" create="0" delete="0">
+                                    <field name="name"/>
+                                    <field name="payment_date"/>
+                                    <field name="payment_amount"/>
+                                    <field name="prencipal"/>
+                                    <field name="interest"/>
+                                    <field name="balance"/>
+
+                                </tree>
+                            </field>
+
+                        </page>
+
+                        <page name="schedule" string="Renewed Schedule">
+
+                            <field name="loan_old_ids" style="pointer-events:none;">
+                                <tree editable="bottom" create="0" delete="0">
+                                    <field name="name" width="20%"/>
+                                    <field name="payment_date" width="15%"/>
+                                    <field name="payment_amount" width="15%"/>
+                                    <field name="prencipal" width="15%"/>
+                                    <field name="interest" width="15%"/>
+                                    <field name="balance" width="20%"/>
+
+
+
+                                </tree>
+                            </field>
+
+                        </page>
+                        
+
+                        </notebook>
+                          </page>
+                        <page string="Other">
+                        <group name="name" string="company"  invisible='1'>
+                            <field name="company_id"/>
+                        </group>
+                        <group  >
+                            <group name="name" string="Accounting With Journal">
+                                <field name="account_penality"/>
+                                <field name="account_interest"/>
+                               
+                                <field name="accrued_interest_payable"/>
+                                 <field name="account_jornal_inte"/>
+
+                            </group>
+                            <group name="name" string="Accounting With Journal">
+                                <field name="account_bank"/>
+                                <field name="disbursement"/>
+                                
+                                
+                                <field name="account_jornal"/>
+                            </group>
+                        </group>
+                        
+                        
+                        </page>
+                       
+                    </notebook>
+                     <button  type="object" name="compute_daily_crons" string="Calculate Interest"
+                        class="oe_stat_button" icon="fa-file-text"
+                        context="{'default_acount_monthly_closing_id':active_id}"
+                       
+                 />
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+
+
+
+    <record id="account_loan_view_tree_report" model="ir.ui.view">
+        <field name="name">account.loan.view.tree.report</field>
+        <field name="model">account.loan</field>
+        <field name="arch" type="xml">
+            <tree string="Loan" create="false" edit="false">
+                <field name="name"/>
+                <field name="loan_amount"/>
+                <field name="loan_type"/>
+                <field name="loan_amount"/>
+                <field name="cumulative_balance"/>
+                <field name="cumulative_interest"/>
+                <field name="payment"/>
+                <!-- <field name=" next_payment_date"/>  -->
+                <field name="remaining_days" attrs="{'invisible': [('remaining_days', '&lt;=', '0')]}"/>
+                <field name="overdue_days" attrs="{'invisible': [('remaining_days', '&gt;=', '0')]}"/>
+                                       
+                <field name="state" widget="badge" decoration-success="state == 'active'"
+                decoration-info="state == 'draft'" decoration-danger= "state == 'overdue'"
+                />
+
+
+
+
+
+            </tree>
+        </field>
+    </record>
+
+    <record id="account_loan_action_report" model="ir.actions.act_window">
+        <field name="name">Loan Status Summary</field>
+        <field name="res_model">account.loan</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="account_loan_view_tree_report"/>
+    </record>
+   
+
+
+
+
+
+
+    <!-- menu for Loan anagment -->
+    <!-- <menuitem id="loan_menu_root_report" name="Report" parent="loan_menu_root">
+    <menuitem id="bank_loan_menu_report" name="Loan Status Summary">
+        <menuitem id="account_loan_menu_action" action="account_loan_action_report"/>
+    </menuitem>
+</menuitem> -->
+
+</odoo>

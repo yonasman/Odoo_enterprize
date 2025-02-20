@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="droga_inventory_stock_out_history" model="ir.ui.view">
+        <field name="name">stock.out.history</field>
+        <field name="model">product.template</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <notebook>
+                        <page string="Stock out history">
+                            <field name="stock_out_detail">
+                                <tree create="0" delete="0">
+                                    <field name="date_from" readonly="1"></field>
+                                    <field name="date_to" readonly="1"></field>
+                                    <field name="duration" readonly="1"></field>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

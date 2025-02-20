@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="droga_account_loan_reports_xls_action" model="ir.actions.act_window">
+        <field name="name">Loan Amortization - Excel</field>
+        <field name="res_model">droga.account.loan.reports.xls</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="droga_account_loan_reports_xls_form" model="ir.ui.view">
+        <field name="name">droga.account.loan.reports.xls.form</field>
+        <field name="model">droga.account.loan.reports.xls</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <group>
+                    <group>
+                        <field name="loan_id" options="{'no_create':True,'no_open':True}"></field>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_get_xls" string="Get Excel" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <!-- <record id="action_report_account_loan" model="ir.actions.report">
+        <field name="name">Loan Amortization</field>
+        <field name="model">account.loan</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">droga_treasury.report_template_payment</field>
+        <field name="report_file">droga_treasury.report_template_payment</field>
+        <field name="print_report_name">'%s' % object.name</field>
+        <field name="binding_model_id" ref="model_account_loan"/>
+        <field name="binding_type">report</field>
+    </record> -->
+
+    <menuitem
+            id="droga_account_loan_reports_xls_menu"
+            name="Loan Amortization - Excel"
+            action="droga_account_loan_reports_xls_action"
+            parent="loan_report_menu"
+            
+            sequence="19"/>
+</odoo>

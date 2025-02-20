@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="droga_pharma_intervention_action" model="ir.actions.act_window">
+        <field name="name">Intervention</field>
+        <field name="res_model">droga.pharma.intervention</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="droga_pharma_intervention_tree" model="ir.ui.view">
+        <field name="name">droga.pharma.intervention.view.tree</field>
+        <field name="model">droga.pharma.intervention</field>
+        <field name="arch" type="xml">
+            <tree string="" editable="top" delete="0">
+                <field name="intervention"></field>
+                <field name="descr"></field>
+                <field name="status"></field>
+            </tree>
+        </field>
+    </record>
+
+</odoo>

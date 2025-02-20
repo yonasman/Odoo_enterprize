@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- tree view for budget reallocation -->
+    <record id="droga_budget_reallocation_view_tree" model="ir.ui.view">
+        <field name="name">droga.budget.reallocation.view.tree</field>
+        <field name="model">droga.budget.reallocation</field>
+        <field name="arch" type="xml">
+            <tree string="" delete="0" duplicate="0">
+                <field name="name"/>
+                <field name="request_by" />
+                <field name="request_date" />
+                <field name="analytic_account" string="Cost Center" />
+                <field name="purpose" />
+                <field name="state" decoration-warning="state in('Draft')" decoration-info="state in('Submitted','Verified')" decoration-danger="state == 'Cancelled'" decoration-success="state == 'Approved'" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- form view for budget reallocation-->
+    <record id="droga_budget_reallocation_view_form" model="ir.ui.view">
+        <field name="name">droga_budget_reallocation.view.form</field>
+        <field name="model">droga.budget.reallocation</field>
+        <field name="arch" type="xml">
+            <form string="Budget Reallocation" delete="0" duplicate="0">
+                <header>
+                    <button name="submit_request" type="object" states="Draft" string="Submit" id="submit_request" class="oe_highlight" data-hotkey="v"/>
+                    <button name="verify_request" type="object" states="Submitted" string="Verify" id="verify_request" class="oe_highlight" data-hotkey="v"/>
+                    <button name="approve_request" type="object" states="Verified" string="Approve" id="approve_request" class="oe_highlight" data-hotkey="v"/>
+
+                    <button name="draft_request" type="object" states="Submitted,Verified" string="Reject" id="draft_request" data-hotkey="v"/>
+                    <button name="cancel_request" type="object" states="Draft" string="Cancel" id="cancel_request" data-hotkey="v"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="budget_id" options="{'no_create':True,'no_open':True}" attrs="{'readonly': [('state', 'in', ('Approved', 'Cancelled'))]}"/>
+                            <field name="request_by" required="1" options="{'no_create':True,'no_open':True}" attrs="{'readonly': [('state', 'in', ('Approved', 'Cancelled'))]}"/>
+                            <field name="request_date" required="1" attrs="{'readonly': [('state', 'in', ('Approved', 'Cancelled'))]}"/>
+
+                        </group>
+                        <group>
+                            <field name="analytic_account" string="Cost Center" options="{'no_create':True,'no_open':True}" required="1" attrs="{'readonly': [('state', 'in', ('Approved', 'Cancelled'))]}"/>
+                            <field name="purpose" required="1" attrs="{'readonly': [('state', 'in', ('Approved', 'Cancelled'))]}"/>
+                            <field name="company_id" readonly="1" options="{'no_create':True,'no_open':True}"/>
+                            <field name="document_type" attrs="{'readonly': [('state', 'not in', ('Draft'))]}" invisible="1"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Reallocation">
+                            <field name="budget_reallocations" mode="tree" attrs="{'readonly': [('state', 'in', ('Approved', 'Cancelled'))]}">
+                                <tree editable="bottom">
+                                    <field name="from_budgetary_position" options="{'no_create':True,'no_open':True}" width="20" required="1" string="BP From"/>
+                                    <field name="account_from" options="{'no_create':True,'no_open':True}" width="10" required="1" string="From Account"/>
+                                    <field name="to_budgetary_position" options="{'no_create':True,'no_open':True}" width="25" required="1" string="BP To"/>
+                                    <field name="account_to" options="{'no_create':True,'no_open':True}" width="10" required="1" string="To Account"/>
+                                    <field name="fiscal_year" invisible="1" />
+                                    <field name="period" required="1" options="{'no_create':True,'no_open':True}" width="10" string="Period From"/>
+                                    <field name="date_from" width="10" invisible="1"/>
+                                    <field name="date_to" width="10" invisible="1"/>
+                                    <field name="period_to" options="{'no_create':True,'no_open':True}" width="10"/>
+                                    <field name="period_to_date_from" width="10" invisible="1"/>
+                                    <field name="period_to_date_to" width="10" invisible="1"/>
+                                    <field name="remaining_amount" width="15" readonly="1"/>
+                                    <field name="transfer_amount" width="15" required="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Addition">
+                            <field name="budget_additions" mode="tree" attrs="{'readonly': [('state', 'in', ('Approved', 'Cancelled'))]}">
+                                <tree editable="bottom">
+                                    <field name="bdugetary_position" options="{'no_create':True,'no_open':True}" width="50" required="1"/>
+                                    <field name="account" width="10" required="1"/>
+                                    <field name="fiscal_year" invisible="1" />
+                                    <field name="period" required="1" options="{'no_create':True,'no_open':True}" width="10"/>
+                                    <field name="date_from" width="10" required="1"/>
+                                    <field name="date_to" width="10" required="1"/>
+                                    <field name="addition_amount" width="20" required="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+
+
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- search view -->
+    <record id="droga_budget_reallocation_view_search" model="ir.ui.view">
+        <field name="name">droga.budget.reallocation.view.search</field>
+        <field name="model">droga.budget.reallocation</field>
+        <field name="arch" type="xml">
+            <search string="">
+                <filter string="Draft" name="draft" domain="[('state', 'in', 'Draft')]"/>
+                <filter string="Submitted" name="submitted" domain="[('state', 'in', 'Submitted')]"/>
+                <filter string="Verified" name="verified" domain="[('state', 'in', 'Verified')]"/>
+                <filter string="Approved" name="approved" domain="[('state', 'in', 'Approved')]"/>
+                <filter string="Cancelled" name="cancelled" domain="[('state', 'in', 'Cancelled')]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- actions -->
+    <record id="droga_budget_reallocation_action" model="ir.actions.act_window">
+        <field name="name">Budget Reallocation/Addition</field>
+        <field name="res_model">droga.budget.reallocation</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p>
+                Budget Reallocation
+            </p>
+        </field>
+    </record>
+
+</odoo>

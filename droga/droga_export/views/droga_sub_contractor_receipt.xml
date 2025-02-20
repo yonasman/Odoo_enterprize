@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="droga_sub_contract_receive_view_tree" model="ir.ui.view">
+        <field name="name">droga.sub.contract.receive.view.tree</field>
+        <field name="model">droga.inventory.consignment.receive</field>
+        <field name="arch" type="xml">
+            <tree string="" delete="0">
+                <field name="name"></field>
+                <field name="supplier" string="Cleaning unit"></field>
+                <field name="state"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_sub_contract_receive_view_form" model="ir.ui.view">
+        <field name="name">droga.sub.contract.receive.view.form</field>
+        <field name="model">droga.inventory.consignment.receive</field>
+        <field name="arch" type="xml">
+            <form string="Consignment receipt" delete="0">
+                <header>
+                    <button name="request_mg"
+                            attrs="{'invisible': [('state', 'not in', ('draft'))]}"
+                            string="Request" type="object" class="oe_highlight" data-hotkey="v"/>
+                    <button name="mg_approve"
+                            attrs="{'invisible': [('state', 'not in', ('mg'))]}"
+                            groups="droga_export.export_manager"
+                            string="Approve" type="object" class="oe_highlight" data-hotkey="v"/>
+                    <button name="amend"
+                            attrs="{'invisible': [('state', 'not in', ('mg','mtmg'))]}"
+                            groups="droga_inventory.stores_manager,droga_inventory.marketing_manager"
+                            string="Amend" type="object" class="oe_highlight btn-warning" data-hotkey="v"/>
+                    <button name="action_cancel"
+                            attrs="{'invisible': [('state', 'not in', ('draft'))]}"
+                            string="Cancel" type="object" class="oe_highlight" data-hotkey="v"/>
+
+                    <field name="state" widget="statusbar" statusbar_visible="draft,mg,waiting,sc"/>
+                </header>
+                <sheet>
+                    <group string="Store receive request">
+                        <group>
+                            <field name="supplier" required="1" string="Cleaning unit"
+                                   attrs="{'readonly': True}"></field>
+                            <field name="issue_type" required="True"
+                                   attrs="{'readonly': [('issue_type', '=', 'SUBL')]}"></field>
+                            <field name="subcontractor_return_origin_form" readonly="1"
+                                   options="{'no_create':True,'no_open':True}"></field>
+                        </group>
+                        <group>
+                            <field name="receipt_date"
+                                   attrs="{'readonly': [('state', 'in', ('waiting','reject','cancel','done'))]}"></field>
+                            <field name="cons_ref" widget="many2many_tags"></field>
+                            <field name="remark"></field>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Product Details">
+                            <field name="detail_entries" mode="tree"
+                                   attrs="{'readonly': [('state', 'in', ('waiting','reject','cancel','done'))]}">
+                                <tree editable="1" create="0" delete="1">
+                                    <field name="company_id" invisible="1"/>
+                                    <field name="prodct_id_esti" readonly="1" force_save="1" options="{'no_create':True,'no_open':True}"
+                                           required="1"/>
+                                    <field name="product_id" readonly="0" force_save="1" options="{'no_create':True,'no_open':True}"
+                                           required="1"/>
+                                    <field name="product_uom" options="{'no_create':True,'no_open':True}" readonly="1"/>
+                                    <field name="product_uom_category_id" invisible="1"/>
+                                    <field name="product_uom_qty_esti" string="Qty Estimated" readonly="1"/>
+                                    <field name="product_uom_qty" string="Quantity"/>
+                                    <field name="price_unit_cons" readonly="True" force_save="True"/>
+                                    <field name="amount" sum="Total"/>
+                                    <field name="warehouse_id" options="{'no_create':True,'no_open':True}"
+                                           string="Receipt warehouse"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                    </notebook>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="droga_sub_contract_receive_view_form_inherit" model="ir.ui.view">
+        <field name="name">Sub cont receive inherit</field>
+        <field name="model">droga.inventory.consignment.receive</field>
+        <field name="inherit_id" ref="droga_inventory.droga_inventory_consignment_receive_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='amend']" position="before">
+                <button name="mg_approve"
+                            attrs="{'invisible': [('state', 'not in', ('mg'))]}"
+                            groups="droga_export.export_manager"
+                            string="Approve" type="object" class="oe_highlight" data-hotkey="v"/>
+                    <button name="amend"
+                            attrs="{'invisible': [('state', 'not in', ('mg','mtmg'))]}"
+                            groups="droga_inventory.stores_manager,droga_inventory.marketing_manager"
+                            string="Amend" type="object" class="oe_highlight btn-warning" data-hotkey="v"/>
+                    <button name="action_cancel"
+                            attrs="{'invisible': [('state', 'not in', ('draft'))]}"
+                            string="Cancel" type="object" class="oe_highlight" data-hotkey="v"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

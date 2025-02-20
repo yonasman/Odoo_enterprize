@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="droga_tender_settings_submission_place_action" model="ir.actions.act_window">
+        <field name="name">Submission places registry</field>
+        <field name="res_model">droga.tender.settings.submission.place</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="droga_tender_settings_submission_place_view_tree" model="ir.ui.view">
+        <field name="name">droga.tender.settings.submission_place.view.tree</field>
+        <field name="model">droga.tender.settings.submission.place</field>
+        <field name="arch" type="xml">
+            <tree string="" delete="0">
+                <field name="submission_place_name"></field>
+                <field name="submission_place_descr"></field>
+                <field name="status"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_tender_settings_submission_place_view_form" model="ir.ui.view">
+        <field name="name">droga.tender.settings.submission_place.view.form</field>
+        <field name="model">droga.tender.settings.submission.place</field>
+        <field name="arch" type="xml">
+            <form string="" delete="0">
+                <sheet>
+                    <group>
+                        <field name="submission_place_name"></field>
+                        <field name="submission_place_descr"></field>
+                        <field name="status"></field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <menuitem
+            id="droga_tender_settings_submission_place"
+            name="Submission places Registry"
+            action="droga_tender_settings_submission_place_action"
+            parent="tender_settings_menu"
+            groups="tender_manager"
+            sequence="18"/>
+</odoo>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- local purchase request action -->
+    <record id="droga_purchase_request_local_for_self_service_action" model="ir.actions.act_window">
+        <field name="name">Purchase Request</field>
+        <field name="res_model">droga.purchase.request.local</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+        (0, 0, {'view_mode': 'tree', 'view_id': ref('droga_procurement.droga_purchase_request_local_view_tree')}),
+         (0, 0, {'view_mode': 'form', 'view_id': ref('droga_procurement.droga_purchase_request_local_view_form')}),
+         (0, 0, {'view_mode': 'kanban', 'view_id': ref('droga_procurement.droga_purchase_request_local_view_kanban')})]"/>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="domain">[('request_type', '=', 'Local'),('create_uid', '=', uid)]</field>
+        <field name="context">{'default_request_type': 'Local'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No purchase requisition found let's create one
+            </p>
+        </field>
+    </record>
+
+    <!-- local purchase request foreign action -->
+    <record id="droga_purchase_request_foreign_for_self_service_action" model="ir.actions.act_window">
+        <field name="name">Purchase Request Foreign</field>
+        <field name="res_model">droga.purhcase.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+        (0, 0, {'view_mode': 'tree', 'view_id': ref('droga_procurement.droga_purhcase_request_view_tree')}),
+         (0, 0, {'view_mode': 'form', 'view_id': ref('droga_procurement.droga_purhcase_request_foregin_view_form')}),
+          (0, 0, {'view_mode': 'kanban', 'view_id': ref('droga_procurement.droga_purhcase_request_view_kanban')})]"/>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="domain">[('request_type', '=', 'Foregin'),('create_uid', '=', uid)]</field>
+        <field name="context">{'default_request_type': 'Foregin'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No purchase requisition found let's create one
+            </p>
+        </field>
+    </record>
+
+    <!-- action for payment request Normal -->
+    <record id="droga_payment_request_normal_self_service_action" model="ir.actions.act_window">
+        <field name="name">Payment Request</field>
+        <field name="res_model">droga.account.payment.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+        (0, 0, {'view_mode': 'tree', 'view_id': ref('droga_finance.droga_account_payment_request_view_tree')}),
+         (0, 0, {'view_mode': 'form', 'view_id': ref('droga_finance.droga_account_payment_request_view_form')})]"/>
+        <field name="domain">[('payment_type','=','Normal'),('create_uid', '=', uid)]</field>
+        <field name="context">{'default_payment_type': 'Normal'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No payment request found let's create one
+            </p>
+        </field>
+    </record>
+
+    <!-- action for payment request Urgent -->
+    <record id="droga_payment_request_urgent_self_service_action" model="ir.actions.act_window">
+        <field name="name">Payment Request</field>
+        <field name="res_model">droga.account.payment.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+        (0, 0, {'view_mode': 'tree', 'view_id': ref('droga_finance.droga_account_payment_request_view_tree')}),
+         (0, 0, {'view_mode': 'form', 'view_id': ref('droga_finance.droga_account_payment_request_view_form')})]"/>
+        <field name="domain">[('payment_type','=','Urgent'),('create_uid', '=', uid)]</field>
+        <field name="context">{'default_payment_type': 'Urgent'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No payment request found let's create one
+            </p>
+        </field>
+    </record>
+
+    <!-- action for payment request Urgent -->
+    <record id="droga_payment_request_withoutpo_self_service_action" model="ir.actions.act_window">
+        <field name="name">Payment Request</field>
+        <field name="res_model">droga.account.payment.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+        (0, 0, {'view_mode': 'tree', 'view_id': ref('droga_finance.droga_account_payment_request_view_tree')}),
+         (0, 0, {'view_mode': 'form', 'view_id': ref('droga_finance.droga_account_payment_request_view_form')})]"/>
+        <field name="domain">[('create_uid', '=', uid)]</field>
+        <field name="context">{'default_payment_type': 'Withoutpo'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No payment request found let's create one
+            </p>
+        </field>
+    </record>
+
+    <!-- action store requisition -->
+    <record id="droga_inventory_office_supplies_request_self_service_action" model="ir.actions.act_window">
+        <field name="name">Store Requisition</field>
+        <field name="res_model">droga.inventory.office.supplies.request</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+        (0, 0, {'view_mode': 'tree', 'view_id': ref('droga_inventory.droga_inventory_office_supplies_request_tree')}),
+         (0, 0, {'view_mode': 'form', 'view_id': ref('droga_inventory.droga_inventory_office_supplies_request_form')}),
+         (0, 0, {'view_mode': 'kanban', 'view_id': ref('droga_inventory.droga_inventory_office_supplies_request_kanban')})]"/>
+
+        <field name="domain">[('create_uid', '=', uid)]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No Store requisition found!Let's create one
+            </p>
+        </field>
+    </record>
+
+
+     <!-- action for head count request -->
+    <record id="droga_hr_head_count_request_action" model="ir.actions.act_window">
+        <field name="name">Head Count Request</field>
+        <field name="res_model">hr.head.count.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+        (0, 0, {'view_mode': 'tree', 'view_id': ref('droga_hr.droga_hr_head_count_request_tree_view')}),
+         (0, 0, {'view_mode': 'form', 'view_id': ref('droga_hr.droga_hr_head_count_request_form_view')})]"/>
+        <field name="domain">[('create_uid', '=', uid)]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Head Count Request
+            </p>
+        </field>
+    </record>
+
+</odoo>

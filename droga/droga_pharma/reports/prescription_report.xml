@@ -1,0 +1,11 @@
+<odoo>
+    <record id="droga_prescription_action" model="ir.actions.report">
+        <field name="name">Prescription Paper</field>
+        <field name="model">droga.pharma.priscription</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">droga_pharma.report_prescription</field>
+        <field name="report_file">droga_pharma.report_prescription</field>
+        <field name="binding_model_id" ref="model_droga_pharma_priscription"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

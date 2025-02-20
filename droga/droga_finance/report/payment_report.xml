@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!--action for payment report -->
+    <record id="view_account_payment_report_tree" model="ir.ui.view">
+        <field name="name">account.payment.tree</field>
+        <field name="model">account.payment</field>
+        <field name="arch" type="xml">
+            <tree edit="false" sample="1" create="false" delete="false" decoration-info="state == 'draft'"
+                  decoration-muted="state == 'cancel'">
+                <header>
+                    <button name="action_post" type="object" string="Confirm"/>
+                </header>
+                <field name="company_currency_id" invisible="1"/>
+                <field name="date"/>
+                <field name="name"/>
+                <field name="journal_id"/>
+                <field name="payment_method_line_id"/>
+                <field name="partner_id" string="Customer"/>
+                <field name="amount_signed" string="Amount in Currency" groups="base.group_multi_currency"
+                       optional="hide"/>
+                <field name="currency_id" string="Payment Currency" groups="base.group_multi_currency" optional="hide"/>
+                <field name="amount_company_currency_signed" widget="monetary" string="Amount" sum="Total"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'"
+                       decoration-success="state == 'posted'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_account_payment_report_pivot" model="ir.ui.view">
+        <field name="name">account.payment.pivot</field>
+        <field name="model">account.payment</field>
+        <field name="arch" type="xml">
+            <pivot string="">
+                <field name="partner_id" type="row"/>
+
+                <field name="amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_account_payment_report_search" model="ir.ui.view">
+        <field name="name">account.payment.search</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='reconciled']" position="after">
+                <separator/>
+
+                <filter string="Today"
+                        domain="[('date', '&gt;=', context_today().strftime('%Y-%m-%d')), ('date', '&lt;', (context_today() + relativedelta(days=1)).strftime('%Y-%m-%d'))]"
+                        name="today_sales"></filter>
+                <filter string="Current week sales"
+                    domain="[
+                        ('date', '>=', (datetime.datetime.combine(context_today() + relativedelta(weeks=-1,days=1,weekday=0), datetime.time(0,0,0)).to_utc()).strftime('%Y-%m-%d %H:%M:%S')),
+                        ('date', '&lt;', (datetime.datetime.combine(context_today() + relativedelta(days=1,weekday=0), datetime.time(0,0,0)).to_utc()).strftime('%Y-%m-%d %H:%M:%S'))]"
+                    name="current_week_sales"></filter>
+                <filter string="Current Month"
+                        domain="[('date', '&lt;=', (context_today() + relativedelta(day=31)).strftime('%Y-%m-%d')),('date', '&gt;=', (context_today() - relativedelta(day=1)).strftime('%Y-%m-%d'))]"
+                        name="current_month_sales"></filter>
+                <filter string="Previous Week"
+                        domain="[('date', '&lt;=', (context_today() - relativedelta(weeks=1,weekday=-1)).strftime('%Y-%m-%d')),('date', '&gt;=', (context_today() - relativedelta(weeks=2,weekday=0)).strftime('%Y-%m-%d'))]"
+                        name="previous_week_sales"></filter>
+                <filter string="Previous Month"
+                        domain="[('date', '&lt;=', (context_today() + relativedelta(months=-1,day=31)).strftime('%Y-%m-%d')),('date', '&gt;=', (context_today() - relativedelta(months=1,day=1)).strftime('%Y-%m-%d'))]"
+                        name="previous_month_sales"></filter>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_account_payments_reports" model="ir.actions.act_window">
+        <field name="name">Payments</field>
+        <field name="res_model">account.payment</field>
+        <field name="view_mode">tree,pivot,graph</field>
+        <field name="context">{
+            'default_payment_type': 'inbound',
+            'default_partner_type': 'customer',
+            'search_default_inbound_filter': 1,
+            'search_default_current_week_sales': 1,
+            'default_move_journal_types': ('bank', 'cash'),
+            }
+        </field>
+        <field name="view_id" ref="view_account_payment_report_tree"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Register a payment
+            </p>
+            <p>
+                Payments are used to register liquidity movements. You can process those payments by your own means or
+                by using installed facilities.
+            </p>
+        </field>
+    </record>
+
+
+    <!--action for payment report from view -->
+    <record id="view_account_payment1_report_tree" model="ir.ui.view">
+        <field name="name">droga.finance.payment.report.tree</field>
+        <field name="model">droga.finance.payment.report</field>
+        <field name="arch" type="xml">
+            <tree edit="false" sample="1" create="false" delete="false">
+
+                <field name="invoice_no" optional="show"/>
+                <field name="partner_id" optional="show"/>
+                <field name="category" optional="show"/>
+                <field name="division" optional="show"/>
+                <field name="sales_channel" optional="show"/>
+                <field name="sales_type" optional="show"/>
+                <field name="sales_initiator" optional="show"/>
+                <field name="invoice_date_due" optional="show"/>
+                <field name="paid_date" optional="show"/>
+                <field name="total_amount" optional="show"/>
+                <field name="paid_amount" optional="show"/>
+                <field name="settled_amount" optional="show"/>
+                <field name="payment_type" optional="hide"/>
+                <field name="due_days" decoration-danger="due_days &gt; 0"
+                       decoration-success="due_days &lt;=0"/>
+
+                <field name="paid_passed_days" optional="hide"/>
+                <field name="company_id" optional="hide"/>
+
+                <!--<field name="state" widget="badge" decoration-info="state == 'draft'"
+                       decoration-success="state == 'posted'"/>-->
+
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_account_payment1_report_pivot" model="ir.ui.view">
+        <field name="name">droga.finance.payment.report.pivot</field>
+        <field name="model">droga.finance.payment.report</field>
+        <field name="arch" type="xml">
+            <pivot string="Payment Report">
+                <field name="partner_id" type="row"/>
+
+                <field name="total_amount" type="measure"/>
+                <field name="paid_amount" type="measure"/>
+                <field name="settled_amount" type="measure"/>
+
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_account_payment1_report_search" model="ir.ui.view">
+        <field name="name">droga.finance.payment.report.search</field>
+        <field name="model">droga.finance.payment.report</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="partner_id"/>
+                <field name="category"/>
+                <field name="division"/>
+                <field name="invoice_no"/>
+                <field name="sales_type"/>
+                <field name="sales_initiator"/>
+                <field name="invoice_date_due"/>
+                <field name="paid_date"/>
+                <field name="total_amount"/>
+                <field name="paid_amount"/>
+                <field name="settled_amount"/>
+
+                <separator/>
+
+                <filter string="Today"
+                        domain="[('paid_date', '&gt;=', context_today().strftime('%Y-%m-%d')), ('paid_date', '&lt;', (context_today() + relativedelta(days=1)).strftime('%Y-%m-%d'))]"
+                        name="today_sales"></filter>
+                <filter string="Current Week"
+                        domain="[('paid_date', '&lt;=', (context_today() + relativedelta(weeks=0,weekday=-1)).strftime('%Y-%m-%d')),('paid_date', '&gt;=', (context_today() - relativedelta(weeks=1,weekday=0)).strftime('%Y-%m-%d'))]"
+                        name="current_week_sales"></filter>
+                <filter string="Current Month"
+                        domain="[('paid_date', '&lt;=', (context_today() + relativedelta(day=31)).strftime('%Y-%m-%d')),('paid_date', '&gt;=', (context_today() - relativedelta(day=1)).strftime('%Y-%m-%d'))]"
+                        name="current_month_sales"></filter>
+                <filter string="Previous Week"
+                        domain="[('paid_date', '&lt;=', (context_today() - relativedelta(weeks=1,weekday=-1)).strftime('%Y-%m-%d')),('paid_date', '&gt;=', (context_today() - relativedelta(weeks=2,weekday=0)).strftime('%Y-%m-%d'))]"
+                        name="previous_week_sales"></filter>
+                <filter string="Previous Month"
+                        domain="[('paid_date', '&lt;=', (context_today() + relativedelta(months=-1,day=31)).strftime('%Y-%m-%d')),('paid_date', '&gt;=', (context_today() - relativedelta(months=1,day=1)).strftime('%Y-%m-%d'))]"
+                        name="previous_month_sales"></filter>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_account_payments_customer_reports" model="ir.actions.act_window">
+        <field name="name">Payments</field>
+        <field name="res_model">droga.finance.payment.report</field>
+        <field name="view_mode">tree,pivot</field>
+        <field name="domain">[('payment_type', '=', 'Customer')]</field>
+        <field name="context">{
+            'search_default_current_week_sales': 1,
+            }
+        </field>
+        <field name="view_id" ref="view_account_payment1_report_tree"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Payment Report
+            </p>
+            <p>
+                Payments are used to register liquidity movements. You can process those payments by your own means or
+                by using installed facilities.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_account_payments_vendor_reports" model="ir.actions.act_window">
+        <field name="name">Payments</field>
+        <field name="res_model">droga.finance.payment.report</field>
+        <field name="view_mode">tree,pivot</field>
+        <field name="domain">[('payment_type', '=', 'Vendor')]</field>
+        <field name="context">{
+            'search_default_current_week_sales': 1,
+            }
+        </field>
+        <field name="view_id" ref="view_account_payment1_report_tree"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Payment Report
+            </p>
+            <p>
+                Payments are used to register liquidity movements. You can process those payments by your own means or
+                by using installed facilities.
+            </p>
+        </field>
+    </record>
+
+     <!-- rule for filtering data specific data -->
+    <record model="ir.rule" id="droga_account_payment_report_rule">
+        <field name="name">Payment Report multi-company</field>
+        <field name="model_id" ref="model_droga_finance_payment_report"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+
+</odoo>

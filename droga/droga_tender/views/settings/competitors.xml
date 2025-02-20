@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="droga_tender_settings_competitor_action" model="ir.actions.act_window">
+        <field name="name">Competitor registry</field>
+        <field name="res_model">droga.tender.settings.competitor</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="droga_tender_settings_competitor_view_tree" model="ir.ui.view">
+        <field name="name">droga.tender.settings.competitor.view.tree</field>
+        <field name="model">droga.tender.settings.competitor</field>
+        <field name="arch" type="xml">
+            <tree string="" delete="0">
+                <field name="competitor_name"></field>
+                <field name="competitor_descr"></field>
+                <field name="status"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_tender_settings_competitor_view_form" model="ir.ui.view">
+        <field name="name">droga.tender.settings.competitor.view.form</field>
+        <field name="model">droga.tender.settings.competitor</field>
+        <field name="arch" type="xml">
+            <form string="" delete="0">
+                <sheet>
+                    <group>
+                        <field name="competitor_name"></field>
+                        <field name="competitor_descr"></field>
+                        <field name="status"></field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <menuitem
+            id="droga_tender_settings_competitor"
+            name="Competitors Registry"
+            action="droga_tender_settings_competitor_action"
+            parent="tender_settings_menu"
+            groups="tender_manager"
+            sequence="18"/>
+</odoo>

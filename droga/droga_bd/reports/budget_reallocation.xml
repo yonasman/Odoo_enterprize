@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- action for sales report -->
+    <record id="droga_budget_rellocation_report_action" model="ir.actions.report">
+        <field name="name">Budget Reallocation Report</field>
+        <field name="model">droga.budget.reallocation</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">droga_bd.droga_budget_reallocation_report</field>
+        <field name="report_file">droga_bd.droga_budget_reallocation_report</field>
+        <field name="print_report_name">'Budget Reallocation Report - %s' % (object.name)
+        </field>
+        <field name="paperformat_id" ref="droga_bd.paperformat_droga_budget_a4"/>
+        <field name="binding_model_id" ref="model_droga_budget_reallocation"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="droga_budget_reallocation_report" name="Budget Reallocation Report">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-foreach="docs" t-as="o">
+
+
+                    <div class="page">
+
+                        <div class="oe_structure"/>
+                        <h2>
+                            <span t-field="o.name"/>
+                        </h2>
+                        <br></br>
+                        <div id="informations" class="row mt32 mb32">
+
+                            <div class="col-4 bm-2">
+                                    Budget:
+                                <p t-field="o.budget_id" class="m-0"/>
+                            </div>
+                            <div class="col-4 bm-2">
+                                    Requested By:
+                                <p t-field="o.request_by" class="m-0"/>
+                            </div>
+                            <div class="col-4 bm-2">
+                                Requested Date:
+                                <p t-field="o.request_date" class="m-0"/>
+                            </div>
+
+
+                        </div>
+                        <br></br>
+                        <div id="informations" class="row mt32 mb32">
+
+                            <div class="col-4 bm-2">
+                                Cost Center:
+                                <p t-field="o.analytic_account" class="m-0"/>
+                            </div>
+                            <div class="col-4 bm-2">
+                                Purpose:
+                                <p t-field="o.purpose" class="m-0"/>
+                            </div>
+
+
+                        </div>
+                        <br></br>
+
+
+                        <t t-if="o.budget_reallocations">
+                            <h4>Budget Item Reallocation</h4>
+                            <table style="width:100%" class="table table-hover table-sm">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th class="small">
+                                                No
+                                        </th>
+                                        <th class="small">
+                                                From Budgetary Position
+                                        </th>
+                                        <!--<th class="small">
+                                                Account
+                                        </th>-->
+                                        <th class="small">
+                                            To Budgetary Position
+                                        </th>
+                                        <!--<th class="small">
+                                                Account
+                                        </th>-->
+                                        <th class="small">
+                                                Date From
+                                        </th>
+                                        <th class="small">
+                                            Date To
+                                        </th>
+                                        <th class="small text-end">
+                                                Transfer Amount
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="o.budget_reallocations" t-as="reallocation">
+                                        <td>
+
+                                        </td>
+                                        <td class="small">
+                                            <t t-esc="reallocation.from_budgetary_position.name"/>
+                                        </td>
+                                        <!--<td class="small">
+                                            <t t-esc="reallocation.account_from.name"/>
+                                        </td>-->
+                                        <td class="small">
+                                            <t t-esc="reallocation.to_budgetary_position.name"/>
+                                        </td>
+                                        <!--<td class="small">
+                                            <t t-esc="reallocation.account_to.name"/>
+                                        </td>-->
+                                        <td class="small">
+                                            <t t-esc="reallocation.date_from"/>
+                                        </td>
+                                        <td class="small">
+                                            <t t-esc="reallocation.date_to"/>
+                                        </td>
+                                        <td class="small text-end">
+                                            <t t-esc="reallocation.transfer_amount" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                        </t>
+                        <br></br>
+
+                        <t t-if="o.budget_additions">
+                            <h4>New Budget Item</h4>
+                            <table style="width:100%" class="table table-hover table-sm">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th class="small">
+                                                No
+                                        </th>
+                                        <th class="small">
+                                                From Budgetary Position
+                                        </th>
+                                        <th class="small">
+                                                Account
+                                        </th>
+
+                                        <th class="small">
+                                                Date From
+                                        </th>
+                                        <th class="small">
+                                            Date To
+                                        </th>
+                                        <th class="small text-end">
+                                                Amount
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="o.budget_additions" t-as="additions">
+                                        <td></td>
+                                        <td class="small">
+                                            <t t-esc="additions.bdugetary_position.name"/>
+                                        </td>
+                                        <td class="small">
+                                            <t t-esc="additions.account.name"/>
+                                        </td>
+                                        <td class="small">
+                                            <t t-esc="additions.date_from"/>
+                                        </td>
+                                        <td class="small">
+                                            <t t-esc="additions.date_to"/>
+                                        </td>
+                                        <td class="small text-end">
+                                            <t t-esc="additions.addition_amount" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+
+                        <div id="informations" class="row mt32 mb32">
+
+                            <div class="col-12 bm-2">
+                                    Reason:
+                                <p t-field="o.purpose" class="m-0"/>
+                            </div>
+
+                        </div>
+                        <br></br>
+
+                        <div id="informations" class="row mt32 mb32">
+
+                            <div class="col-4 bm-2">
+                                    Department Director:
+                                <p t-field="o.request_by" class="m-0"/>
+                            </div>
+
+                            <div class="col-4 bm-2">
+                               CFO:
+                                <p t-field="o.request_by" class="m-0"/>
+                            </div>
+
+                            <div class="col-4 bm-2">
+                            CEO:
+                                <p t-field="o.request_by" class="m-0"/>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </t>
+
+            </t>
+        </t>
+
+
+    </template>
+
+</odoo>

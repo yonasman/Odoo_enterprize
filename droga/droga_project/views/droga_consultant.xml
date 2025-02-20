@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="droga_project_consultants_action" model="ir.actions.act_window">
+        <field name="name">Consultant registry</field>
+        <field name="res_model">droga.project.consultant</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="droga_project_consultants_view_tree" model="ir.ui.view">
+        <field name="name">droga.project.Consultants.view.tree</field>
+        <field name="model">droga.project.consultant</field>
+        <field name="arch" type="xml">
+            <tree string="" delete="0">
+                <field name="consultant_name"></field>
+                <field name="consultant_descr"></field>
+                <field name="status"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_project_consultants_view_form" model="ir.ui.view">
+        <field name="name">droga.project.Consultants.view.form</field>
+        <field name="model">droga.project.consultant</field>
+        <field name="arch" type="xml">
+            <form string="" delete="0">
+                <sheet>
+                    <group>
+                        <field name="consultant_name"></field>
+                        <field name="consultant_descr"></field>
+                        <field name="status"></field>
+                    </group>
+
+                    <notebook>
+                        <page string="Projects">
+
+                            <field name="project_consulting" mode="tree" views="[(3, 'project.project_project_stage_view_tree')]">
+                                    <tree editable="bottom" create="0">
+                                        <field name="name"></field>
+                                    </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <menuitem
+            id="droga_project_consultants"
+            name="Consultants Registry"
+            action="droga_project_consultants_action"
+            parent="project.menu_project_config"
+            groups="proj_admin"
+            sequence="19"/>
+</odoo>

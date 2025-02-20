@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="email_template_payslip" model="mail.template">
+            <field name="name">Payslip</field>
+            <field name="model_id" ref="hr_payroll.model_hr_payslip"/>
+            <field name="subject">Payslip of {{object.employee_id.name}} for month {{ object.period.description }}</field>
+            <field name="partner_to">{{ object.employee_id.id }}</field>
+            <field name="description">Payslip report for the employee {{ object.name }}</field>
+            <field name="body_html" type="html">
+
+                <div class="container">
+                    <p>Dear<t t-out="object.employee_id.name"/>,
+                    </p>
+                    <p>Please find below the details of your payslip for the month
+                        <t t-out="object.period.description"/>
+                        from
+                        <t t-out="object.date_from"/>
+                        to<t t-out="object.date_to"/>:
+                    </p>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-sm">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Description</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="object.line_ids" t-as="pd">
+                                    <tr>
+
+                                        <t t-if="pd.code in ['GROSS', 'DED', 'NET']">
+                                            <td>
+                                                <strong>
+                                                    <t t-out="pd.name"/>
+                                                </strong>
+                                            </td>
+                                            <td align="right">
+                                                <strong>
+                                                    <t t-esc="'{:,.2f}'.format(pd.total)"/>
+                                                </strong>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td>
+                                                <t t-out="pd.name"/>
+                                            </td>
+                                            <td align="right">
+                                                <t t-esc="'{:,.2f}'.format(pd.total)"/>
+                                            </td>
+                                        </t>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        <p>Regards,</p>
+                        <p>
+                            <t t-out="object.company_id.name"/>
+                        </p>
+                    </div>
+                </div>
+
+            </field>
+            <field name="email_from">{{object.mail_server}}</field>
+            <field name="email_to">{{object.employee_id.work_email}}</field>
+
+
+            <field name="report_name">RFQ_{{ (object.name or '').replace('/','_') }}</field>
+            <field name="lang">{{ object.employee_id.lang }}</field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>

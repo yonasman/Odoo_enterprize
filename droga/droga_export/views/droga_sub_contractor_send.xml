@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="droga_sales_subcontractor_issue_view_tree" model="ir.ui.view">
+        <field name="name">droga.inventory.consignment.issue.view.tree</field>
+        <field name="model">droga.inventory.consignment.issue</field>
+        <field name="arch" type="xml">
+            <tree string="" create="1" delete="0">
+                <field name="name"></field>
+                <field name="customer" string="Cleaning unit"></field>
+                <field name="state"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_sales_bag_issue_view_tree" model="ir.ui.view">
+        <field name="name">droga.inventory.consignment.issue.view.tree</field>
+        <field name="model">droga.inventory.consignment.issue</field>
+        <field name="arch" type="xml">
+            <tree string="" create="1" delete="0">
+                <field name="name"></field>
+                <field name="consignment_reference"></field>
+                <field name="state"></field>
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="droga_sales_subcontractor_issue_view_form" model="ir.ui.view">
+        <field name="name">droga.inventory.consignment.issue.view.form</field>
+        <field name="model">droga.inventory.consignment.issue</field>
+        <field name="arch" type="xml">
+            <form string="Subcontractor issue" delete="0">
+                <header>
+                    <button name="request_mg"
+                            attrs="{'invisible': [('state', 'not in', ('draft'))]}"
+                            string="Request" type="object" class="oe_highlight" data-hotkey="v"/>
+                    <button name="mg_approve"
+                            attrs="{'invisible': [('state', 'not in', ('mg'))]}"
+                            groups="droga_export.export_manager"
+                            string="Approve" type="object" class="oe_highlight" data-hotkey="v"/>
+                    <button name="amend"
+                            attrs="{'invisible': [('state', 'not in', ('mg','mtmg'))]}"
+                            groups="droga_inventory.stores_manager,droga_inventory.marketing_manager"
+                            string="Amend" type="object" class="oe_highlight btn-warning" data-hotkey="v"/>
+                    <button name="action_cancel"
+                            attrs="{'invisible': [('state', 'not in', ('draft'))]}"
+                            string="Cancel" type="object" class="oe_highlight" data-hotkey="v"/>
+
+                    <field name="state" widget="statusbar" statusbar_visible="draft,mg,waiting,sc"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button icon="fa-credit-card-alt" type="object" string="Payment request" name="pay_req_open"
+                                class="oe_stat_button"></button>
+                        <button icon="fa-credit-card-alt" type="object" string="Cost build-up" name="cost_buildup"
+                                class="oe_stat_button"></button>
+                        <button icon="fa-credit-card-alt" type="object" string="Cleaning unit return" name="sub_cont_return"
+                                class="oe_stat_button"></button>
+                    </div>
+                    <group string="Cleaning unit issue">
+                        <group>
+                            <field name="customer" string="Cleaning unit" required="1"
+                                   attrs="{'readonly': [('state', 'in', ('waiting','mg','reject','cancel','done'))]}"></field>
+                            <field name="issue_type" required="True"
+                                   attrs="{'readonly': True}"></field>
+                            <field name="subcontract_issue_origin_form" readonly="1" options="{'no_create':True,'no_open':True}"></field>
+                        </group>
+                        <group>
+                            <field name="issue_date"
+                                   attrs="{'readonly': [('state', 'in', ('waiting','mg','reject','cancel','done'))]}"></field>
+                            <field name="consignment_reference"></field>
+                            <field name="remark"></field>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Product Details">
+                            <field name="state" invisible="1"></field>
+                            <field name="detail_entries"
+                                   attrs="{'readonly': [('state', 'in', ('waiting','reject','cancel','done'))]}">
+                                <tree editable="bottom">
+                                    <field name="company_id" invisible="1"/>
+                                    <field name="product_id" required="1" options="{'no_create':True,'no_open':True}"
+                                           context="{'default_detailed_type': 'product'}"/>
+                                    <field name="product_uom" options="{'no_create':True,'no_open':True}" readonly="1"/>
+                                    <field name="product_uom_category_id" invisible="1"/>
+                                    <field name="state" invisible="1"/>
+                                    <field name="product_uom_qty" sum="Total" string="Quantity"/>
+                                    <field name="proc_cost" sum="Total"></field>
+                                    <field name="tot_cost" sum="Total"></field>
+                                    <field name="product_uom" invisible="1"></field>
+                                    <field name="warehouse_id" attrs="{'required': [('state', '!=','draft')]}"
+                                           string="Issuer warehouse" options="{'no_create':True,'no_open':True}"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                    </notebook>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="droga_sales_bag_issue_view_form" model="ir.ui.view">
+        <field name="name">droga.inventory.consignment.issue.view.form</field>
+        <field name="model">droga.inventory.consignment.issue</field>
+        <field name="arch" type="xml">
+            <form string="Bag issue" delete="0">
+                <header>
+                    <button name="request_mg"
+                            attrs="{'invisible': [('state', 'not in', ('draft'))]}"
+                            string="Request" type="object" class="oe_highlight" data-hotkey="v"/>
+                    <button name="mg_approve"
+                            attrs="{'invisible': [('state', 'not in', ('mg'))]}"
+                            groups="droga_export.export_manager"
+                            string="Approve" type="object" class="oe_highlight" data-hotkey="v"/>
+                    <button name="amend"
+                            attrs="{'invisible': [('state', 'not in', ('mg','mtmg'))]}"
+                            groups="droga_inventory.stores_manager,droga_inventory.marketing_manager"
+                            string="Amend" type="object" class="oe_highlight btn-warning" data-hotkey="v"/>
+                    <button name="action_cancel"
+                            attrs="{'invisible': [('state', 'not in', ('draft'))]}"
+                            string="Cancel" type="object" class="oe_highlight" data-hotkey="v"/>
+
+                    <field name="state" widget="statusbar" statusbar_visible="draft,mg,waiting,sc"/>
+                </header>
+                <sheet>
+                    <group string="Cleaning unit issue">
+                        <group>
+                            <field name="issue_type" required="True"
+                                   attrs="{'readonly': True}"></field>
+                            <field name="bag_issue_order" readonly="1" options="{'no_create':True,'no_open':True}"></field>
+                            <field name="remark"></field>
+                        </group>
+                        <group>
+                            <field name="issue_date"
+                                   attrs="{'readonly': [('state', 'in', ('waiting','mg','reject','cancel','done'))]}"></field>
+                            <field name="consignment_reference"></field>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Product Details">
+                            <field name="state" invisible="1"></field>
+                            <field name="detail_entries"
+                                   attrs="{'readonly': [('state', 'in', ('waiting','reject','cancel','done'))]}">
+                                <tree editable="bottom">
+                                    <field name="company_id" invisible="1"/>
+                                    <field name="product_id" required="1" options="{'no_create':True,'no_open':True}"
+                                           context="{'default_detailed_type': 'product'}"/>
+                                    <field name="product_uom" options="{'no_create':True,'no_open':True}"/>
+                                    <field name="product_uom_category_id" invisible="1"/>
+                                    <field name="state" invisible="1"/>
+                                    <field name="product_uom_qty" sum="Total" string="Quantity"/>
+                                    <field name="product_amt" sum="Total" string="Amount"/>
+                                    <field name="warehouse_id" attrs="{'required': [('state', '!=','draft')]}"
+                                           string="Issuer warehouse" options="{'no_create':True,'no_open':True}"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                    </notebook>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="droga_sales_subcontract_issue_action_sales" model="ir.actions.act_window">
+        <field name="name">Cleaning unit items issuance</field>
+        <field name="res_model">droga.inventory.consignment.issue</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('droga_sales_subcontractor_issue_view_tree')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('droga_sales_subcontractor_issue_view_form')})]"/>
+        <field name="context">{'default_issue_type': 'SUBL','default_warehouse_id':9}</field>
+        <field name="domain">[('create_uid','=',uid)]</field>
+    </record>
+
+
+    <menuitem
+            id="droga_export_clean_issue_menu"
+            name="Cleaning unit issue and return"
+            action="droga_export.droga_sales_subcontract_issue_action_sales"
+            parent="stock.menu_stock_warehouse_mgmt"
+            sequence="30"/>
+</odoo>

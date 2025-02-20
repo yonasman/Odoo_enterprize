@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="droga_cust_contact_extension" model="ir.ui.view">
+        <field name="name">customer</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//form" position="attributes">
+                <attribute name="js_class">js_form_view</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page[@name='contact_addresses']" position="after">
+                <field name="customer_rank" invisible="1"></field>
+                <page string="Contacts" attrs="{'invisible': [('supplier_rank', '>', 0)]}">
+                    <field name="contacts" mode="tree,kanban">
+                        <tree editable="1" create="1" delete="0">
+                            <field name="specialty" domain="([('status','=','Active')])"
+                                   options="{'no_create':True,'no_open':True}"/>
+                            <field name="contact_name"/>
+                            <field name="job_position"/>
+                            <field name="gender"/>
+                            <field name="mobile"/>
+                            <field name="contact_tobe_accessed_by" options="{'no_create':True,'no_open':True}"/>
+                            <field name="cont_grade" options="{'no_create':True,'no_open':True}"
+                                   domain="([('status','=','Active'),('cont_include','=',True)])"/>
+                            <field name="days" widget="many2many_tags"/>
+                        </tree>
+                        <form>
+                            <group>
+                                <field name="specialty" domain="([('status','=','Active')])"
+                                       options="{'no_create':True,'no_open':True}"/>
+                                <field name="contact_name"/>
+                                <field name="job_position"/>
+                                <field name="gender"/>
+                                <field name="mobile"/>
+                                <field name="contact_tobe_accessed_by" options="{'no_create':True,'no_open':True}"/>
+                                <field name="cont_grade" options="{'no_create':True,'no_open':True}"
+                                       domain="([('status','=','Active'),('cont_include','=',True)])"/>
+                                <field name="days" widget="many2many_tags"/>
+                            </group>
+                        </form>
+                        <kanban class="o_kanban_mobile">
+                            <field name="specialty" domain="([('status','=','Active')])"
+                                   options="{'no_create':True,'no_open':True}"/>
+                            <field name="contact_name"/>
+                            <field name="job_position"/>
+                            <field name="gender"/>
+                            <field name="mobile"/>
+                            <field name="contact_tobe_accessed_by" options="{'no_create':True,'no_open':True}"/>
+                            <field name="cont_grade" options="{'no_create':True,'no_open':True}"
+                                   domain="([('status','=','Active'),('cont_include','=',True)])"/>
+                            <field name="days" widget="many2many_tags"/>
+                            <templates>
+                                <t t-name="kanban-box">
+                                    <div t-attf-class="oe_kanban_global_click" on_create="quick_create">
+                                        <div class="oe_kanban_details">
+                                            <ul>
+                                                <li>
+                                                    <field name="contact_name"></field>
+                                                </li>
+                                                <li>
+                                                    Specialty:
+                                                    <field name="specialty"></field>
+                                                    <span></span>-
+                                                    <span></span>
+                                                    Job Position:
+                                                    <field name="job_position"></field>
+                                                </li>
+                                                <li>
+                                                    Gender:
+                                                    <field name="gender"></field>
+                                                    <span></span>-
+                                                    <span></span>
+                                                    Mobile:
+                                                    <field name="mobile"></field>
+                                                </li>
+
+
+                                            </ul>
+
+                                        </div>
+                                    </div>
+                                </t>
+                            </templates>
+
+                        </kanban>
+                    </field>
+                </page>
+                <page string="Location update history">
+                    <group col="1">
+                        <group>
+                            <field name="partner_latitude" readonly="1"></field>
+                            <field name="partner_longitude" readonly="1"></field>
+                        </group>
+
+                            <field name="loc_history" mode="tree">
+                                <tree create="0" editable="0" delete="0">
+                                    <field name="update_user_loc" readonly="1"></field>
+                                    <field name="update_date" readonly="1"></field>
+                                    <field name="old_lati" readonly="1"></field>
+                                    <field name="new_lati" readonly="1"></field>
+                                    <field name="old_long" readonly="1"></field>
+                                    <field name="new_long" readonly="1"></field>
+                                </tree>
+                            </field>
+
+                    </group>
+                </page>
+            </xpath>
+
+
+            <xpath expr="//form/sheet/notebook/page[@name='contact_addresses']" position="attributes">
+                <attribute name="attrs">{'invisible': [('supplier_rank', '=', 0)]}</attribute>
+            </xpath>
+
+            <xpath expr="//form/sheet/group/group" position="attributes">
+                <attribute name="attrs">{'invisible': [('supplier_rank', '=', 0)]}</attribute>
+            </xpath>
+
+            <xpath expr="//form/sheet/group/group/field[@name='function']" position="attributes">
+                <attribute name="attrs">{'invisible': [('supplier_rank', '=', 0)]}</attribute>
+            </xpath>
+
+            <xpath expr="//form/sheet/group/group/field[@name='category_id']" position="attributes">
+                <attribute name="attrs">{'invisible': [('supplier_rank', '=', 0)]}</attribute>
+            </xpath>
+
+            <xpath expr="//form/sheet/group/group" position="after">
+                <group attrs="{'invisible': [('supplier_rank', '>', 0)]}">
+                    <field name="supplier_rank" invisible="1"></field>
+                    <field name="cust_grade" options="{'no_create':True,'no_open':True}"
+                           string="Customer grade" domain="([('status','=','Active')])"></field>
+                    <field name="cust_type_ext" domain="([('status','=','Active')])"
+                           attrs="{'required': [('supplier_rank', '=', 0)]}"
+                           options="{'no_create':True,'no_open':True}"
+                           string="Customer type"></field>
+                    <field name="pr_avail_area" invisible="1" widget="many2many_tags"></field>
+                    <field name="pr_sales_logged" invisible="1"></field>
+                    <field name="city_name" attrs="{'required': [('supplier_rank', '=', 0)]}"
+                           domain="([('city_avail', '=',True),('status','=','Active')])"
+                           options="{'no_create':True,'no_open':True}"
+                           string="City/sub-city team"></field>
+                    <field name="area" options="{'no_create':True,'no_open':True}" string="Area"
+                           domain="([('parent_id','=',city_name),('status','=','Active')])"></field>
+
+                    <field name="mature_individually" groups="droga_crm.tin_admin"></field>
+
+                </group>
+
+            </xpath>
+            <xpath expr="//form/sheet/group/group/field[@name='website']" position="after">
+                <field name="vat" string="Tin No"/>
+                <field name="key_account"/>
+                <field name="x_wereda"/>
+                <field name="x_house_no"/>
+                <field name="x_exclude_maturity_for_reconciliation" groups="droga_crm.tin_admin"></field>
+            </xpath>
+
+            <xpath expr="//form/sheet/group/group/field[@name='phone']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+
+            <xpath expr="//form/sheet/group/group/field[@name='website']" position="attributes">
+                <attribute name="attrs">{'invisible': [('supplier_rank', '=', 0)]}</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_crm_partner_geo_form" model="ir.ui.view">
+        <field name="name">res.partner.geolocation.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base_geolocalize.view_crm_partner_geo_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='geo_location']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="droga_crm_teams_extension" model="ir.ui.view">
+        <field name="name">CRM teams</field>
+        <field name="model">crm.team</field>
+        <field name="inherit_id" ref="sales_team.crm_team_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/group/group/field[@name='active']" position="after">
+                <field name="city_name" domain="([('status','=','Active')])"></field>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="view_out_invoice_tree_pr_sales_add" model="ir.ui.view">
+        <field name="name">account.move.tree.pr.sales.add</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_out_invoice_tree"/>
+        <field name="arch" type="xml">
+            <field name="invoice_date_due" position="after">
+                <field name="pr_sales" string='Sales person' optional="show"/>
+            </field>
+            <field name="name" position="after">
+                <field name="invoice_partner_display_name" string='Customer' optional="show"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="stock_product_crm_category" model="ir.ui.view">
+        <field name="name">droga.crm.product.category.inherited</field>
+        <field name="model">product.category</field>
+        <field name="inherit_id" ref="product.product_category_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/group/field[@name='parent_id']" position="after">
+                <field name="crm_group"></field>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="res_partner_view_tree_add_if_loc_set" model="ir.ui.view">
+            <field name="name">res.partner.view.tree.inherit.loc.set</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='user_id']" position="after">
+                    <field name="loc_set" optional="show"/>
+                </xpath>
+            </field>
+        </record>
+</odoo>

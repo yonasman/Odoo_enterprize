@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+<!--        <record id="droga_product_analysis_tree_action" model="ir.actions.act_window">-->
+<!--            <field name="name">Product analysis criterias</field>-->
+<!--            <field name="res_model">droga.bdr.analysis.criteria</field>-->
+<!--            <field name="view_mode">tree</field>-->
+<!--        </record>-->
+
+        <record id="droga_product_analysis_page_view" model="ir.ui.view">
+            <field name="name">droga.product.analysis.view</field>
+            <field name="model">droga.bdr.product.analysis.criterias</field>
+            <field name="arch" type="xml">
+                <tree create="true" editable='top' string="Product criterias">
+<!--                    <field name="criteria"/>-->
+                    <field name="score"/>
+
+<!--                    <field name="maximum_score"/>-->
+<!--                    <field name="weight"/>-->
+<!--                    <field name="status"/>-->
+                </tree>
+            </field>
+        </record>
+    </data>
+</odoo>

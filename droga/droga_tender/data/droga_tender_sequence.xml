@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="seq_tender_master" model="ir.sequence">
+            <field name="name">Tender master sequence</field>
+            <field name="code">droga.tender.master.custom.sequence</field>
+            <field name="prefix">TENDER/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_bond_sequence" model="ir.sequence">
+            <field name="name">Tender bond sequence</field>
+            <field name="code">droga.bond.requests.sequence</field>
+            <field name="prefix">BOND/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

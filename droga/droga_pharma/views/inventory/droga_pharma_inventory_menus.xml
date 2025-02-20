@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <menuitem
+            id="droga_pharma_inventory"
+            name="Inventory"
+            parent="droga_pharma.pharma_main_menu"
+            groups="droga_pharma.pharma_dp_admin,droga_pharma.pharma_br_admin,droga_pharma.pharma_di_admin,droga_pharma.pharma_supply_chain_manager,droga_pharma.pharma_fin"
+            sequence="26">
+        <menuitem
+                action="stock.stock_picking_type_action"
+                id="droga_pharma_stock_picking_type_menu"
+                sequence="1"
+                groups="droga_pharma.pharma_dp_admin,droga_pharma.pharma_br_admin,droga_pharma.pharma_di_admin,droga_pharma.pharma_supply_chain_manager"
+                name="Overview"/>
+        <menuitem
+                id="droga_pharma_transfer_menu"
+                name="Store transfer requests"
+                action="droga_pharma_transfer_custom_action"
+                groups="droga_pharma.pharma_dp_admin,droga_pharma.pharma_br_admin,droga_pharma.pharma_di_admin,droga_pharma.pharma_supply_chain_manager"
+                sequence="2"/>
+        <menuitem
+                id="droga_pharma_consignment_menu"
+                name="Consignment requests"
+                action="droga_inventory_consignment_receipt_action_pharmacy"
+                groups="droga_pharma.pharma_dp_admin,droga_pharma.pharma_br_admin,droga_pharma.pharma_di_admin,droga_pharma.pharma_supply_chain_manager"
+                sequence="3"/>
+        <menuitem
+                id="droga_pharma_compounding_menu"
+                name="Compounding"
+                action="droga_pharma_compounding_action"
+                groups="droga_pharma.pharma_supply_chain_manager"
+                sequence="5"/>
+
+        <menuitem
+                id="droga_pharma_inv_settings_menu"
+                name="Settings"
+                groups="droga_pharma.pharma_dp_admin,droga_pharma.pharma_br_admin,droga_pharma.pharma_di_admin,droga_pharma.pharma_supply_chain_manager"
+                sequence="4">
+            <menuitem
+                    id="droga_pharma_products_view"
+                    name="Services"
+                    action="droga_pharma_product_action"
+                    groups="droga_pharma.pharma_supply_chain_manager"
+                    sequence="0"/>
+            <menuitem
+                    id="droga_pharma_product_menu"
+                    name="Products"
+                    action="droga_inventory.droga_pharma_only_product_action"
+                    groups="droga_pharma.pharma_supply_chain_manager"
+                    sequence="1"/>
+            <menuitem
+                    id="droga_pharma_categ_menu"
+                    name="Product categories"
+                    action="droga_pharma_product_categ"
+                    groups="droga_pharma.pharma_supply_chain_manager"
+                    sequence="2"/>
+        </menuitem>
+    </menuitem>
+</odoo>

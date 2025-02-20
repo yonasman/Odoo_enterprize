@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_mtm_excel_report" model="ir.ui.view">
+        <field name="name">mtm.excel.report.form</field>
+        <field name="model">mtm.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string=" Print Excel Report" delete="0">
+                <group>
+                    <field name="client"/>
+                    <field name="date_from"/>
+
+                </group>
+
+                <group>
+
+                    <field name="date_to"/>
+                </group>
+                <footer>
+                    <button name="action_wizard_print_excel_report" type="object" string="Create Report" class="btn-primary"/>
+                    <button name="action_cancel" string="Cancel" type="object" class="btn-secondary"/>
+                </footer>
+
+            </form>
+        </field>
+    </record>
+
+
+    <record model="ir.actions.act_window" id="action_mtm_excel_report">
+        <field name="name">droga.mtm.excel.report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">mtm.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_mtm_excel_report"/>
+        <field name="target">new</field>
+
+    </record>
+</odoo>

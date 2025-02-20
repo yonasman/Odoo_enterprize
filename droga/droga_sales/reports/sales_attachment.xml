@@ -1,0 +1,1440 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <!-- action for Sales Attachment -->
+    <record id="droga_sales_pos_attachment_action" model="ir.actions.report">
+        <field name="name">Sales Attachment</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">droga_sales.droga_sales_pos_attachment_report</field>
+        <field name="report_file">droga_sales.droga_sales_pos_attachment_report</field>
+        <field name="print_report_name">'Sales Attachment - %s' % (object.name)
+        </field>
+        <field name="binding_model_id" ref="model_account_move"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- sales attachment for droga-->
+    <template id="droga_sales_pos_attachment_report" name="Sales Attachment">
+
+        <t t-call="web.html_container">
+
+            <t t-call="web.basic_layout">
+
+                <style type="text/css">
+
+                    /* Default left, right, top, bottom margin is 2cm */
+                    @page {
+                    size: A4 portrait;
+                    margin-top: 0cm;
+                    margin-left:1cm;
+                    margin-right:1cm;
+                    margin-bottom:1cm;
+                    }
+
+                    @media print
+                    {
+                    #non-printable { visibility: hidden; }
+                    #wrapwrap { visibility: visible; }
+                    }
+
+                    .nopadding {
+                    padding: 0 !important;
+                    margin: 0 !important;
+                    }
+
+                    .padding1 {
+                    padding: 0 !important;
+                    margin: 0 !important;
+                    }
+
+                    .table_morecondensed>thead>tr>th,
+                    .table_morecondensed>tbody>tr>th,
+                    .table_morecondensed>tfoot>tr>th,
+                    .table_morecondensed>thead>tr>td,
+                    .table_morecondensed>tbody>tr>td,
+                    .table_morecondensed>tfoot>tr>td{ padding: 1px; }
+
+                    .top5 { margin-top:15px; }
+
+
+                </style>
+
+                <t t-foreach="docs" t-as="o">
+
+                    <!-- Store and Sales Represnetataives -->
+                    <t t-set="store" t-value=""/>
+                    <t t-set="sales_representative" t-value=""/>
+                    <t t-set="order_type" t-value=""/>
+
+                    <t t-foreach="request.env['sale.order'].search([('name', '=', o.invoice_origin)])"
+                       t-as="sale_order">
+                        <t t-set="sales_order_no" t-value="sale_order.name"/>
+                        <t t-set="sales_representative" t-value="sale_order.sales_initiator"/>
+                        <t t-set="store" t-value="sale_order.order_type"/>
+                        <t t-set="order_from" t-value="sale_order.order_from"/>
+                        <t t-set="order_type" t-value="sale_order.sales_type"/>
+                        <t t-set="customer_name" t-value="sale_order.cust_name"/>
+                        <t t-set="withholding_amt" t-value="abs(o.amount_tax)"/>
+                    </t>
+
+
+                    <div class="header">
+                        <div class="row">
+                            <div class="col-2 bm-2">
+                                <img
+                                        t-attf-src="data:image/*;base64,{{o.company_id.logo}}"
+                                        t-att-alt="o.company_id.name"
+                                        t-field-options='{"widget": "image", "style":"width: 150px;height: 150px"}'
+                                />
+                            </div>
+                            <t t-if="store=='IM'">
+                                <div class="col-10 bm-2">
+                                    <h2>
+                                        <span t-esc="o.company_id.name"/>
+                                    </h2>
+                                    <h6>
+                                        Sub City: Gulele     Kebele: 09          Bldg/H.No. New
+                                    </h6>
+                                    <h6>Tel 1: +251939323232 +251913667537   Tel 2: +251929908565/66 - Tel 3:
+                                        +251974858585
+                                    </h6>
+                                    <h6>
+                                        TIN: 0045080232      VAT Reg. No. :
+                                    </h6>
+
+                                </div>
+                            </t>
+
+                            <t t-if="store=='WS'">
+                                <div class="col-10 bm-2">
+                                    <h2>
+                                        <span t-esc="o.company_id.name"/>
+                                    </h2>
+                                    <h6>
+                                        Addis Ababa,  Sub City: A/Ketema  W.06  H.NO 133
+                                    </h6>
+                                    <h6>
+                                        Tel. +251 960424242 /+251 929 90 85 65/66 /+251 913 66 75 37
+                                    </h6>
+                                    <h6>
+                                        TIN: 0045080232      VAT Reg. No. :
+                                    </h6>
+
+                                </div>
+                            </t>
+
+                            <t t-if="order_from=='PT-Bole'">
+                                <div class="col-10 bm-2">
+                                    <h2>
+                                        <span t-esc="o.company_id.name"/>
+                                    </h2>
+                                    <h6>
+                                        Addis Ababa,  Sub City: Bole  W.02  H.NO New
+                                    </h6>
+                                    <h6>
+                                        Tel. +251 974 959 595
+                                    </h6>
+                                    <h6>
+                                        TIN: 0045080232      VAT Reg. No. :
+                                    </h6>
+
+                                </div>
+                            </t>
+
+                            <t t-if="order_from=='PT-4 Kilo'">
+                                <div class="col-10 bm-2">
+                                    <h2>
+                                        <span t-esc="o.company_id.name"/>
+                                    </h2>
+                                    <h6>
+                                        Addis Ababa,  Sub City: A/Ketema  W.06  H.NO 133
+                                    </h6>
+                                    <h6>
+                                        Tel. +251 960424242 /+251 929 90 85 65/66 /+251 913 66 75 37
+                                    </h6>
+                                    <h6>
+                                        TIN: 0045080232      VAT Reg. No. :
+                                    </h6>
+
+                                </div>
+                            </t>
+
+
+                        </div>
+
+                    </div>
+
+                    <div class="mt-5">
+                        <div class="page">
+
+                            <div class="oe_structure"/>
+
+
+                            <div id="informations" class="row mt32 mb32 text-center">
+                                <div class="col-12 bm-2">
+                                    <t t-if="order_type=='Cash sales'">
+                                        <h2>Cash Sales Attachment</h2>
+                                    </t>
+                                    <t t-if="order_type=='Credit sales'">
+                                        <h2>Credit Sales Attachment</h2>
+                                    </t>
+                                </div>
+                            </div>
+
+                            <br/>
+                            <div id="informations" class="row mt32 mb32">
+                                <div class="col-4 bm-2">
+                                    <strong>Shop/Store:</strong>
+                                    <span t-esc="store"/>
+
+                                </div>
+                                <div class="col-8 bm-2">
+                                    <strong>Sales Agent/Representative:</strong>
+                                    <span t-esc="sales_representative"/>
+
+                                </div>
+
+
+                            </div>
+                            <br/>
+
+
+                            <table class="table  table-bordered table-sm table_morecondensed "
+                                   style="page-break-inside: avoid;">
+                                <tr>
+                                    <td>
+                                        <strong>Date:</strong>
+                                        <span class="small" t-esc="o.FTimeStamp"
+                                              t-options='{"widget": "datetime","format": "MM-dd-yyyy hh:mm a"}'/>
+                                    </td>
+                                    <td>
+                                        <strong>Fs No.:</strong>
+                                        <span class="small" t-esc="o.FSInvoiceNumber"/>
+                                    </td>
+                                    <td>
+                                        <strong>Invoice No.:</strong>
+                                        <span class="small" t-esc="o.name"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <strong>Customer Information</strong>
+                                    </td>
+                                    <td>
+                                        <strong>Order No.:</strong>
+                                        <span class="small" t-esc="sales_order_no"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <strong>Customer Name:</strong>
+                                        <span class="small" t-esc="o.partner_id.name"/>
+                                    </td>
+
+                                    <td>
+                                        <strong>TIN.:</strong>
+                                        <span class="small" t-esc="o.partner_id.vat"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>ID No.:</strong>
+                                    </td>
+                                    <td colspan="2">
+                                        <strong>Payment Term.:</strong>
+                                        <span class="small" t-esc="o.invoice_payment_term_id.name"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Address:</strong>
+                                        <span t-esc="o.partner_id.street"/>
+                                    </td>
+                                    <td colspan="2">
+                                        <strong>City:</strong>
+                                        <span t-esc="o.partner_id.city"/>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <div class="watermark"
+                                 style="position:absolute;opacity:0.1;font-size:3em;height:100%width:100%;text-align:center;z-index:1000;border:0; transform: rotate(-45deg); -webkit-transform: rotate(-45deg);">
+                                <span style="font-size:120px; transform: rotate(45deg);  ">Attachement</span>
+                            </div>
+
+                            <table class="table table-bordered o_main_table table-sm table_morecondensed">
+                                <thead class="thead-dark">
+                                    <tr>
+
+                                        <th scope="col" class="text-start">Code</th>
+                                        <th scope="col" class="text-start">Item Description</th>
+                                        <th scope="col">Batch #</th>
+                                        <th scope="col">Expiry Date</th>
+                                        <th scope="col" class="text-center">UoM</th>
+                                        <th scope="col" class="text-center">Qty</th>
+                                        <th scope="col" class="text-end">Unit Price</th>
+                                        <th scope="col" class="text-end">Total Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="invoice_tbody">
+                                    <t t-foreach="o.invoice_line_ids" t-as="line">
+                                        <t t-if="line.price_unit!=0">
+
+                                            <!-- get batch no and expiry date -->
+                                            <t t-set="batch_no" t-value=""/>
+                                            <t t-set="expiry_date" t-value=""/>
+
+                                            <t t-foreach="request.env['sale.order'].search([('name', '=', o.invoice_origin)])"
+                                               t-as="sale_order">
+                                                <t t-foreach="sale_order.order_line" t-as="sale_order_line">
+                                                    <t t-if="sale_order_line.product_id.id==line.product_id.id">
+                                                        <t t-set="batch_no" t-value="sale_order_line.batch_html"/>
+                                                        <t t-set="expiry_date"
+                                                           t-value="sale_order_line.expiry_date_html"/>
+                                                    </t>
+                                                </t>
+                                            </t>
+                                            <tr>
+
+                                                <td class="text-start">
+                                                    <span class="small"
+                                                          t-esc="line.product_id.product_tmpl_id.default_code"/>
+                                                </td>
+                                                <td>
+                                                    <span class="small" t-esc="line.name"/>
+                                                </td>
+                                                <td>
+                                                    <span class="small">
+                                                        <t t-esc="batch_no"/>
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span class="small">
+                                                        <t t-esc="expiry_date"/>
+                                                    </span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <t t-if="not line.item_uom_alternate">
+                                                        <span class="small" t-esc="line.product_uom_id.name"/>
+                                                    </t>
+                                                    <t t-if="line.item_uom_alternate">
+                                                        <span class="small" t-esc="line.item_uom_alternate"/>
+                                                    </t>
+
+                                                </td>
+                                                <td class="text-center">
+                                                    <span class="small" t-esc="line.quantity"/>
+                                                </td>
+                                                <td class="text-end">
+                                                    <span t-esc="'{0:,.2f}'.format(line.price_unit)"
+                                                          class="small"/>
+                                                </td>
+                                                <td class="text-end">
+                                                    <span t-esc="'{0:,.2f}'.format(line.price_subtotal)"
+                                                          class="small"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </t>
+
+                                    <tr class="is-subtotal text-end">
+                                        <td colspan="7">
+                                            <strong class="mr16">Sub Total</strong>
+
+                                        </td>
+                                        <td>
+                                            <strong t-esc="'{0:,.2f}'.format(o.amount_total)"
+                                                    class="small"/>
+                                        </td>
+                                    </tr>
+                                    <tr class="is-subtotal text-end">
+                                        <td colspan="7">
+                                            <strong class="mr16">Non Tax (%)</strong>
+
+                                        </td>
+                                        <td>
+                                            <strong class="small">0.00</strong>
+                                        </td>
+                                    </tr>
+                                    <tr class="is-subtotal text-end">
+
+                                        <td colspan="7">
+                                            <strong class="mr16">Grand Total</strong>
+
+                                        </td>
+                                        <td>
+                                            <strong t-esc="'{0:,.2f}'.format(o.amount_untaxed)"
+                                                    class="small"/>
+                                        </td>
+                                    </tr>
+                                    <t t-if="withholding_amt!=0">
+                                        <tr class="is-subtotal text-end">
+
+                                            <td colspan="7">
+                                                <strong class="mr16">Withholding</strong>
+
+                                            </td>
+                                            <td>
+                                                <strong t-esc="'{0:,.2f}'.format(withholding_amt)"
+                                                        class="small"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <t t-if="withholding_amt!=0">
+                                        <tr class="is-subtotal text-end">
+
+                                            <td colspan="7">
+                                                <strong class="mr16">Net Total</strong>
+
+                                            </td>
+                                            <td>
+                                                <strong t-esc="'{0:,.2f}'.format(o.amount_total)"
+                                                        class="small"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+
+                                </tbody>
+
+                            </table>
+
+
+                            <div id="informations" class="row mt32 mb32 pb-2">
+                                <div class="col-12 bm-2">
+                                    <strong class="small">Total Amount in Words:</strong>
+                                    <span class="small" t-esc="o.total_amount_word"/>
+                                </div>
+                            </div>
+                            <div id="informations" class="row mt32 mb32">
+                                <div class="col-12 bm-2">
+                                    <strong class="small nopadding">I received the above goods/services in good
+                                        condition._______________________________
+                                    </strong>
+                                </div>
+                            </div>
+                            <div id="informations" class="row mt32 mb32 pb-1">
+                                <div class="col-12 bm-2">
+                                    <span class="small">Memo / Note:</span>
+                                </div>
+                            </div>
+                            <hr></hr>
+                            <div id="informations" class="row mt32 mb32">
+                                <div class="col-6 bm-2">
+                                    <span class="small">Prepared By :</span>
+                                    <u class="small" t-esc="o.create_uid.name"/>
+                                </div>
+                                <div class="col-6 bm-2">
+                                    <span class="small">Checked By :________________________</span>
+                                </div>
+                            </div>
+                            <div id="informations" class="row mt32 mb32">
+                                <div class="col-6 bm-2">
+                                    <span class="small">Approved By :________________________</span>
+                                </div>
+                                <div class="col-6 bm-2">
+                                    <span class="small">Received By :________________________</span>
+                                </div>
+                            </div>
+                            <div id="informations" class="row mt32 mb32">
+                                <div class="col-6 bm-2">
+                                    <span class="small">Signature :___________________________</span>
+                                </div>
+
+                            </div>
+                            <hr></hr>
+                            <div id="informations" class="row mt32 mb32">
+                                <div class="col-12 bm-2 text-center">
+                                    <strong class="small">This receipt is not valid unless the fiscal receipt is
+                                        attached!
+                                    </strong>
+
+                                </div>
+
+                            </div>
+                            <div id="informations" class="row mt32 mb32">
+                                <div class="col-12 bm-2 text-center">
+                                    <span t-esc="o.FPMachineID"/>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="footer">
+                        <hr></hr>
+                        <div class="row">
+                            <div class="col-12 bm-2 text-center">
+                                <h6>
+                                    email:-
+                                    <span t-esc="o.company_id.email"/>
+                                    website:-
+                                    <span t-esc="o.company_id.website"/>
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- sales attachment for ema-->
+    <record id="ema_sales_pos_attachment_action" model="ir.actions.report">
+        <field name="name">Sales Attachment</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">droga_sales.ema_sales_pos_attachment_report</field>
+        <field name="report_file">droga_sales.ema_sales_pos_attachment_report</field>
+        <field name="print_report_name">'Sales Attachment - %s' % (object.name)
+        </field>
+        <field name="binding_model_id" ref="model_account_move"/>
+        <field name="binding_type">report</field>
+    </record>
+
+
+    <template id="ema_sales_pos_attachment_report" name="Sales Attachment">
+
+        <t t-call="web.html_container">
+
+            <t t-call="web.basic_layout">
+
+                <style type="text/css">
+
+                    /* Default left, right, top, bottom margin is 2cm */
+                    @page {
+                    size: A4 portrait;
+                    margin-top: 0cm;
+                    margin-left:1cm;
+                    margin-right:1cm;
+                    margin-bottom:1cm;
+                    }
+
+                    @media print
+                    {
+                    #non-printable { visibility: hidden; }
+                    #wrapwrap { visibility: visible; }
+                    }
+
+                    .nopadding {
+                    padding: 0 !important;
+                    margin: 0 !important;
+                    }
+
+                    .padding1 {
+                    padding: 0 !important;
+                    margin: 0 !important;
+                    }
+
+                    .table_morecondensed>thead>tr>th,
+                    .table_morecondensed>tbody>tr>th,
+                    .table_morecondensed>tfoot>tr>th,
+                    .table_morecondensed>thead>tr>td,
+                    .table_morecondensed>tbody>tr>td,
+                    .table_morecondensed>tfoot>tr>td{ padding: 1px; }
+
+                    .top5 { margin-top:15px; }
+
+
+                </style>
+
+                <t t-foreach="docs" t-as="o">
+
+                    <!-- Store and Sales Represnetataives -->
+                    <t t-set="store" t-value=""/>
+                    <t t-set="sales_representative" t-value=""/>
+                    <t t-set="order_type" t-value=""/>
+
+
+                    <t t-foreach="request.env['sale.order'].search([('name', '=', o.invoice_origin)])"
+                       t-as="sale_order">
+                        <t t-set="sales_order_no" t-value="sale_order.name"/>
+                        <t t-set="sales_representative" t-value="sale_order.sales_initiator"/>
+                        <t t-set="store" t-value="sale_order.order_type"/>
+                        <t t-set="order_from" t-value="sale_order.order_from"/>
+                        <t t-set="order_type" t-value="sale_order.sales_type"/>
+                        <t t-set="customer_name" t-value="sale_order.cust_name"/>
+                        <t t-set="withholding_amt" t-value="abs(o.amount_tax)"/>
+                    </t>
+
+                    <div class="header">
+                        <div class="row">
+                            <div class="col-2 bm-2">
+                                <img
+                                        t-attf-src="data:image/*;base64,{{o.company_id.logo}}"
+                                        t-att-alt="o.company_id.name"
+                                        t-field-options='{"widget": "image", "style":"width: 150px;height: 150px"}'
+                                        width="125" height="125"
+                                />
+                            </div>
+                            <div class="col-10 bm-2">
+                                <h2>
+                                    <span t-esc="o.company_id.name"/>
+                                </h2>
+                                <h6>
+                                    Sub City: Gulele     Woreda: 09          Bldg/H.No. 488/001
+                                </h6>
+                                <h6>
+                                    Around Rufale Church
+                                </h6>
+                                <h6>Tel 1: +251913122247
+                                </h6>
+                                <h6>
+                                    TIN: 0052453449      VAT Reg. No. :
+                                </h6>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="mt-5">
+                        <div class="page">
+
+                            <div class="oe_structure"/>
+
+
+                            <div id="informations" class="row mt32 mb32 text-center">
+                                <div class="col-12 bm-2">
+                                    <t t-if="order_type=='Cash sales'">
+                                        <h2>Cash Sales Attachment</h2>
+                                    </t>
+                                    <t t-if="order_type=='Credit sales'">
+                                        <h2>Credit Sales Attachment</h2>
+                                    </t>
+                                </div>
+                            </div>
+
+                            <br/>
+                            <div id="informations" class="row mt32 mb32">
+                                <div class="col-4 bm-2">
+                                    <strong>Shop/Store:</strong>
+                                    <span t-esc="store"/>
+
+                                </div>
+                                <div class="col-8 bm-2">
+                                    <strong>Sales Agent/Representative:</strong>
+                                    <span t-esc="sales_representative"/>
+
+                                </div>
+
+
+                            </div>
+                            <br/>
+
+
+                            <table class="table  table-bordered table-sm table_morecondensed "
+                                   style="page-break-inside: avoid;">
+                                <tr>
+                                    <td>
+                                        <strong>Date:</strong>
+                                        <span class="small" t-esc="o.FTimeStamp"
+                                              t-options='{"widget": "datetime","format": "MM-dd-yyyy hh:mm a"}'/>
+                                    </td>
+                                    <td>
+                                        <strong>Fs No.:</strong>
+                                        <span class="small" t-esc="o.FSInvoiceNumber"/>
+                                    </td>
+                                    <td>
+                                        <strong>Invoice No.:</strong>
+                                        <span class="small" t-esc="o.name"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <strong>Customer Information</strong>
+                                    </td>
+                                    <td>
+                                        <strong>Order No.:</strong>
+                                        <span class="small" t-esc="sales_order_no"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <strong>Customer Name:</strong>
+                                        <span class="small" t-esc="o.partner_id.name"/>
+                                    </td>
+
+                                    <td>
+                                        <strong>TIN.:</strong>
+                                        <span class="small" t-esc="o.partner_id.vat"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>ID No.:</strong>
+                                    </td>
+                                    <td colspan="2">
+                                        <strong>Payment Term.:</strong>
+                                        <span class="small" t-esc="o.invoice_payment_term_id.name"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Address:</strong>
+                                        <span t-esc="o.partner_id.street"/>
+                                    </td>
+                                    <td colspan="2">
+                                        <strong>City:</strong>
+                                        <span t-esc="o.partner_id.city"/>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <div class="watermark"
+                                 style="position:absolute;opacity:0.1;font-size:3em;height:100%width:100%;text-align:center;z-index:1000;border:0; transform: rotate(-45deg); -webkit-transform: rotate(-45deg);">
+                                <span style="font-size:120px; transform: rotate(45deg);  ">Attachement</span>
+                            </div>
+
+                            <table class="table table-bordered o_main_table table-sm table_morecondensed">
+                                <thead class="thead-dark">
+                                    <tr>
+
+                                        <th scope="col" class="text-start">Code</th>
+                                        <th scope="col" class="text-start">Item Description</th>
+                                        <th scope="col">Batch #</th>
+                                        <th scope="col">Expiry Date</th>
+                                        <th scope="col" class="text-center">UoM</th>
+                                        <th scope="col" class="text-center">Qty</th>
+                                        <th scope="col" class="text-end">Unit Price</th>
+                                        <th scope="col" class="text-end">Total Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="invoice_tbody">
+                                    <t t-foreach="o.invoice_line_ids" t-as="line">
+                                        <t t-if="line.price_unit!=0">
+
+                                            <!-- get batch no and expiry date -->
+                                            <t t-set="batch_no" t-value=""/>
+                                            <t t-set="expiry_date" t-value=""/>
+
+                                            <t t-foreach="request.env['sale.order'].search([('name', '=', o.invoice_origin)])"
+                                               t-as="sale_order">
+                                                <t t-foreach="sale_order.order_line" t-as="sale_order_line">
+                                                    <t t-if="sale_order_line.product_id.id==line.product_id.id">
+                                                        <t t-set="batch_no" t-value="sale_order_line.batch_html"/>
+                                                        <t t-set="expiry_date"
+                                                           t-value="sale_order_line.expiry_date_html"/>
+                                                    </t>
+                                                </t>
+                                            </t>
+                                            <tr>
+
+                                                <td class="text-start">
+                                                    <span class="small"
+                                                          t-esc="line.product_id.product_tmpl_id.default_code"/>
+                                                </td>
+                                                <td>
+                                                    <span class="small" t-esc="line.name"/>
+                                                </td>
+                                                <td>
+                                                    <span class="small">
+                                                        <t t-esc="batch_no"/>
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span class="small">
+                                                        <t t-esc="expiry_date"/>
+                                                    </span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <t t-if="not line.item_uom_alternate">
+                                                        <span class="small" t-esc="line.product_uom_id.name"/>
+                                                    </t>
+                                                    <t t-if="line.item_uom_alternate">
+                                                        <span class="small" t-esc="line.item_uom_alternate"/>
+                                                    </t>
+
+                                                </td>
+                                                <td class="text-center">
+                                                    <span class="small" t-esc="line.quantity"/>
+                                                </td>
+                                                <td class="text-end">
+                                                    <span t-esc="'{0:,.2f}'.format(line.price_unit)"
+                                                          class="small"/>
+                                                </td>
+                                                <td class="text-end">
+                                                    <span t-esc="'{0:,.2f}'.format(line.price_subtotal)"
+                                                          class="small"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </t>
+
+                                    <tr class="is-subtotal text-end">
+                                        <td colspan="7">
+                                            <strong class="mr16">Sub Total</strong>
+
+                                        </td>
+                                        <td>
+
+
+                                            <strong t-esc="'{0:,.2f}'.format(o.amount_untaxed)"
+                                                    class="small"/>
+                                        </td>
+                                    </tr>
+                                    <tr class="is-subtotal text-end">
+                                        <td colspan="7">
+                                            <strong class="mr16">Vat</strong>
+
+                                        </td>
+                                        <td>
+                                            <strong t-esc="'{0:,.2f}'.format(o.vat_percent)"
+                                                    class="small"/>
+                                        </td>
+                                    </tr>
+                                    <tr class="is-subtotal text-end">
+
+                                        <td colspan="7">
+                                            <strong class="mr16">Grand Total</strong>
+
+                                        </td>
+                                        <td>
+                                            <t t-set="grand_total" t-value="o.amount_untaxed+o.vat_percent"/>
+                                            <strong t-esc="'{0:,.2f}'.format(grand_total)"
+                                                    class="small"/>
+                                        </td>
+                                    </tr>
+                                    <t t-if="withholding_amt!=0">
+                                        <tr class="is-subtotal text-end">
+
+                                            <td colspan="7">
+                                                <strong class="mr16">Withholding</strong>
+
+                                            </td>
+                                            <td>
+                                                <strong t-esc="'{0:,.2f}'.format(o.withholding_two_percent)"
+                                                        class="small"/>
+
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <t t-if="withholding_amt!=0">
+                                        <tr class="is-subtotal text-end">
+
+                                            <td colspan="7">
+                                                <strong class="mr16">Net Total</strong>
+
+                                            </td>
+                                            <td>
+                                                <strong t-esc="'{0:,.2f}'.format(o.amount_total)"
+                                                        class="small"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+
+                                </tbody>
+
+                            </table>
+
+
+                            <div id="informations" class="row mt32 mb32 pb-2">
+                                <div class="col-12 bm-2">
+                                    <strong class="small">Total Amount in Words:</strong>
+                                    <span class="small" t-esc="o.total_amount_word"/>
+                                </div>
+                            </div>
+                            <div id="informations" class="row mt32 mb32">
+                                <div class="col-12 bm-2">
+                                    <strong class="small nopadding">I received the above goods/services in good
+                                        condition._______________________________
+                                    </strong>
+                                </div>
+                            </div>
+                            <div id="informations" class="row mt32 mb32 pb-1">
+                                <div class="col-12 bm-2">
+                                    <span class="small">Memo / Note:</span>
+                                </div>
+                            </div>
+                            <hr></hr>
+                            <div id="informations" class="row mt32 mb32">
+                                <div class="col-6 bm-2">
+                                    <span class="small">Prepared By :</span>
+                                    <u class="small" t-esc="o.create_uid.name"/>
+                                </div>
+                                <div class="col-6 bm-2">
+                                    <span class="small">Checked By :________________________</span>
+                                </div>
+                            </div>
+                            <div id="informations" class="row mt32 mb32">
+                                <div class="col-6 bm-2">
+                                    <span class="small">Approved By :________________________</span>
+                                </div>
+                                <div class="col-6 bm-2">
+                                    <span class="small">Received By :________________________</span>
+                                </div>
+                            </div>
+                            <div id="informations" class="row mt32 mb32">
+                                <div class="col-6 bm-2">
+                                    <span class="small">Signature :___________________________</span>
+                                </div>
+
+                            </div>
+                            <hr></hr>
+                            <div id="informations" class="row mt32 mb32">
+                                <div class="col-12 bm-2 text-center">
+                                    <strong class="small">This receipt is not valid unless the fiscal receipt is
+                                        attached!
+                                    </strong>
+
+                                </div>
+
+                            </div>
+                            <div id="informations" class="row mt32 mb32">
+                                <div class="col-12 bm-2 text-center">
+                                    <span t-esc="o.FPMachineID"/>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="footer">
+                        <hr></hr>
+                        <div class="row">
+                            <div class="col-12 bm-2 text-center">
+                                <h6>
+                                    email:-
+                                    <span t-esc="o.company_id.email"/>
+                                    website:-
+                                    <span t-esc="o.company_id.website"/>
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- action for Sales Attachment -->
+    <record id="droga_sales_pos_attachment_a5_action" model="ir.actions.report">
+        <field name="name">Sales Attachment</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">droga_sales.droga_sales_pos_attachment_a5_report</field>
+        <field name="report_file">droga_sales.droga_sales_pos_attachment_a5_report</field>
+        <field name="print_report_name">'Sales Attachment - %s' % (object.name)
+        </field>
+        <field name="paperformat_id" ref="droga_procurement.paperformat_droga_a5"/>
+        <field name="binding_model_id" ref="model_account_move"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="droga_sales_pos_attachment_a5_report" name="Sales Attachment">
+
+        <t t-call="web.html_container">
+
+            <div id="non-printable">
+                <button class="btn btn-primary btn-sm o_report_print" onclick="window.print();">Print Preview
+                </button>
+            </div>
+            <br></br>
+            <t t-call="web.basic_layout">
+
+                <style type="text/css">
+
+                    /* Default left, right, top, bottom margin is 2cm */
+                    @page {
+                    size: A4 portrait;
+                    margin-top: 0cm;
+                    margin-left:1cm;
+                    margin-right:1cm;
+                    margin-bottom:1cm;
+                    }
+
+                    @media print
+                    {
+                    #non-printable { visibility: hidden; }
+                    #wrapwrap { visibility: visible; }
+                    }
+
+                    .nopadding {
+                    padding: 0 !important;
+                    margin: 0 !important;
+                    }
+
+                    .padding1 {
+                    padding: 0 !important;
+                    margin: 0 !important;
+                    }
+
+                    .table_morecondensed>thead>tr>th,
+                    .table_morecondensed>tbody>tr>th,
+                    .table_morecondensed>tfoot>tr>th,
+                    .table_morecondensed>thead>tr>td,
+                    .table_morecondensed>tbody>tr>td,
+                    .table_morecondensed>tfoot>tr>td{ padding: 1px; }
+
+                    .top5 { margin-top:15px; }
+
+
+                </style>
+
+
+                <t t-foreach="docs" t-as="o">
+
+                    <!-- Store and Sales Represnetataives -->
+                    <t t-set="store" t-value=""/>
+                    <t t-set="sales_representative" t-value=""/>
+                    <t t-set="order_type" t-value=""/>
+                    <t t-set="pharmacy_order_from" t-value="o.cost_center"/>
+
+                    <t t-foreach="request.env['sale.order'].search([('name', '=', o.invoice_origin)])"
+                       t-as="sale_order">
+                        <t t-set="sales_order_no" t-value="sale_order.name"/>
+                        <t t-set="sales_representative" t-value="sale_order.sales_initiator"/>
+                        <t t-set="store" t-value="sale_order.order_type"/>
+                        <t t-set="order_from" t-value="sale_order.order_from"/>
+                        <t t-set="order_type" t-value="sale_order.sales_type"/>
+                        <t t-set="customer_name" t-value="sale_order.cust_name"/>
+                        <t t-set="customer_id" t-value="sale_order.cust_id"/>
+                        <t t-set="withholding_amt" t-value="abs(o.amount_tax)"/>
+                    </t>
+
+                    <div class="header">
+                        <div class="row">
+                            <!--<div class="col-2 bm-2">
+                                <img
+                                        t-attf-src="data:image/*;base64,{{o.company_id.logo}}"
+                                        t-att-alt="o.company_id.name"
+                                        t-field-options='{"widget": "image", "style":"width: 150px;height: 150px"}'
+                                />
+                            </div>-->
+                            <h5 class="text-center">
+                                <strong t-esc="o.company_id.name"/>
+                            </h5>
+                            <t t-if="order_from=='PT-Bole'">
+                                <div class="col-4 bm-2">
+
+                                    <h6 class="small nopadding">
+                                        Sub City: Bole
+                                    </h6>
+                                    <h6 class="small nopadding">
+                                        Tel 1 : +251 974 959 595
+                                    </h6>
+                                    <h6 class="small nopadding">
+                                        TIN: 0045080232
+                                    </h6>
+
+                                </div>
+                                <div class="col-4 bm-2">
+
+                                    <h6 class="small nopadding">
+                                        Woreda: 02
+                                    </h6>
+                                    <h6 class="small nopadding">
+                                        Tel 2 : +000 000 000 000
+                                    </h6>
+                                    <h6 class="small nopadding">
+                                        VAT Reg. No. :
+                                    </h6>
+
+                                </div>
+                                <div class="col-4 bm-2">
+
+                                    <h6 class="small nopadding">
+                                        Bldg/H.NO. New
+                                    </h6>
+                                    <h6 class="small">
+                                        Fax: +000 000 000 000
+                                    </h6>
+
+
+                                </div>
+                            </t>
+
+
+                            <t t-if="order_from=='PT-4 Kilo'">
+                                <div class="col-4 bm-2">
+
+                                    <h6 class="small nopadding">
+                                        Sub City: Arada
+                                    </h6>
+                                    <h6 class="small nopadding">
+                                        Tel 1 : +251 913 667 573
+                                    </h6>
+                                    <h6 class="small nopadding">
+                                        TIN: 0045080232
+                                    </h6>
+
+                                </div>
+                                <div class="col-4 bm-2">
+
+                                    <h6 class="small nopadding">
+                                        Woreda: 09
+                                    </h6>
+                                    <h6 class="small nopadding">
+                                        Tel 2 : +251 929 908 565/66
+                                    </h6>
+                                    <h6 class="small nopadding">
+                                        VAT Reg. No. :
+                                    </h6>
+
+                                </div>
+                                <div class="col-4 bm-2">
+
+                                    <h6 class="small nopadding">
+                                        Bldg/H.NO. New
+                                    </h6>
+                                    <h6 class="small nopadding">
+                                        Fax: +000 000 000 000
+                                    </h6>
+
+
+                                </div>
+                            </t>
+
+                            <t t-if="order_from=='PH'">
+
+
+                                <div class="col-4 bm-2">
+
+                                    <h6 class="small nopadding">
+                                        Sub City: <span t-esc="o.branch_address.sub_city"/>
+                                    </h6>
+                                    <h6 class="small nopadding">
+                                        Tel 1 : <span t-esc="o.branch_address.telephone1"/>
+                                    </h6>
+                                    <h6 class="small nopadding">
+                                        TIN: 0045080232
+                                    </h6>
+
+                                </div>
+                                <div class="col-4 bm-2">
+
+                                    <h6 class="small nopadding">
+                                        Woreda: <span t-esc="o.branch_address.woreda"/>
+                                    </h6>
+                                    <h6 class="small nopadding">
+                                        Tel 2 : <span t-esc="o.branch_address.telephone2"/>
+                                    </h6>
+                                    <h6 class="small nopadding">
+                                        VAT Reg. No. :
+                                    </h6>
+
+                                </div>
+                                <div class="col-4 bm-2">
+
+                                    <h6 class="small nopadding">
+                                        Bldg/H.NO. <span t-esc="o.branch_address.house_no"/>
+                                    </h6>
+                                    <h6 class="small nopadding">
+                                        Fax: <span t-esc="o.branch_address.fax"/>
+                                    </h6>
+                                </div>
+
+
+                            </t>
+
+
+                        </div>
+                        <br/>
+                        <div id="informations" class="row mt32 mb32 text-center">
+                            <div class="col-12 bm-2 text-center">
+                                <t t-if="order_type=='Cash sales'">
+                                    <strong>Cash Sales Attachment</strong>
+                                </t>
+                                <t t-if="order_type=='Credit sales'">
+                                    <strong>Credit Sales Attachment</strong>
+                                </t>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="page">
+
+
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-4 bm-2">
+                                <strong class="small">Shop/Store:</strong>
+                                <span t-esc="store" class="small"/>
+
+                            </div>
+                            <div class="col-8 bm-2">
+                                <strong class="small">Sales Agent/Representative:</strong>
+                                <span t-esc="sales_representative" class="small"/>
+
+                            </div>
+
+
+                        </div>
+                        <br/>
+
+
+                        <table class="table table-bordered table-responsive table-sm table_morecondensed"
+                               style="page-break-inside: avoid;">
+                            <tr>
+                                <td>
+                                    <strong class="small">Date:</strong>
+                                    <span class="small" t-esc="o.FTimeStamp"
+                                          t-options='{"widget": "datetime","format": "MM-dd-yyyy hh:mm a"}'/>
+                                </td>
+                                <td>
+                                    <strong class="small">Fs No.:</strong>
+                                    <span class="small" t-esc="o.FSInvoiceNumber"/>
+                                </td>
+                                <td>
+                                    <strong class="small">Invoice No.:</strong>
+                                    <span class="small" t-esc="o.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <strong class="small">Customer Information</strong>
+                                </td>
+                                <td>
+                                    <strong class="small">Order No.:</strong>
+                                    <span class="small" t-esc="sales_order_no"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <strong class="small">Customer Name:</strong>
+
+                                    <span class="small" t-esc="o.partner_id.name"/>
+                                </td>
+
+                                <td>
+                                    <strong class="small">TIN.:</strong>
+                                    <span class="small" t-esc="o.partner_id.vat"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong class="small">ID No.:</strong>
+                                    <t class="small" t-esc="customer_id"/>
+                                </td>
+                                <td colspan="2">
+                                    <strong>Payment Term.:</strong>
+                                    <span class="small" t-esc="o.invoice_payment_term_id.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <strong class="small">Contact Person:</strong>
+                                    <t class="small" t-esc="customer_name"/>
+
+                                </td>
+
+                            </tr>
+                        </table>
+
+                        <div class="watermark"
+                             style="position:absolute;opacity:0.1;font-size:3em;height:100%width:100%;text-align:center;z-index:1000;border:0; transform: rotate(-45deg); -webkit-transform: rotate(-45deg);">
+                            <span style="font-size:120px; transform: rotate(45deg);  ">Attachment</span>
+                        </div>
+
+                        <table class="table table-bordered table-responsive table-sm table_morecondensed">
+                            <thead class="thead-dark">
+                                <tr>
+
+                                    <th scope="col" class="text-start small">Code</th>
+                                    <th scope="col" class="text-start small">Item Description</th>
+                                    <th scope="col" class="text-center small">UoM</th>
+                                    <th scope="col" class="text-center small">Qty</th>
+                                    <th scope="col" class="text-end small">Unit Price</th>
+                                    <th scope="col" class="text-end small">Total Price</th>
+                                </tr>
+                            </thead>
+                            <tbody class="invoice_tbody">
+                                <t t-foreach="o.invoice_line_ids" t-as="line">
+                                    <t t-if="line.price_unit!=0">
+
+                                        <!-- get batch no and expiry date -->
+                                        <t t-set="batch_no" t-value=""/>
+                                        <t t-set="expiry_date" t-value=""/>
+
+                                        <t t-foreach="request.env['sale.order'].search([('name', '=', o.invoice_origin)])"
+                                           t-as="sale_order">
+                                            <t t-foreach="sale_order.order_line" t-as="sale_order_line">
+                                                <t t-if="sale_order_line.product_id.id==line.product_id.id">
+                                                    <t t-set="batch_no" t-value="sale_order_line.batch_html"/>
+                                                    <t t-set="expiry_date"
+                                                       t-value="sale_order_line.expiry_date_html"/>
+                                                </t>
+                                            </t>
+                                        </t>
+                                        <tr>
+
+                                            <td class="text-start">
+                                                <span class="small"
+                                                      t-esc="line.product_id.product_tmpl_id.default_code"/>
+                                            </td>
+                                            <td>
+                                                <span class="small" t-esc="line.name"/>
+                                            </td>
+
+                                            <td class="text-center">
+                                                <t t-if="not line.item_uom_alternate">
+                                                    <span class="small" t-esc="line.product_uom_id.name"/>
+                                                </t>
+                                                <t t-if="line.item_uom_alternate">
+                                                    <span class="small" t-esc="line.item_uom_alternate"/>
+                                                </t>
+
+                                            </td>
+                                            <td class="text-center">
+                                                <span class="small" t-esc="line.quantity"/>
+                                            </td>
+                                            <td class="text-end">
+                                                <span t-esc="'{0:,.2f}'.format(line.price_unit)"
+                                                      class="small"/>
+                                            </td>
+                                            <td class="text-end">
+                                                <span t-esc="'{0:,.2f}'.format(line.price_subtotal)"
+                                                      class="small"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </t>
+
+                                <tr class="is-subtotal text-end">
+                                    <td colspan="5">
+                                        <strong class="mr16 small">Sub Total</strong>
+
+                                    </td>
+                                    <td>
+                                        <strong t-esc="'{0:,.2f}'.format(o.amount_total)"
+                                                class="small"/>
+                                    </td>
+                                </tr>
+                                <tr class="is-subtotal text-end">
+                                    <td colspan="5">
+                                        <strong class="mr16 small">Non Tax (%)</strong>
+
+                                    </td>
+                                    <td>
+                                        <strong class="small">0.00</strong>
+                                    </td>
+                                </tr>
+                                <tr class="is-subtotal text-end">
+
+                                    <td colspan="5">
+                                        <strong class="mr16 small">Grand Total</strong>
+
+                                    </td>
+                                    <td>
+                                        <strong t-esc="'{0:,.2f}'.format(o.amount_untaxed)"
+                                                class="small"/>
+                                    </td>
+                                </tr>
+                                <t t-if="withholding_amt!=0">
+                                    <tr class="is-subtotal text-end">
+
+                                        <td colspan="5">
+                                            <strong class="mr16 small">Vat</strong>
+
+                                        </td>
+                                        <td>
+                                            <strong t-esc="'{0:,.2f}'.format(withholding_amt)"
+                                                    class="small"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <t t-if="withholding_amt!=0">
+                                    <tr class="is-subtotal text-end">
+
+                                        <td colspan="5">
+                                            <strong class="mr16 small">Net Total</strong>
+
+                                        </td>
+                                        <td>
+                                            <strong t-esc="'{0:,.2f}'.format(o.amount_total)"
+                                                    class="small"/>
+                                        </td>
+                                    </tr>
+                                </t>
+
+                            </tbody>
+
+                        </table>
+
+
+                        <div id="informations" class="row mt32 mb32 pb-2">
+                            <div class="col-12 bm-2">
+                                <strong class="small">Total Amount in Words:</strong>
+                                <span class="small" t-esc="o.total_amount_word"/>
+                            </div>
+                        </div>
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-12 bm-2">
+                                <strong class="small nopadding">I received the above goods/services in good
+                                    condition._______________________________
+                                </strong>
+                            </div>
+                        </div>
+                        <div id="informations" class="row mt32 mb32 pb-1">
+                            <div class="col-12 bm-2">
+                                <span class="small">Memo / Note:</span>
+                            </div>
+                        </div>
+                        <hr></hr>
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-6 bm-2">
+                                <span class="small">Prepared By :</span>
+                                <u class="small" t-esc="o.create_uid.name"/>
+                            </div>
+                            <div class="col-6 bm-2">
+                                <span class="small">Checked By :________________________</span>
+                            </div>
+                        </div>
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-6 bm-2">
+                                <span class="small">Approved By :________________________</span>
+                            </div>
+                            <div class="col-6 bm-2">
+                                <span class="small">Received By :________________________</span>
+                            </div>
+                        </div>
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-6 bm-2">
+                                <span class="small">Signature :___________________________</span>
+                            </div>
+
+                        </div>
+                        <hr></hr>
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-12 bm-2 text-center">
+                                <strong class="small">This receipt is not valid unless the fiscal receipt is
+                                    attached!
+                                </strong>
+
+                            </div>
+
+                        </div>
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-12 bm-2 text-center">
+                                <span t-esc="o.FPMachineID"/>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                    <div class="footer">
+                        <hr></hr>
+                        <div class="row">
+                            <div class="col-12 bm-2 text-center">
+                                <h6 class="small">
+                                    email:-
+                                    <span t-esc="o.company_id.email"/>
+                                    website:-
+                                    <span t-esc="o.company_id.website"/>
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+</odoo>

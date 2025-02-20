@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="droga_crm_customer_settings_region_action" model="ir.actions.act_window">
+        <field name="name">Region settings</field>
+        <field name="res_model">droga.crm.settings.region</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="droga_crm_customer_region_view_tree" model="ir.ui.view">
+        <field name="name">droga.crm.settings.region.view.tree</field>
+        <field name="model">droga.crm.settings.region</field>
+        <field name="arch" type="xml">
+            <tree string="" editable="top" delete="0">
+                <field name="region_name"></field>
+                <field name="region_descr"></field>
+                <field name="status"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.rule" id="droga_crm_region_rule">
+        <field name="name">Region multi-company</field>
+        <field name="model_id" ref="model_droga_crm_settings_region"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <menuitem
+        id="customer_settings_sub_menu"
+        name="Customer location settings"
+        parent="crm.crm_menu_config"
+        sequence="25"/>
+
+    <menuitem
+        id="droga_crm_customer_settings_region"
+        name="Region settings"
+        action="droga_crm_customer_settings_region_action"
+        parent="customer_settings_sub_menu"
+        sequence="18"/>
+
+</odoo>

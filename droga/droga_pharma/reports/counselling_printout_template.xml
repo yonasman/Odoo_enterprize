@@ -1,0 +1,119 @@
+<odoo>
+    <template id="report_counselling_english">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="droga_pharma.droga_pharma_header_layout">
+                </t>
+                <t t-call="web.external_layout">
+                    <head>
+                        <style>
+                            @font-face {
+                                font-family: amharic_font;
+                                src: url('/droga_pharma/static/fonts/amharic_font.ttf') format('truetype');
+                            }
+                        </style>
+                    </head>
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <div class="row mt32">
+                            <div class="col-12">
+                                <div style="display: flex;">
+                                    <h2 style="display: inline; margin-right: 40%;">Counselling Follow Up</h2>
+                                    <p style="display: inline;"><span t-field="doc.coun_code"/></p>
+                                </div>
+                                <br/>
+                                <br/>
+                               <div style="display: flex;">
+                                <h5 style="display: inline; margin-right: 30%;">Date: <span t-field="doc.date"/></h5>
+                                <h5 style="display: inline;">Area of Counselling: <span t-field="doc.counselling_cat"/></h5>
+                               </div>
+                                <br/>
+                                <div style="display: flex;">
+                                <h5 style="display: inline; margin-right: 20%;">Name: <span t-field="doc.client"/></h5>
+                                <h5 style="display: inline;">Address: <span t-field="doc.address"/></h5>
+                               </div>
+                                <br/>
+                                <br/>
+                                <h5>To implement the consulting service I have received, I will do the following.</h5>
+<!--                                <div t-raw="doc.plan"/>-->
+                                <br/>
+                                <table style="border-collapse: separate; border-spacing: 10%; width: 100%;">
+                                    <tbody>
+                                        <t t-foreach="doc.counselling_given.split('\n')" t-as="line">
+                                            <tr>
+                                                <td style="font-family: amharic_font, Arial, sans-serif;">
+                                                    <t t-raw="line"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <t t-call="droga_pharma.droga_pharma_footer_layout">
+                    </t>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_counselling_amharic">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="droga_pharma.droga_pharma_header_layout">
+                </t>
+                <t t-call="web.external_layout">
+                    <head>
+                        <style>
+                            @font-face {
+                                font-family: amharic_font;
+                                src: url('/droga_pharma/static/fonts/amharic_font.ttf') format('truetype');
+                            }
+                        </style>
+                    </head>
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <div class="row mt32">
+                            <div class="col-12">
+                                <div style="display: flex;">
+                                    <h2 style="font-family: amharic_font, Arial, sans-serif; display: inline; margin-right: 40%">የማማከር አገልግሎት መከታተያ</h2>
+                                    <p style="display: inline;"><span t-field="doc.coun_code"/></p>
+                                </div>
+                                <br/>
+                                <br/>
+                               <div style="display: flex;">
+                                <h5 style="font-family: amharic_font, Arial, sans-serif; display: inline; margin-right: 30%;">ቀን: <span t-field="doc.date"/></h5>
+                                <h5 style="font-family: amharic_font, Arial, sans-serif; display: inline;">የምክር ምድብ: <span t-field="doc.counselling_cat"/></h5>
+                               </div>
+                                <br/>
+                                <div style="display: flex;">
+                                <h5 style="font-family: amharic_font, Arial, sans-serif; display: inline; margin-right: 20%;">ስም: <span t-field="doc.client"/></h5>
+                                <h5 style="font-family: amharic_font, Arial, sans-serif; display: inline;">አድራሻ: <span t-field="doc.address"/></h5>
+                               </div>
+                                <br/>
+                                <br/>
+                                <h5 style="font-family: amharic_font, Arial, sans-serif;">ይህንን የማማከር አገልግሎት ተግባራዊ ለማድረግ የሚከተሉትን እፈፅማለሁ ።</h5>
+<!--                                <div t-raw="doc.plan"/>-->
+                                <br/>
+                                <table style="border-collapse: separate; border-spacing: 10%; width: 100%;">
+                                    <tbody>
+                                        <t t-foreach="doc.counselling_given.split('\n')" t-as="line">
+                                            <tr>
+                                                <td style="font-family: amharic_font, Arial, sans-serif;">
+                                                    <t t-raw="line"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <t t-call="droga_pharma.droga_pharma_footer_layout">
+                    </t>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

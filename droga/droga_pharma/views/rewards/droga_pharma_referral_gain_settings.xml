@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="droga_pharma_referral_rewards_action" model="ir.actions.act_window">
+        <field name="name">Rewards gain settings per referral</field>
+        <field name="res_model">droga.pharma.referral.reward</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="droga_pharma_referral_rewards_tree" model="ir.ui.view">
+        <field name="name">droga.pharma.referral.reward.view.tree</field>
+        <field name="model">droga.pharma.referral.reward</field>
+        <field name="arch" type="xml">
+            <tree string="" delete="0">
+                <field name="points_to_gain"></field>
+                <field name="from_amt"></field>
+                <field name="to_amt"></field>
+                <field name="status"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_pharma_referral_rewards_form" model="ir.ui.view">
+        <field name="name">droga.pharma.referral.reward.view.form</field>
+        <field name="model">droga.pharma.referral.reward</field>
+        <field name="arch" type="xml">
+            <form string="" delete="0">
+                <sheet>
+                    <group>
+                        <field name="from_amt"></field>
+                        <field name="to_amt"></field>
+                        <field name="points_to_gain"></field>
+                        <field name="remark"></field>
+                        <field name="status"></field>
+                    </group>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>

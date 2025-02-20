@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- tree view -->
+    <record id="droga_hr_letter_type_tree_view" model="ir.ui.view">
+        <field name="name">Letter Type Tree View</field>
+        <field name="model">droga.hr.letter.type</field>
+        <field name="arch" type="xml">
+            <tree delete="0" editable="bottom">
+                <field name="name"/>
+                <field name="language"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <!-- letter request amharic action -->
+    <record id="droga_hr_letter_types_action" model="ir.actions.act_window">
+        <field name="name">Letter Types</field>
+        <field name="res_model">droga.hr.letter.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Letter Types
+            </p>
+        </field>
+    </record>
+
+
+    <!-- letter request search view -->
+    <record id="droga_hr_letter_request_search_view" model="ir.ui.view">
+        <field name="name">Letter Request Search View</field>
+        <field name="model">droga.hr.letter</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="employee"/>
+                <field name="letter_type"/>
+                <field name="request_date"/>
+                <field name="reason"/>
+                <separator/>
+                <filter name="not_issued" string="Not Issued" domain="[('status', '=', 'Not Issued')]"/>
+                <filter name="issued" string="Issued" domain="[('status', '=', 'Issued')]"/>
+                <separator/>
+                <filter name="request_date" string="Request Date" date="request_date"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- letter request english-->
+    <record id="droga_hr_letter_request_english_tree_view" model="ir.ui.view">
+        <field name="name">Letter Request Tree View</field>
+        <field name="model">droga.hr.letter</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="employee"/>
+                <field name="letter_type"/>
+                <field name="request_date"/>
+                <field name="reason"/>
+                <field name="state" widget="badge" decoration-success="state == 'Submitted'"
+                       decoration-danger="state == 'Draft'"/>
+                <field name="status" widget="badge" decoration-success="state == 'Issued'"
+                       decoration-danger="state == 'Not Issued'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- letter request english -->
+    <record id="droga_hr_letter_request_english_form_view" model="ir.ui.view">
+        <field name="name">Letter Request Form View</field>
+        <field name="model">droga.hr.letter</field>
+        <field name="arch" type="xml">
+            <form>
+
+                <header>
+                    <button name="submit_request" type="object" string="Submit" class="oe_highlight"
+                            id="submit_request" data-hotkey="v"
+                            attrs="{'invisible':[('state','not in',('Draft'))]}"/>
+                    <field name="state" widget="statusbar"/>
+                    <field name="status" widget="statusbar"/>
+                </header>
+
+                <sheet>
+                    <div class="oe_title">
+                        <span class="o_form_label">Request No</span>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="employee"/>
+                            <field name="letter_type"/>
+                            <field name="guarantee_for"/>
+                            <field name="company_name"/>
+                            <field name="employee_salary"/>
+
+                        </group>
+                        <group>
+                            <field name="request_date"/>
+                            <field name="reason"/>
+                            <field name="state" invisible="1"/>
+                        </group>
+                    </group>
+                </sheet>
+
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+
+
+            </form>
+
+        </field>
+    </record>
+
+    <!-- letter request english action -->
+    <record id="droga_hr_letter_request_eng_action" model="ir.actions.act_window">
+        <field name="name">Letter Request</field>
+        <field name="res_model">droga.hr.letter</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+        (0, 0, {'view_mode': 'tree', 'view_id': ref('droga_hr.droga_hr_letter_request_english_tree_view')}),
+         (0, 0, {'view_mode': 'form', 'view_id': ref('droga_hr.droga_hr_letter_request_english_form_view')})]"/>
+        <field name="domain">[('language','=','English'),('create_uid', '=', uid)]</field>
+        <field name="context">{'default_language':'English'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Letter Request Amharic
+            </p>
+        </field>
+    </record>
+
+
+    <!-- letter request amharic-->
+    <record id="droga_hr_letter_request_amharic_tree_view" model="ir.ui.view">
+        <field name="name">Letter Request Tree View</field>
+        <field name="model">droga.hr.letter</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="employee"/>
+                <field name="letter_type"/>
+                <field name="request_date"/>
+                <field name="reason"/>
+                <field name="state" widget="badge" decoration-success="state == 'Submitted'"
+                       decoration-danger="state == 'Draft'"/>
+                <field name="status" widget="badge" decoration-success="state == 'Issued'"
+                       decoration-danger="state == 'Not Issued'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- letter request amharic -->
+    <record id="droga_hr_letter_request_amharic_form_view" model="ir.ui.view">
+        <field name="name">Letter Request Form View</field>
+        <field name="model">droga.hr.letter</field>
+        <field name="arch" type="xml">
+            <form>
+
+                <header>
+                    <button name="submit_request" type="object" string="Submit" class="oe_highlight"
+                            id="submit_request" data-hotkey="v"
+                            attrs="{'invisible':[('state','not in',('Draft'))]}"/>
+                    <field name="state" widget="statusbar"/>
+                    <field name="status" widget="statusbar"/>
+                </header>
+
+                <sheet>
+                    <div class="oe_title">
+                        <span class="o_form_label">Request No</span>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="employee"/>
+                            <field name="letter_type"/>
+                            <field name="guarantee_for"/>
+                            <field name="company_name"/>
+
+                        </group>
+                        <group>
+                            <field name="request_date"/>
+                            <field name="reason"/>
+                            <field name="state" invisible="1"/>
+                        </group>
+                    </group>
+                </sheet>
+
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+
+
+            </form>
+
+        </field>
+    </record>
+
+    <!-- letter request amharic action -->
+    <record id="droga_hr_letter_request_amharic_action" model="ir.actions.act_window">
+        <field name="name">Letter Request</field>
+        <field name="res_model">droga.hr.letter</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+        (0, 0, {'view_mode': 'tree', 'view_id': ref('droga_hr.droga_hr_letter_request_amharic_tree_view')}),
+         (0, 0, {'view_mode': 'form', 'view_id': ref('droga_hr.droga_hr_letter_request_amharic_form_view')})]"/>
+        <field name="domain">[('language','=','Amharic'),('create_uid', '=', uid)]</field>
+        <field name="context">{'default_language':'Amharic'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Letter Request Amharic
+            </p>
+        </field>
+    </record>
+
+    <!--letter request view for hr for hr -->
+    <!-- letter request amharic action -->
+    <record id="droga_hr_letter_requests_action" model="ir.actions.act_window">
+        <field name="name">Letter Request</field>
+        <field name="res_model">droga.hr.letter</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+        (0, 0, {'view_mode': 'tree', 'view_id': ref('droga_hr.droga_hr_letter_request_amharic_tree_view')}),
+         (0, 0, {'view_mode': 'form', 'view_id': ref('droga_hr.droga_hr_letter_request_amharic_form_view')})]"/>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Letter Requests
+            </p>
+        </field>
+    </record>
+
+</odoo>

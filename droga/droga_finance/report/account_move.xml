@@ -1,0 +1,1066 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- bank payment voucher -->
+    <record id="droga_account_bank_payment_voucher_action" model="ir.actions.report">
+        <field name="name">Bank Payment Voucher</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">droga_finance.droga_account_bank_payment_voucher_report</field>
+        <field name="report_file">droga_finance.droga_account_bank_payment_voucher_report</field>
+        <field name="print_report_name">'Bank Payment Voucher - %s' % (object.name)
+        </field>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="paperformat_id" ref="droga_procurement.paperformat_droga_a5"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="droga_account_bank_payment_voucher_report" name="Bank Payment Voucher">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-foreach="docs" t-as="o">
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <div id="informations" class="row " style="font-size: 12.5px;">
+                            <div class="col-12 bm-2 text-end">
+
+                                <strong>Date:-</strong>
+                                <span t-field="o.date" class="m-0"/>
+
+                                <br></br>
+                                <strong>No:-</strong>
+                                <span t-field="o.transaction_no" class="m-0"/>
+
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <h5>Bank Payment Voucher</h5>
+                        </div>
+
+
+                        <div id="informations" class="row " style="font-size: 12.5px;">
+                            <div class="col-7 bm-2">
+                                <strong>Payee:-</strong>
+                                <u>
+                                    <span t-field="o.partner_id.name" class="m-0"/>
+                                </u>
+
+                                <br></br>
+                                <strong>Purpose:-</strong>
+                                <u>
+                                    <span t-field="o.purpose" class="m-0"/>
+                                </u>
+
+                            </div>
+                            <div class="col-5 bm-2">
+                                <strong>Check No:-</strong>
+                                <span t-field="o.ref"></span>
+                                <br/>
+                                <strong>Bank Account:-</strong>
+                                <span t-field="o.journal_id"></span>
+                            </div>
+                        </div>
+                        <br></br>
+
+                        <div id="informations" class="row " style="font-size: 12.5px;">
+                            <div class="col-12 bm-2">
+                                <strong>Amount in Figures:-</strong>
+                                <u>
+                                    <span t-field="o.amount_total" class="m-0"/>
+                                </u>
+
+                                <br></br>
+                                <strong>Amount in Words:-</strong>
+                                <u>
+                                    <span t-field="o.amount_total_word" class="m-0"/>
+
+                                </u>
+
+                            </div>
+
+                        </div>
+                        <br></br>
+
+                        <table class="table table-sm o_main_table mt-4" style="font-size: 12.5px;">
+                            <thead>
+                                <tr>
+                                    <!--<th>
+                                        <strong>Sub Ledger</strong>
+                                    </th>-->
+                                    <th>
+                                        <strong>GL Account</strong>
+                                    </th>
+                                    <th>
+                                        <strong>GL Description</strong>
+                                    </th>
+                                    <th class="text-end">
+                                        <strong>Debit</strong>
+                                    </th>
+                                    <th class="text-end">
+                                        <strong>Credit</strong>
+                                    </th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.line_ids" t-as="line">
+                                    <!--<td></td>-->
+                                    <td>
+                                        <t t-esc="line.account_id.code"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="line.account_id.name"/>
+                                    </td>
+                                    <td class="text-end">
+                                        <t t-esc="line.debit"
+                                           t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                    </td>
+                                    <td class="text-end">
+                                        <t t-esc="line.credit"
+                                           t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <br></br>
+                        <div id="informations" class="row " style="font-size: 12.5px;">
+                            <div class="col-3 bm-2">
+                                <strong>Prepared By</strong>
+                                <br></br>
+                                <br></br>
+                                <span>___________________</span>
+                            </div>
+                            <div class="col-3 bm-2">
+                                <strong>Checked By</strong>
+                                <br></br>
+                                <br></br>
+                                <span>___________________</span>
+                            </div>
+                            <div class="col-3 bm-2">
+                                <strong>Approved By</strong>
+                                <br></br>
+                                <br></br>
+                                <span>___________________</span>
+                            </div>
+                            <div class="col-3 bm-2">
+                                <strong>Authorized By</strong>
+                                <br></br>
+                                <br></br>
+                                <span>___________________</span>
+                            </div>
+                        </div>
+                        <br></br>
+
+                        <div id="informations" class="row " style="font-size: 12.5px;">
+                            <div class="col-9 bm-2">
+                            </div>
+                            <div class="col-3 bm-2">
+                                <strong>Received the above amount</strong>
+                                <br></br>
+                                <br></br>
+                                <span>_______________________________</span>
+                                <br></br>
+                                <span class="text-center">Signature of Payee</span>
+                            </div>
+                        </div>
+                        <br></br>
+                        <div id="informations" class="row " style="font-size: 12.5px;">
+                            <div class="col-3 bm-2">
+                                <span>Distribution</span>
+                            </div>
+                            <div class="col-3 bm-2">
+                                <span>White-Accounts</span>
+                            </div>
+                            <div class="col-3 bm-2">
+                                <span>Pink-Pad</span>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- bank deposit voucher -->
+    <record id="droga_account_bank_deposit_voucher_action" model="ir.actions.report">
+        <field name="name">Bank Deposit Voucher</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">droga_finance.droga_account_bank_deposit_voucher_report</field>
+        <field name="report_file">droga_finance.droga_account_bank_deposit_voucher_report</field>
+        <field name="print_report_name">'Bank Deposit Voucher - %s' % (object.name)
+        </field>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="paperformat_id" ref="droga_procurement.paperformat_droga_a5"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="droga_account_bank_deposit_voucher_report" name="Bank Payment Voucher">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-foreach="docs" t-as="o">
+
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <div id="informations" class="row " style="font-size: 12.5px;">
+                            <div class="col-12 bm-2 text-end">
+
+                                <strong>Date:-</strong>
+                                <span t-field="o.date" class="m-0"/>
+
+                                <br></br>
+                                <strong>No:-</strong>
+                                <span t-field="o.transaction_no" class="m-0"/>
+
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <h5>Bank Deposit Voucher</h5>
+                        </div>
+
+
+                        <div id="informations" class="row " style="font-size: 12.5px;">
+                            <div class="col-7 bm-2">
+                                <strong>Payee:-</strong>
+                                <u>
+                                    <span t-field="o.partner_id.name" class="m-0"/>
+                                </u>
+
+                                <br></br>
+                                <strong>Purpose:-</strong>
+                                <u>
+                                    <span t-field="o.purpose" class="m-0"/>
+                                </u>
+
+                            </div>
+                            <div class="col-5 bm-2">
+                                <strong>Check No:-</strong>
+                                <span t-field="o.ref"></span>
+                                <br/>
+                                <strong>Bank Account:-</strong>
+                                <span t-field="o.journal_id"></span>
+                            </div>
+                        </div>
+                        <br></br>
+
+                        <div id="informations" class="row " style="font-size: 12.5px;">
+                            <div class="col-12 bm-2">
+                                <strong>Amount in Figures:-</strong>
+                                <u>
+                                    <span t-field="o.amount_total" class="m-0"/>
+                                </u>
+
+                                <br></br>
+                                <strong>Amount in Words:-</strong>
+                                <u>
+                                    <span t-field="o.amount_total_word" class="m-0"/>
+
+                                </u>
+
+                            </div>
+
+                        </div>
+                        <br></br>
+
+                        <table class="table table-sm o_main_table mt-4" style="font-size: 12.5px;">
+                            <thead>
+                                <tr>
+                                    <!--<th>
+                                        <strong>Sub Ledger</strong>
+                                    </th>-->
+                                    <th>
+                                        <strong>GL Account</strong>
+                                    </th>
+                                    <th>
+                                        <strong>GL Description</strong>
+                                    </th>
+                                    <th class="text-end">
+                                        <strong>Debit</strong>
+                                    </th>
+                                    <th class="text-end">
+                                        <strong>Credit</strong>
+                                    </th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.line_ids" t-as="line">
+                                    <!--<td></td>-->
+                                    <td>
+                                        <t t-esc="line.account_id.code"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="line.account_id.name"/>
+                                    </td>
+                                    <td class="text-end">
+                                        <t t-esc="line.debit"
+                                           t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                    </td>
+                                    <td class="text-end">
+                                        <t t-esc="line.credit"
+                                           t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <br></br>
+                        <div id="informations" class="row " style="font-size: 12.5px;">
+                            <div class="col-3 bm-2">
+                                <strong>Prepared By</strong>
+                                <br></br>
+                                <br></br>
+                                <span>___________________</span>
+                            </div>
+                            <div class="col-3 bm-2">
+                                <strong>Checked By</strong>
+                                <br></br>
+                                <br></br>
+                                <span>___________________</span>
+                            </div>
+                            <div class="col-3 bm-2">
+                                <strong>Approved By</strong>
+                                <br></br>
+                                <br></br>
+                                <span>___________________</span>
+                            </div>
+                            <div class="col-3 bm-2">
+                                <strong>Authorized By</strong>
+                                <br></br>
+                                <br></br>
+                                <span>___________________</span>
+                            </div>
+                        </div>
+                        <br></br>
+
+                        <div id="informations" class="row " style="font-size: 12.5px;">
+                            <div class="col-9 bm-2">
+                            </div>
+                            <div class="col-3 bm-2">
+                                <strong>Received the above amount</strong>
+                                <br></br>
+                                <br></br>
+                                <span>_______________________________</span>
+                                <br></br>
+                                <span class="text-center">Signature of Payee</span>
+                            </div>
+                        </div>
+                        <br></br>
+                        <div id="informations" class="row " style="font-size: 12.5px;">
+                            <div class="col-3 bm-2">
+                                <span>Distribution</span>
+                            </div>
+                            <div class="col-3 bm-2">
+                                <span>White-Accounts</span>
+                            </div>
+                            <div class="col-3 bm-2">
+                                <span>Pink-Pad</span>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+    <!-- Petty Cash payment voucher -->
+    <record id="droga_account_petty_cash_payment_voucher_action" model="ir.actions.report">
+        <field name="name">Petty Cash Voucher</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">droga_finance.droga_account_petty_cash_payment_voucher_report</field>
+        <field name="report_file">droga_finance.droga_account_petty_cash_payment_voucher_report</field>
+        <field name="print_report_name">'Petty Cash Payment Voucher - %s' % (object.name)
+        </field>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="paperformat_id" ref="droga_procurement.paperformat_droga_a5"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="droga_account_petty_cash_payment_voucher_report" name="Petty Cash Voucher">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-foreach="docs" t-as="o">
+
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <div id="informations" class="row " style="font-size: 12.5px;">
+                            <div class="col-12 bm-2 text-end">
+
+                                <strong>Date:-</strong>
+                                <span t-field="o.date" class="m-0"/>
+
+                                <br></br>
+                                <strong>No:-</strong>
+                                <span t-field="o.transaction_no" class="m-0"/>
+
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <h5>Petty Cash Voucher</h5>
+                        </div>
+
+
+                        <div id="informations" class="row " style="font-size: 12.5px;">
+                            <div class="col-7 bm-2">
+                                <strong>Payee:-</strong>
+                                <u>
+                                    <span t-field="o.partner_id.name" class="m-0"/>
+                                </u>
+
+                                <br></br>
+                                <strong>Purpose:-</strong>
+                                <u>
+                                    <span t-field="o.purpose" class="m-0"/>
+                                </u>
+
+                            </div>
+                            <div class="col-5 bm-2">
+                                <strong>Check No:-</strong>
+                                <span t-field="o.ref"></span>
+                                <br/>
+                                <strong>Bank Account:-</strong>
+                                <span t-field="o.journal_id"></span>
+                            </div>
+                        </div>
+                        <br></br>
+
+                        <div id="informations" class="row " style="font-size: 12.5px;">
+                            <div class="col-12 bm-2">
+                                <strong>Amount in Figures:-</strong>
+                                <u>
+                                    <span t-field="o.amount_total" class="m-0"/>
+                                </u>
+
+                                <br></br>
+                                <strong>Amount in Words:-</strong>
+                                <u>
+                                    <span t-field="o.amount_total_word" class="m-0"/>
+
+                                </u>
+
+                            </div>
+
+                        </div>
+                        <br></br>
+
+                        <table class="table table-sm o_main_table mt-4" style="font-size: 12.5px;">
+                            <thead>
+                                <tr>
+                                    <!--<th>
+                                        <strong>Sub Ledger</strong>
+                                    </th>-->
+                                    <th>
+                                        <strong>GL Account</strong>
+                                    </th>
+                                    <th>
+                                        <strong>GL Description</strong>
+                                    </th>
+                                    <th class="text-end">
+                                        <strong>Debit</strong>
+                                    </th>
+                                    <th class="text-end">
+                                        <strong>Credit</strong>
+                                    </th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.line_ids" t-as="line">
+                                    <!--<td></td>-->
+                                    <td>
+                                        <t t-esc="line.account_id.code"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="line.account_id.name"/>
+                                    </td>
+                                    <td class="text-end">
+                                        <t t-esc="line.debit"
+                                           t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                    </td>
+                                    <td class="text-end">
+                                        <t t-esc="line.credit"
+                                           t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <br></br>
+                        <div id="informations" class="row " style="font-size: 12.5px;">
+                            <div class="col-3 bm-2">
+                                <strong>Prepared By</strong>
+                                <br></br>
+                                <br></br>
+                                <span>___________________</span>
+                            </div>
+                            <div class="col-3 bm-2">
+                                <strong>Checked By</strong>
+                                <br></br>
+                                <br></br>
+                                <span>___________________</span>
+                            </div>
+                            <div class="col-3 bm-2">
+                                <strong>Approved By</strong>
+                                <br></br>
+                                <br></br>
+                                <span>___________________</span>
+                            </div>
+                            <div class="col-3 bm-2">
+                                <strong>Authorized By</strong>
+                                <br></br>
+                                <br></br>
+                                <span>___________________</span>
+                            </div>
+                        </div>
+                        <br></br>
+
+                        <div id="informations" class="row " style="font-size: 12.5px;">
+                            <div class="col-9 bm-2">
+                            </div>
+                            <div class="col-3 bm-2">
+                                <strong>Received the above amount</strong>
+                                <br></br>
+                                <br></br>
+                                <span>_______________________________</span>
+                                <br></br>
+                                <span class="text-center">Signature of Payee</span>
+                            </div>
+                        </div>
+                        <br></br>
+                        <div id="informations" class="row " style="font-size: 12.5px;">
+                            <div class="col-3 bm-2">
+                                <span>Distribution</span>
+                            </div>
+                            <div class="col-3 bm-2">
+                                <span>White-Accounts</span>
+                            </div>
+                            <div class="col-3 bm-2">
+                                <span>Pink-Pad</span>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+    <!--cash reciept voucher-->
+    <record id="droga_account_cash_reciept_voucher_action" model="ir.actions.report">
+        <field name="name">Cash Reciept Voucher</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">droga_finance.droga_account_cash_reciept_voucher_report</field>
+        <field name="report_file">droga_finance.droga_account_cash_reciept_voucher_report</field>
+        <field name="print_report_name">'Cash Receipt Voucher - %s' % (object.name)
+        </field>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="paperformat_id" ref="droga_procurement.paperformat_droga_a5"/>
+        <field name="binding_type">report</field>
+
+    </record>
+
+
+    <template id="droga_account_cash_reciept_voucher_report" name="Cash Receipt Voucher">
+        <t t-call="web.html_container">
+            <div id="non-printable">
+                <button class="btn btn-primary btn-sm o_report_print" onclick="window.print();">Print Preview
+                </button>
+            </div>
+            <br></br>
+            <t t-call="web.basic_layout">
+
+
+                <style type="text/css">
+
+                    /* Default left, right, top, bottom margin is 2cm */
+                    @page {
+                    size: A4 portrait;
+                    margin-top: 6.5cm;
+                    margin-left:3cm;
+                    margin-right:2cm;
+                    margin-bottom:2cm;
+                    }
+
+                    @media print
+                    {
+                    #non-printable { visibility: hidden; }
+                    #wrapwrap { visibility: visible; }
+                    }
+                </style>
+
+                <t t-foreach="docs" t-as="o">
+
+
+                    <div class="page">
+
+                        <div id="informations" class="row">
+                            <div class="col-6 bm-2">
+                                <h6 class="small">ከ:-
+                                    <strong t-esc="o.company_id.name"/>
+                                </h6>
+                                <h6 class="small">From
+
+                                </h6>
+                                <h6 class="small">አድራሻ/ክልል፦አ.አ
+                                    <span style="padding-left: 10px;" class="small">ክ.ከ፦አ/ከተማ</span>
+                                    <span style="padding-left: 10px;" class="small">ወ፦06</span>
+                                    <span style="padding-left: 10px;" class="small">ቤ.ቁ፦133</span>
+                                </h6>
+                                <h6 class="small">Address Region
+                                    <span style="padding-left: 8px;" class="small">K/K</span>
+                                    <span style="padding-left: 15px;" class="small">W.</span>
+                                    <span style="padding-left: 15px;" class="small">H.No.</span>
+                                </h6>
+                                <h6 class="small">የታክስ ከፋይ መ.ቁ፦&#160;&#160;<u>0045080232</u>
+                                </h6>
+                                <h6 class="small">Supplier's TIN No.</h6>
+                                <h6 class="small">የተ.እ.ታ ቁጥር______________________________</h6>
+                                <h6 class="small">VAT Reg. No</h6>
+                                <h6 class="small">የተመዘገበበት ቀን_______________________________</h6>
+                                <h6 class="small">Date of Registration</h6>
+
+                            </div>
+                            <div class="col-6 bm-2">
+                                <h6 class="small">ለ:-
+                                    <strong t-esc="o.partner_id.name"/>
+                                </h6>
+                                <h6 class="small">To
+
+                                </h6>
+                                <h6 class="small">አድራሻ/ክልል፦____ክ.ከ፦____ወ፦____ቤ.ቁ፦_____</h6>
+                                <h6 class="small">Address Region&#160;K/K&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;W.&#160;&#160;&#160;&#160;&#160;&#160;&#160;H.No.</h6>
+
+                                <h6 class="small">የተ.እ.ታ ቁጥር______________________________</h6>
+                                <h6 class="small">VAT Reg. No</h6>
+
+                                <h6 class="small">የታክስ ከፋይ መ.ቁ:-
+                                    <u>
+                                        <t t-esc="o.partner_id.vat"/>
+                                    </u>
+                                </h6>
+                                <h6 class="small">Customer's TIN No.</h6>
+
+                                <h6 class="small">የተመዘገበበት ቀን_______________________________</h6>
+                                <h6 class="small">Date of Registration</h6>
+                            </div>
+                        </div>
+
+                        <div id="informations" class="row">
+                            <div class="col-8 bm-2">
+                                <h6 class="small">የክፍያው ምክንያት</h6>
+                                <h6 class="small">Payment Description:-
+                                    <span class="small">
+                                        <t t-esc="o.purpose"/>
+                                    </span>
+                                </h6>
+                                <h6 class="small">የገንዘብ ልክ በፊደል</h6>
+                                <h6 class="small">Amount in Words:-
+                                    <span class="small">
+                                        <t t-esc="o.amount_total_word"/>
+                                    </span>
+
+                                </h6>
+
+
+                            </div>
+                            <div class="col-4 bm-2">
+                                <h6 class="small">ብር</h6>
+                                <h6 class="small">Birr:
+                                    <b>
+                                        <span class="small">
+                                            <t t-esc="o.amount_total"
+                                               t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                        </span>
+                                    </b>
+
+                                </h6>
+                            </div>
+                        </div>
+
+
+                        <div id="informations" class="row">
+                            <div class="col-12 bm-2">
+                                <h6 class="small">
+                                    <span class="small">የክፍያ ሁኔታ</span>
+                                    <span style="padding-left: 75px;" class="small">በጥሬ&#160;</span>
+                                    <input type="checkbox"></input>
+                                    <span style="padding-left: 15px;" class="small">በቼክ&#160;</span>
+                                    <input type="checkbox"></input>
+                                    <span style="padding-left: 25px;" class="small">የቼክ ቁጥር</span>
+                                </h6>
+                                <h6 class="small">Mode of Payment
+                                    <span style="padding-left: 15px;" class="small">Cash</span>
+                                    <span style="padding-left: 15px;" class="small">Cheque</span>
+                                    <span style="padding-left: 15px;" class="small">Cheque No</span>
+                                    _____________________
+                                </h6>
+                                <h6 class="small">ያዘጋጀው ስምና ፊርማ_____________________________________</h6>
+                                <h6 class="small">Prepared By</h6>
+                                <h6 class="small">የተቀባይ (የሻጭ) ስምና ፊርማ_______________________________</h6>
+                                <h6 class="small">Cashier's Signature</h6>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+    <template id="droga_account_cash_new_receipt_voucher_report" name="Cash Receipt Voucher">
+        <t t-call="web.html_container">
+            <div id="non-printable">
+                <button class="btn btn-primary btn-sm o_report_print" onclick="window.print();">Print Preview
+                </button>
+            </div>
+            <br></br>
+            <t t-call="web.basic_layout">
+
+
+                <style type="text/css">
+
+                    /* Default left, right, top, bottom margin is 2cm */
+                    @page {
+                    size: A4 portrait;
+                    margin-top: 6.5cm;
+                    margin-left:3cm;
+                    margin-right:2cm;
+                    margin-bottom:2cm;
+                    }
+
+                    @media print
+                    {
+                    #non-printable { visibility: hidden; }
+                    #wrapwrap { visibility: visible; }
+                    }
+                </style>
+
+                <t t-foreach="docs.move_id_crv" t-as="o">
+
+                    <!-- get amount,and purpose from the main document -->
+                    <t t-set="total_amount" t-value=""/>
+                    <t t-set="total_amount_word" t-value=""/>
+                    <t t-set="purpose" t-value=""/>
+
+                    <t t-foreach="docs" t-as="crv">
+                        <t t-set="total_amount" t-value="crv.amount"/>
+                        <t t-set="total_amount_word" t-value="crv.amount_word"/>
+                        <t t-set="purpose" t-value="crv.payment_description"/>
+                    </t>
+
+
+                    <div class="page">
+
+                        <div id="informations" class="row ">
+                            <div class="col-6 bm-2">
+                                <h6 class="small">ከ:-
+                                    <strong t-esc="o.company_id.name"/>
+                                </h6>
+                                <h6 class="small">From
+
+                                </h6>
+                                <h6 class="small">አድራሻ/ክልል፦አ.አ
+                                    <span style="padding-left: 10px;" class="small">ክ.ከ፦አ/ከተማ</span>
+                                    <span style="padding-left: 10px;" class="small">ወ፦06</span>
+                                    <span style="padding-left: 10px;" class="small">ቤ.ቁ፦133</span>
+                                </h6>
+                                <h6 class="small">Address Region
+                                    <span style="padding-left: 8px;" class="small">K/K</span>
+                                    <span style="padding-left: 15px;" class="small">W.</span>
+                                    <span style="padding-left: 15px;" class="small">H.No.</span>
+                                </h6>
+                                <h6 class="small">የታክስ ከፋይ መ.ቁ፦&#160;&#160;<u>0045080232</u>
+                                </h6>
+                                <h6 class="small">Supplier's TIN No.</h6>
+                                <h6 class="small">የተ.እ.ታ ቁጥር______________________________</h6>
+                                <h6 class="small">VAT Reg. No</h6>
+                                <h6 class="small">የተመዘገበበት ቀን_______________________________</h6>
+                                <h6 class="small">Date of Registration</h6>
+
+                            </div>
+                            <div class="col-6 bm-2">
+                                <h6 class="small">ለ:-
+                                    <strong t-esc="o.partner_id.name"/>
+                                </h6>
+                                <h6 class="small">To
+
+                                </h6>
+                                <h6 class="small">አድራሻ/ክልል፦____ክ.ከ፦____ወ፦____ቤ.ቁ፦_____</h6>
+                                <h6 class="small">Address Region&#160;K/K&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;W.&#160;&#160;&#160;&#160;&#160;&#160;&#160;H.No.</h6>
+
+                                <h6 class="small">የተ.እ.ታ ቁጥር______________________________</h6>
+                                <h6 class="small">VAT Reg. No</h6>
+
+                                <h6 class="small">የታክስ ከፋይ መ.ቁ:-
+                                    <u>
+                                        <t t-esc="o.partner_id.vat"/>
+                                    </u>
+                                </h6>
+                                <h6 class="small">Customer's TIN No.</h6>
+
+                                <h6 class="small">የተመዘገበበት ቀን_______________________________</h6>
+                                <h6 class="small">Date of Registration</h6>
+                            </div>
+                        </div>
+
+                        <div id="informations" class="row ">
+                            <div class="col-8 bm-2">
+                                <h6 class="small">የክፍያው ምክንያት</h6>
+                                <h6 class="small">Payment Description:-
+                                    <span class="small">
+                                        <t t-esc="purpose"/>
+                                    </span>
+                                </h6>
+                                <h6 class="small">የገንዘብ ልክ በፊደል</h6>
+                                <h6 class="small">Amount in Words:-
+                                    <span class="small">
+                                        <t t-esc="total_amount_word"/>
+                                    </span>
+
+                                </h6>
+
+
+                            </div>
+                            <div class="col-4 bm-2">
+                                <h6 class="small">ብር</h6>
+                                <h6 class="small">Birr:
+                                    <b>
+                                        <span class="small">
+                                            <t t-esc="total_amount"
+                                               t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                        </span>
+                                    </b>
+
+                                </h6>
+                            </div>
+                        </div>
+
+
+                        <div id="informations" class="row ">
+                            <div class="col-12 bm-2">
+                                <h6 class="small">
+                                    <span class="small">የክፍያ ሁኔታ</span>
+                                    <span style="padding-left: 75px;" class="small">በጥሬ&#160;</span>
+                                    <input type="checkbox"></input>
+                                    <span style="padding-left: 15px;" class="small">በቼክ&#160;</span>
+                                    <input type="checkbox"></input>
+                                    <span style="padding-left: 25px;" class="small">የቼክ ቁጥር</span>
+                                </h6>
+                                <h6 class="small">Mode of Payment
+                                    <span style="padding-left: 15px;" class="small">Cash</span>
+                                    <span style="padding-left: 15px;" class="small">Cheque</span>
+                                    <span style="padding-left: 15px;" class="small">Cheque No</span>
+                                    _____________________
+                                </h6>
+                                <h6 class="small">ያዘጋጀው ስምና ፊርማ_____________________________________</h6>
+                                <h6 class="small">Prepared By</h6>
+                                <h6 class="small">የተቀባይ (የሻጭ) ስምና ፊርማ_______________________________</h6>
+                                <h6 class="small">Cashier's Signature</h6>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+    <!-- Journal Payment voucher -->
+    <record id="droga_account_journal_voucher_action" model="ir.actions.report">
+        <field name="name">Journal Voucher</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">droga_finance.droga_account_journal_voucher_report</field>
+        <field name="report_file">droga_finance.droga_account_journal_voucher_report</field>
+        <field name="print_report_name">'Journal Voucher - %s' % (object.name)
+        </field>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="paperformat_id" ref="droga_procurement.paperformat_droga_a5"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="droga_account_journal_voucher_report" name="Journal Voucher">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-foreach="docs" t-as="o">
+
+
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <div id="informations" class="row " style="font-size: 12.5px;">
+                            <div class="col-12 bm-2 text-end">
+
+                                <strong>Date:-</strong>
+                                <span t-field="o.date" class="m-0"/>
+
+                                <br></br>
+                                <strong>No:-</strong>
+                                <span t-field="o.transaction_no" class="m-0"/>
+
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <h5>Journal Voucher</h5>
+                        </div>
+
+
+                        <div id="informations" class="row " style="font-size: 12.5px;">
+                            <div class="col-7 bm-2">
+                                <strong>Payee:-</strong>
+                                <u>
+                                    <span t-field="o.partner_id.name" class="m-0"/>
+                                </u>
+
+                                <br></br>
+                                <strong>Purpose:-</strong>
+                                <u>
+                                    <span t-field="o.purpose" class="m-0"/>
+                                </u>
+
+                            </div>
+                            <div class="col-5 bm-2">
+                                <strong>Check No:-</strong>
+                                <span t-field="o.ref"></span>
+                                <br/>
+                                <strong>Bank Account:-</strong>
+                                <span t-field="o.journal_id"></span>
+                            </div>
+                        </div>
+                        <br></br>
+
+                        <div id="informations" class="row " style="font-size: 12.5px;">
+                            <div class="col-12 bm-2">
+                                <strong>Amount in Figures:-</strong>
+                                <u>
+                                    <span t-field="o.amount_total" class="m-0"/>
+                                </u>
+
+                                <br></br>
+                                <strong>Amount in Words:-</strong>
+                                <u>
+                                    <span t-field="o.amount_total_word" class="m-0"/>
+
+                                </u>
+
+                            </div>
+
+                        </div>
+                        <br></br>
+
+                        <table class="table table-sm o_main_table mt-4" style="font-size: 12.5px;">
+                            <thead>
+                                <tr>
+                                    <!--<th>
+                                        <strong>Sub Ledger</strong>
+                                    </th>-->
+                                    <th>
+                                        <strong>GL Account</strong>
+                                    </th>
+                                    <th>
+                                        <strong>GL Description</strong>
+                                    </th>
+                                    <th class="text-end">
+                                        <strong>Debit</strong>
+                                    </th>
+                                    <th class="text-end">
+                                        <strong>Credit</strong>
+                                    </th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.line_ids" t-as="line">
+                                    <!--<td></td>-->
+                                    <td>
+                                        <t t-esc="line.account_id.code"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="line.account_id.name"/>
+                                    </td>
+                                    <td class="text-end">
+                                        <t t-esc="line.debit"
+                                           t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                    </td>
+                                    <td class="text-end">
+                                        <t t-esc="line.credit"
+                                           t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <br></br>
+                        <div id="informations" class="row " style="font-size: 12.5px;">
+                            <div class="col-3 bm-2">
+                                <strong>Prepared By</strong>
+                                <br></br>
+                                <br></br>
+                                <span>___________________</span>
+                            </div>
+                            <div class="col-3 bm-2">
+                                <strong>Checked By</strong>
+                                <br></br>
+                                <br></br>
+                                <span>___________________</span>
+                            </div>
+                            <div class="col-3 bm-2">
+                                <strong>Approved By</strong>
+                                <br></br>
+                                <br></br>
+                                <span>___________________</span>
+                            </div>
+                            <div class="col-3 bm-2">
+                                <strong>Authorized By</strong>
+                                <br></br>
+                                <br></br>
+                                <span>___________________</span>
+                            </div>
+                        </div>
+                        <br></br>
+
+                        <div id="informations" class="row " style="font-size: 12.5px;">
+                            <div class="col-9 bm-2">
+                            </div>
+                            <div class="col-3 bm-2">
+                                <strong>Received the above amount</strong>
+                                <br></br>
+                                <br></br>
+                                <span>_______________________________</span>
+                                <br></br>
+                                <span class="text-center">Signature of Payee</span>
+                            </div>
+                        </div>
+                        <br></br>
+                        <div id="informations" class="row " style="font-size: 12.5px;">
+                            <div class="col-3 bm-2">
+                                <span>Distribution</span>
+                            </div>
+                            <div class="col-3 bm-2">
+                                <span>White-Accounts</span>
+                            </div>
+                            <div class="col-3 bm-2">
+                                <span>Pink-Pad</span>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+</odoo>

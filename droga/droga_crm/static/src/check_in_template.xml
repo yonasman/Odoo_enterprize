@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="check_in.JsFormView"
+       t-inherit="web.FormView" t-inherit-mode="primary" owl="1">
+
+
+        <xpath expr="//ActionMenus" position="before">
+            <button class="btn btn-info" type="button" t-on-click="onClickTestJavascript">
+                Check in
+            </button>
+            <button class="btn btn-info" type="button" t-on-click="onClickTestJavascriptout">
+                Check out
+            </button>
+        </xpath>
+    </t>
+</templates>
+

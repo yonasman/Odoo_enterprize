@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="droga_sales_cost_of_sales_action" model="ir.actions.act_window">
+        <field name="name">Profit margin by item</field>
+        <field name="res_model">droga.sales.cost.of.sales</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="droga_sales_cost_of_sales_tree" model="ir.ui.view">
+        <field name="name">droga.sales.cost.of.sales.view.tree</field>
+        <field name="model">droga.sales.cost.of.sales</field>
+        <field name="arch" type="xml">
+            <tree string="" delete="0">
+                <field name="product_descr"></field>
+                <field name="product_code"></field>
+                <field name="product_categ"></field>
+                <field name="sales_ref"></field>
+                <field name="order_from"></field>
+                <field name="sales_date"></field>
+                <field name="invoiced_amt"></field>
+                <field name="qty_invoiced"></field>
+                <field name="price_unit"></field>
+                <field name="profit"></field>
+                <field name="profit_margin_progress_bar" widget="progressbar"></field>
+                <field name="profit_margin" string="Profit Margin Exact"></field>
+                <field name="amount"></field>
+                <field name="quantity"></field>
+                <field name="unit_cost"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_sales_cost_of_sales_search" model="ir.ui.view">
+        <field name="name">droga.sales.cost.of.sales.view.search</field>
+        <field name="model">droga.sales.cost.of.sales</field>
+        <field name="arch" type="xml">
+            <search string="">
+                <field name="sales_ref"></field>
+                <field name="product_descr"></field>
+                <field name="product_code"></field>
+                <field name="product_categ"></field>
+                <field name="sales_date"></field>
+                <field name="invoiced_amt"></field>
+                <field name="qty_invoiced"></field>
+                <field name="price_unit"></field>
+                <field name="profit"></field>
+                <field name="profit_margin" widget="progressbar"></field>
+                <field name="amount"></field>
+                <field name="quantity"></field>
+                <field name="unit_cost"></field>
+            </search>
+        </field>
+    </record>
+
+    <menuitem
+            id="droga_sales_cost_of_sales_menu"
+            name="Profit margin by item"
+            action="droga_sales_cost_of_sales_action"
+            parent="droga_sales.droga_sales_reports_menu"
+            groups="droga_inventory.inv_prod_fin,droga_inventory.inv_prod_fin_wf,droga_finance.account_finance_operation_manager_group"
+            sequence="25"/>
+
+    <record id="pr_margin_rule" model="ir.rule">
+            <field name="name">Profit margin report domain</field>
+            <field name="model_id" ref="model_droga_sales_cost_of_sales"/>
+            <field eval="True" name="global"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
+        </record>
+
+    <menuitem id="droga_reciveables_profit_report" parent="account.menu_finance_receivables" name="Profit margin"
+              groups="droga_finance.business_control_specialist_group" sequence="1001">
+        <menuitem id="droga_sales_cost_of_sales_menu_finance" name="Profit margin by item"
+                  action="droga_sales_cost_of_sales_action"
+                  groups="droga_finance.business_control_specialist_group" sequence="1"/>
+    </menuitem>
+
+</odoo>

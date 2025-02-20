@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="droga_crm_cont_job_position_action" model="ir.actions.act_window">
+        <field name="name">Contact job position</field>
+        <field name="res_model">droga.cust.job.position</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="droga_crm_settings_cust_job_position_view_tree" model="ir.ui.view">
+        <field name="name">droga.cust.job.position.view.tree</field>
+        <field name="model">droga.cust.job.position</field>
+        <field name="arch" type="xml">
+            <tree string="" delete="0">
+                <field name="job_position"></field>
+                <field name="status"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_crm_settings_cust_job_position_view_form" model="ir.ui.view">
+        <field name="name">droga.cust.job.position.view.form</field>
+        <field name="model">droga.cust.job.position</field>
+        <field name="arch" type="xml">
+            <form string="" delete="0">
+                <sheet>
+                    <group>
+                        <field name="job_position"></field>
+                        <field name="status"></field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <menuitem
+            id="droga_crm_settings_cont_job_position"
+            name="Contact job position registry"
+            action="droga_crm_cont_job_position_action"
+            parent="crm.crm_menu_config"
+            sequence="16"/>
+</odoo>

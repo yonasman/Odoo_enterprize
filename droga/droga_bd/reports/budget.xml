@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- action for sales report -->
+    <record id="droga_budget_summary_report_action" model="ir.actions.report">
+        <field name="name">Budget Summary Report</field>
+        <field name="model">crossovered.budget</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">droga_bd.droga_budget_summary_report</field>
+        <field name="report_file">droga_bd.droga_budget_summary_report</field>
+        <field name="print_report_name">'Budget Summary Report - %s' % (object.name)
+        </field>
+        <field name="paperformat_id" ref="droga_bd.paperformat_droga_budget_landscape_a4"/>
+        <field name="binding_model_id" ref="account_budget.model_crossovered_budget"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- action for sales report -->
+    <record id="droga_budget_detail_report_action" model="ir.actions.report">
+        <field name="name">Budget Detail Report</field>
+        <field name="model">crossovered.budget</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">droga_bd.droga_budget_detail_report</field>
+        <field name="report_file">droga_bd.droga_budget_detail_report</field>
+        <field name="print_report_name">'Budget Detail Report - %s' % (object.name)
+        </field>
+        <field name="paperformat_id" ref="droga_bd.paperformat_droga_budget_landscape_a4"/>
+        <field name="binding_model_id" ref="account_budget.model_crossovered_budget"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="droga_budget_summary_report" name="Budget Summary Report">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-foreach="docs" t-as="o">
+
+
+                    <div class="page">
+
+                        <div class="oe_structure"/>
+                        <h2>
+                            <span t-field="o.name"/>
+                        </h2>
+                        <br></br>
+                        <div id="informations" class="row mt32 mb32">
+
+                            <div class="col-3 bm-2">
+                                    Period From:
+                                <p t-field="o.date_from" class="m-0"/>
+                            </div>
+                            <div class="col-3 bm-2">
+                                    Period To:
+                                <p t-field="o.date_to" class="m-0"/>
+                            </div>
+
+                        </div>
+
+
+                        <t t-set="budget" t-value="0"/>
+                        <t t-set="commitment" t-value="0"/>
+                        <t t-set="reallocation" t-value="0"/>
+                        <t t-set="addition" t-value="0"/>
+                        <t t-set="revised" t-value="0"/>
+                        <t t-set="actual" t-value="0"/>
+                        <t t-set="remaining" t-value="0"/>
+
+
+                        <table style="width:100%" class="table table-hover table-sm">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th class="small">
+                                            No
+                                    </th>
+                                    <th class="small">
+                                            Budgetary Position
+                                    </th>
+                                    <th class="small">
+                                            Analytics
+                                    </th>
+                                    <th class="small">
+                                            Period
+                                    </th>
+
+                                    <th class="small text-end">
+                                            Budget
+                                    </th>
+
+                                    <th class="small text-end">
+                                            Reallocation
+                                    </th>
+                                    <th class="small text-end">
+                                            Addition
+                                    </th>
+                                    <th class="small text-end">
+                                            Revised
+                                    </th>
+                                    <th class="small text-end">
+                                        Commitment
+                                    </th>
+                                    <th class="small text-end">
+                                            Actual
+                                    </th>
+                                    <th class="small text-end">
+                                            Remaining
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="o.crossovered_budget_line" t-as="budget_line">
+
+                                    <t t-set="budget" t-value="budget+budget_line.planned_amount"/>
+                                    <t t-set="commitment" t-value="commitment+budget_line.commitment_budget"/>
+                                    <t t-set="reallocation" t-value="reallocation+budget_line.reallaocation_addition"/>
+                                    <t t-set="addition" t-value="addition+budget_line.addition"/>
+                                    <t t-set="revised" t-value="revised+budget_line.revised_budget"/>
+                                    <t t-set="actual" t-value="actual+budget_line.practical_amount"/>
+                                    <t t-set="remaining" t-value="remaining+budget_line.remaining_balance"/>
+
+                                    <tr>
+                                        <td></td>
+                                        <td class="small">
+                                            <t t-esc="budget_line.general_budget_id.name"/>
+                                        </td>
+                                        <td class="small">
+                                            <t t-esc="budget_line.analytic_account_id.name"/>
+                                        </td>
+                                        <td class="small">
+                                            <t t-esc="budget_line.period.description"/>
+                                        </td>
+
+                                        <td class="small text-end">
+                                            <t t-esc="budget_line.planned_amount" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                        </td>
+
+                                        <td class="small text-end">
+                                            <t t-esc="budget_line.reallaocation_addition" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                        </td>
+                                        <td class="small text-end">
+                                            <t t-esc="budget_line.addition" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                        </td>
+                                        <td class="small text-end">
+                                            <t t-esc="budget_line.revised_budget" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                        </td>
+                                        <td class="small text-end">
+                                            <t t-esc="budget_line.commitment_budget" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                        </td>
+                                        <td class="small text-end">
+                                            <t t-esc="budget_line.practical_amount" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                        </td>
+                                        <td class="small text-end">
+                                            <t t-esc="budget_line.remaining_balance" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                        </td>
+                                    </tr>
+
+                                </t>
+                                <tr>
+                                    <td colspan="4"></td>
+                                    <td class="small text-end">
+                                        <strong t-esc="budget" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                    </td>
+
+                                    <td class="small text-end">
+                                        <strong t-esc="reallocation" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                    </td>
+                                    <td class="small text-end">
+                                        <strong t-esc="addition" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                    </td>
+                                    <td class="small text-end">
+                                        <strong t-esc="revised" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                    </td>
+                                    <td class="small text-end">
+                                        <strong t-esc="commitment" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                    </td>
+                                    <td class="small text-end">
+                                        <strong t-esc="actual" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                    </td>
+                                    <td class="small text-end">
+                                        <strong t-esc="remaining" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+
+            </t>
+        </t>
+
+
+    </template>
+
+    <template id="droga_budget_detail_report" name="Budget Summary Report">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-foreach="docs" t-as="o">
+
+
+                    <div class="page">
+
+                        <div class="oe_structure"/>
+                        <h2>
+                            <span t-field="o.name"/>
+                        </h2>
+                        <br></br>
+                        <div id="informations" class="row mt32 mb32">
+
+                            <div class="col-3 bm-2">
+                                    Period From:
+                                <p t-field="o.date_from" class="m-0 small"/>
+                            </div>
+                            <div class="col-3 bm-2">
+                                    Period To:
+                                <p t-field="o.date_to" class="m-0 small"/>
+                            </div>
+
+                        </div>
+                        <br></br>
+
+                        <t t-set="budget" t-value="0"/>
+                        <t t-set="commitment" t-value="0"/>
+                        <t t-set="reallocation" t-value="0"/>
+                        <t t-set="addition" t-value="0"/>
+                        <t t-set="revised" t-value="0"/>
+                        <t t-set="actual" t-value="0"/>
+                        <t t-set="remaining" t-value="0"/>
+
+
+                        <table style="width:100%" class="table table-hover table-sm">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th class="small">
+                                            No
+                                    </th>
+                                    <th class="small">
+                                            Budgetary Position
+                                    </th>
+                                    <th class="small">
+                                            Analytics
+                                    </th>
+                                    <th class="small">
+                                           Period
+                                    </th>
+
+                                    <th class="small text-end">
+                                            Budget
+                                    </th>
+
+                                    <th class="small text-end">
+                                            Reallocation
+                                    </th>
+                                    <th class="small text-end">
+                                            Addition
+                                    </th>
+                                    <th class="small text-end">
+                                            Revised
+                                    </th>
+                                    <th class="small text-end">
+                                        Commitment
+                                    </th>
+                                    <th class="small text-end">
+                                            Actual
+                                    </th>
+                                    <th class="small text-end">
+                                            Remaining
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="o.crossovered_budget_line" t-as="budget_line">
+
+                                    <t t-set="budget" t-value="budget+budget_line.planned_amount"/>
+                                    <t t-set="commitment" t-value="commitment+budget_line.commitment_budget"/>
+                                    <t t-set="reallocation" t-value="reallocation+budget_line.reallaocation_addition"/>
+                                    <t t-set="addition" t-value="addition+budget_line.addition"/>
+                                    <t t-set="revised" t-value="revised+budget_line.revised_budget"/>
+                                    <t t-set="actual" t-value="actual+budget_line.practical_amount"/>
+                                    <t t-set="remaining" t-value="remaining+budget_line.remaining_balance"/>
+
+                                    <tr>
+                                        <td></td>
+                                        <td class="small">
+                                            <strong t-esc="budget_line.general_budget_id.name"/>
+                                        </td>
+                                        <td class="small">
+                                            <strong t-esc="budget_line.analytic_account_id.name"/>
+                                        </td>
+                                        <td class="small">
+                                            <strong t-esc="budget_line.period.description"/>
+                                        </td>
+
+                                        <td class="small text-end">
+                                            <strong t-esc="budget_line.planned_amount" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                        </td>
+
+                                        <td class="small text-end">
+                                            <strong t-esc="budget_line.reallaocation_addition" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                        </td>
+                                        <td class="small text-end">
+                                            <strong t-esc="budget_line.addition" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                        </td>
+                                        <td class="small text-end">
+                                            <strong t-esc="budget_line.revised_budget" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                        </td>
+                                        <td class="small text-end">
+                                            <strong t-esc="budget_line.commitment_budget" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                        </td>
+                                        <td class="small text-end">
+                                            <strong t-esc="budget_line.practical_amount" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                        </td>
+                                        <td class="small text-end">
+                                            <strong t-esc="budget_line.remaining_balance" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                        </td>
+                                    </tr>
+
+                                    <t t-foreach="budget_line.budget_line_details" t-as="budget_line_detail">
+                                        <tr>
+                                            <td class="small">
+
+                                            </td>
+                                            <td class="small">
+                                                <t t-esc="budget_line_detail.account.code"/>
+                                            </td>
+                                            <td class="small" colspan="2">
+                                                <t t-esc="budget_line_detail.account.name"/>
+                                            </td>
+                                            <td class="small text-end">
+                                                <t t-esc="budget_line_detail.budget_amount" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                            </td>
+
+                                            <td class="small text-end">
+                                                <t t-esc="budget_line_detail.reallaocation" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                            </td>
+                                            <td class="small text-end">
+                                                <t t-esc="budget_line_detail.addition" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                            </td>
+                                            <td class="small text-end">
+                                                <t t-esc="budget_line_detail.revised_budget" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                            </td>
+                                            <td class="small text-end">
+                                                <t t-esc="budget_line_detail.commitment_budget" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                            </td>
+                                            <td class="small text-end">
+                                                <t t-esc="budget_line_detail.actual" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                            </td>
+                                            <td class="small text-end">
+                                                <t t-esc="budget_line_detail.remaining_balance" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                            </td>
+                                        </tr>
+                                    </t>
+
+                                </t>
+                                <tr>
+                                    <td colspan="4"></td>
+                                    <td class=" text-end">
+                                        <strong t-esc="budget" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                    </td>
+
+                                    <td class=" text-end">
+                                        <strong t-esc="reallocation" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                    </td>
+                                    <td class=" text-end">
+                                        <strong t-esc="addition" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                    </td>
+                                    <td class=" text-end">
+                                        <strong t-esc="revised" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                    </td>
+                                    <td class=" text-end">
+                                        <strong t-esc="commitment" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                    </td>
+                                    <td class=" text-end">
+                                        <strong t-esc="actual" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                    </td>
+                                    <td class=" text-end">
+                                        <strong t-esc="remaining" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+
+            </t>
+        </t>
+
+
+    </template>
+
+
+
+
+
+</odoo>

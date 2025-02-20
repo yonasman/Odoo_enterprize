@@ -1,0 +1,9 @@
+<odoo>
+    <record id="action_droga_project_progress_xlsx" model="ir.actions.report">
+        <field name="name">Project Progress XLSX Report</field>
+        <field name="model">project.project</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">droga_project_reports.project_report_xlsx</field>
+        <field name="print_report_name">'Progress_Report_for_'+ object.project_id.name</field>
+    </record>
+</odoo>

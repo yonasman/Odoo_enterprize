@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <!-- bank deposit voucher -->
+    <record id="droga_hr_guarantee_letter_report_action" model="ir.actions.report">
+        <field name="name">Guarantee Letter</field>
+        <field name="model">droga.hr.letter</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">droga_hr.droga_hr_guarantee_letter_report_report</field>
+        <field name="report_file">droga_hr.droga_hr_guarantee_letter_report_report</field>
+        <field name="print_report_name">'Guarantee Letter - %s' % (object.name)
+        </field>
+        <field name="binding_model_id" ref="model_droga_hr_letter"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="droga_hr_guarantee_letter_report_report" name="Letter">
+        <t t-call="web.html_container">
+
+            <div id="non-printable">
+                <button class="btn btn-primary btn-sm o_report_print" onclick="window.print();">Print Preview
+                </button>
+            </div>
+            <br></br>
+
+            <t t-call="web.basic_layout">
+
+                <style type="text/css">
+
+                    /* Default left, right, top, bottom margin is 2cm */
+                    @page {
+                    size: A4 portrait;
+                    margin-top: 7cm;
+                    margin-left:1.5cm;
+                    margin-right:1cm;
+                    margin-bottom:0cm;
+                    }
+
+                    @media print
+                    {
+                    #non-printable { visibility: hidden; }
+                    #wrapwrap { visibility: visible; }
+                    }
+                </style>
+
+                <t t-foreach="docs" t-as="o">
+
+                    <div class="page">
+                        <div class="oe_structure"/>
+
+                        <h5 style="text-align: right;">ቁጥር:
+                            <u>
+                                <spam t-field="o.name"/>
+                            </u>
+                        </h5>
+                        <h5 style="text-align: right;">ቀን:
+                            <u>
+
+                            </u>
+                        </h5>
+
+                        <h5>ለ:
+                            <u>
+                                <spam t-field="o.company_name"/>
+                            </u>
+                        </h5>
+                        <h5>አዲስ አበባ</h5>
+
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-12 bm-2">
+                                <center>
+                                    <h5>ጉዳዩ፡-
+                                        <u>ዋስትናን ይመለከታል</u>
+                                    </h5>
+                                </center>
+
+                            </div>
+                        </div>
+
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-12 bm-2">
+                                <p style="text-align: justify;">
+                                    <h5>የድርጀታችን የስራ ባልደረባ የሆኑት አቶ/ ወ/ሮ / ወ/ት
+                                        <u>
+                                            <span t-field="o.employee.amharic_name" class="m-0"/>
+                                        </u>
+                                        በቀን 12/10/2015 ዓ.ም
+                                        በፃፉት ማመልከቻ ለአቶ/ ወ/ሮ / ወ/ት
+                                        <u>
+                                            <span t-field="o.guarantee_for" class="m-0"/>
+                                        </u>
+                                        ዋስ ለመሆን እንዲችሉ የድርጅታችን ቋሚ ሰራተኛ መሆናቸውንና
+                                        ደመወዛቸውን ገልጸን ደብዳቤ እንድንጽፍላቸው ጠይቀውናል፡፡
+                                    </h5>
+                                </p>
+
+                                <p style="text-align: justify;">
+                                    <h5>ስለሆነም አቶ
+                                        <u>
+                                            <span t-field="o.employee.amharic_name" class="m-0"/>
+                                        </u>
+                                        ያልተጣራ ወርሃዊ ደመወዝ ብር<span t-field="o.employee_salary"/>(<span
+                                                t-field="o.employee_salary_word"/>) እና
+                                        የተለያዩ ጥቅማጥቅሞች እየተከፈላቸው የሚሰሩ ቋሚ ሰራተኛ መሆናቸውን እያሳወቅን ሠራተኛው በጡረታ ቢገለሉ
+                                        ወይም በተለያየ ምክንያት ስራቸውን ቢለቁ የምናሳውቅ መሆኑን እንገልጻለን ፡፡
+                                    </h5>
+                                </p>
+
+                            </div>
+                        </div>
+
+                        <br></br>
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-12 bm-2">
+                                <p>
+                                    <h5 style="text-align: right;">ከሠላምታ ጋር</h5>
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+    <record id="droga_hr_work_experience_report_action" model="ir.actions.report">
+        <field name="name">Work Experience Letter</field>
+        <field name="model">droga.hr.letter</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">droga_hr.droga_hr_work_experience_report_report</field>
+        <field name="report_file">droga_hr.droga_hr_work_experience_report_report</field>
+        <field name="print_report_name">'Work Experience - %s' % (object.name)
+        </field>
+        <field name="binding_model_id" ref="model_droga_hr_letter"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="droga_hr_work_experience_report_report" name="Letter">
+        <t t-call="web.html_container">
+
+            <div id="non-printable">
+                <button class="btn btn-primary btn-sm o_report_print" onclick="window.print();">Print Preview
+                </button>
+            </div>
+            <br></br>
+
+            <t t-call="web.basic_layout">
+
+                <style type="text/css">
+
+                    /* Default left, right, top, bottom margin is 2cm */
+                    @page {
+                    size: A4 portrait;
+                    margin-top: 7cm;
+                    margin-left:1.5cm;
+                    margin-right:1cm;
+                    margin-bottom:0cm;
+                    }
+
+                    @media print
+                    {
+                    #non-printable { visibility: hidden; }
+                    #wrapwrap { visibility: visible; }
+                    }
+                </style>
+
+                <t t-foreach="docs" t-as="o">
+
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <h5 style="text-align: right;">ቁጥር:
+                            <u>
+                                <spam t-field="o.name"/>
+                            </u>
+                        </h5>
+                        <h5 style="text-align: right;">ቀን:
+                            <u>
+
+                            </u>
+                        </h5>
+
+                        <h5>ለ:
+                            <u>
+                                <spam t-field="o.company_name"/>
+                            </u>
+                        </h5>
+                        <h5>አዲስ አበባ</h5>
+
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-12 bm-2">
+                                <center>
+                                    <h5>ጉዳዩ፡-
+                                        <u>በስራ ላይ እያሉ የስራ ልምድ ማስረጃ ስለመስጠት</u>
+                                    </h5>
+                                </center>
+
+                            </div>
+                        </div>
+
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-12 bm-2">
+                                <p style="text-align: justify;">
+                                    <h5>
+                                        የድርጀታችን ድሮጋ ፋርማ ኃ/የተ/የግ/ማህበር የስራ ባልደረባ የሆኑት አቶ/ ወ/ሮ / ወ/ት
+                                        <u>
+                                            <span t-field="o.employee.amharic_name" class="m-0"/>
+                                        </u>
+                                        በቀን ______________ዓ.ም በፃፉት ማመልከቻ በስራ ላይ እያሉ የስራ ልምድ ማስረጃ እንዲፃፍላቸው ጠይቀዋል፡፡
+
+                                    </h5>
+                                </p>
+
+                                <p style="text-align: justify;">
+                                    <h5>
+
+                                        በዚህም መሠረት አቶ/ ወ/ሮ / ወ/ት
+                                        <u>
+                                            <span t-field="o.employee.amharic_name" class="m-0"/>
+                                        </u>
+                                        ከ
+                                        <u>
+                                            <span t-field="o.employee.hire_date_ec" class="m-0"/>
+                                        </u>
+                                        ዓ.ም ጀምሮ የህ ደብዳቤ
+                                        እስከተጻፈበት ድረስ
+                                        <span
+                                                t-field="o.employee.amharic_position"/>
+                                        የስራ መደብ በወር ያልተጣራ<span
+                                            t-field="o.employee_salary"/>(<span t-field="o.employee_salary_word"/>)
+                                        እየተከፈላቸው
+                                        እያገለገሉ እንደሚገኙ እያሳወቅን የሚጠበቅባቸውን የመንግስት የስራ ግብር እና የጡረታ መዋጮ መምሪያው በሚያዘው መሠረት
+                                        እየተቀነሰ ለሚመለከተው የመንግስት
+                                        አካል ገቢ እየተደረገ መሆኑን እንገልፃለን፡፡
+
+                                    </h5>
+                                </p>
+                                <p>ማስታወሻ፡- ይህ የምስክር ወረቀት እንደ ስራ መልቀቂያ አያገለግልም፡፡</p>
+
+                            </div>
+                        </div>
+
+                        <br></br>
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-12 bm-2">
+                                <p>
+                                    <h5 style="text-align: right;">ከሠላምታ ጋር</h5>
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

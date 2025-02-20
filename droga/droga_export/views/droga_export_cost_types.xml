@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="droga_export_cost_types_tree" model="ir.ui.view">
+        <field name="name">droga.export.cost.type.tree</field>
+        <field name="model">droga.export.cost.type</field>
+        <field name="arch" type="xml">
+            <tree string="" editable="bottom" create="1">
+                <field name="type"></field>
+                <field name="type_apply"></field>
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="droga_export_cost_types_action" model="ir.actions.act_window">
+        <field name="name">Export cost types</field>
+        <field name="res_model">droga.export.cost.type</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <menuitem
+            id="droga_export_cost_types_menu"
+            name="Export cost types"
+            action="droga_export_cost_types_action"
+            parent="sale.menu_sales_config"
+            sequence="41"/>
+</odoo>

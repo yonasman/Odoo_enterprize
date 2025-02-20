@@ -1,0 +1,23 @@
+<odoo>
+
+<!-- menu for Loan anagment -->
+<record id="account_loan_type_action" model="ir.actions.act_window">
+    <field name="name">Loan Type</field>
+    <field name="res_model">account.loan.type</field>
+    <field name="view_mode">tree,form</field>
+</record>
+
+
+<record id="account_loan_type_view_tree" model="ir.ui.view">
+        <field name="name">account.loan.type.view.tree</field>
+        <field name="model">account.loan.type</field>
+        <field name="arch" type="xml">
+            <tree string="Bank Loan Type">
+                  <field name="name"/>
+                  <field name="isinterest"/>
+                        
+            </tree>
+        </field>
+    </record>
+
+</odoo>

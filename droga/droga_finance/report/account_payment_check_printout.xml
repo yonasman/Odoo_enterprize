@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="droga_account_check_printout_cbe_action" model="ir.actions.report">
+        <field name="name">Check Print</field>
+        <field name="model">account.payment</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">droga_finance.account_payment_check_printout_report</field>
+        <field name="report_file">droga_finance.account_payment_check_printout_report</field>
+        <field name="print_report_name">'Check print - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_account_payment"/>
+        <field name="paperformat_id" ref="droga_finance.paperformat_droga_check_print_a4"/>
+        <field name="binding_type">report</field>
+    </record>
+    <template id="account_payment_check_printout_report">
+        <t t-call="web.html_container">
+
+            <style type="text/css">
+
+
+                @media print {
+
+
+                .example-screen {
+                display: none;
+                }
+
+                .example-print {
+                display: block;
+                margin: 0cm;
+                }
+                }
+
+                @media print
+                {
+                #non-printable { visibility: hidden; }
+                #wrapwrap { visibility: visible; }
+                }
+
+            </style>
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.basic_layout">
+                    <t t-foreach="docs" t-as="o">
+                        <div class="page">
+
+                            <!-- get setting -->
+                            <t t-set="name_width" t-value="o.journal_id.check_setting.name_width"/>
+
+                            <t t-set="date_left_p" t-value="o.journal_id.check_setting.date_left_p"/>
+                            <t t-set="date_top_p" t-value="o.journal_id.check_setting.date_top_p"/>
+                            <t t-set="name_left_p" t-value="o.journal_id.check_setting.name_left_p"/>
+                            <t t-set="name_top_p" t-value="o.journal_id.check_setting.name_top_p"/>
+                            <t t-set="amount_left_p" t-value="o.journal_id.check_setting.amount_left_p"/>
+                            <t t-set="amount_top_p" t-value="o.journal_id.check_setting.amount_top_p"/>
+                            <t t-set="amount_word_left_p" t-value="o.journal_id.check_setting.amount_word_left_p"/>
+                            <t t-set="amount_world_top_p" t-value="o.journal_id.check_setting.amount_world_top_p"/>
+                            <t t-set="amount_word_width" t-value="o.journal_id.check_setting.amount_word_width"/>
+                            <t t-set="amount_word_width1" t-value="o.journal_id.check_setting.amount_word_width1"/>
+
+
+                            <t t-set="amount_word_line_spacing"
+                               t-value="o.journal_id.check_setting.amount_word_line_spacing"/>
+
+                            <style type="text/css">
+
+
+                                .padding_date{
+                                padding-left:<t t-esc="date_left_p"/>mm;
+                                padding-top:<t t-esc="date_top_p"/>mm;
+                                }
+
+                                .padding_name{
+                                padding-left:<t t-esc="name_left_p"/>mm;
+                                padding-top:<t t-esc="name_top_p"/>mm;
+                                width:<t t-esc="name_width"/>mm;
+                                }
+
+                                .padding_amount{
+                                padding-left:<t t-esc="amount_left_p"/>mm;
+                                padding-top:<t t-esc="amount_top_p"/>mm;
+                                }
+
+                                .padding_amount_word{
+                                padding-left:<t t-esc="amount_word_left_p"/>mm;
+                                padding-top:<t t-esc="amount_world_top_p"/>mm;
+
+
+                                }
+
+                                .amount_word_line_spacing{
+                                margin-top:<t t-esc="amount_word_line_spacing"/>mm;
+                                }
+
+                                p:first-line {
+                                line-height:100% !important;
+                                }
+
+                                .supplierName {
+                                text-transform: lowercase;
+                                }
+
+                                .supplierName::first-letter {
+                                text-transform: uppercase;
+                                }
+
+
+                            </style>
+
+                            <div class="position-absolute padding_date">**
+                                <t
+                                        t-esc="o.check_due_date"
+                                        t-options='{"widget": "date","format": "dd-MM-yyyy"}'/>
+                                **
+                            </div>
+
+                            <t t-if="o.partner_id.name=='One Time Vendor'">
+                                <div class="position-absolute padding_name text-wrap supplierName">**<t
+                                        t-esc="o.vendor_supplier"/>**
+                                </div>
+                            </t>
+
+                            <t t-if="o.partner_id.name!='One Time Vendor'">
+                                <div class="position-absolute padding_name text-wrap supplierName">**<t
+                                        t-esc="o.partner_id.name"/>**
+                                </div>
+                            </t>
+
+
+                            <div class="position-absolute padding_amount_word">
+                                <p>**
+                                    <t t-esc="o.first_line_amount_word"/>
+                                    <t t-if="o.second_line_amount_word==''">
+                                        **
+                                    </t>
+                                </p>
+
+                                <p class="amount_word_line_spacing">
+
+
+                                    <t t-if="o.second_line_amount_word!=''">
+                                        <t t-esc="o.second_line_amount_word"/>
+
+                                        <t t-if="o.third_line_amount_word==''">
+                                            **
+                                        </t>
+
+                                    </t>
+
+                                </p>
+                                <p class="amount_word_line_spacing">
+                                    <t t-if="o.third_line_amount_word!=''">
+                                        <t t-esc="o.third_line_amount_word"/>
+                                        **
+                                    </t>
+
+                                </p>
+
+                            </div>
+                            <div class="position-absolute padding_amount">**<t
+                                    t-esc="'{0:,.2f}'.format(o.amount)"/>**
+                            </div>
+
+
+                        </div>
+
+                    </t>
+                </t>
+            </t>
+
+
+        </t>
+
+
+    </template>
+</odoo>

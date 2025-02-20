@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- tree view -->
+    <record id="droga_purchase_request_rfq_landed_cost_main_tree_view" model="ir.ui.view">
+        <field name="name">Expected Costs</field>
+        <field name="model">droga.purchase.request.rfq.landed.cost.main</field>
+        <field name="arch" type="xml">
+            <tree string="Expected Costs" create="0" edit="0" delete="0">
+                <field name="rfq_id"/>
+                <field name="product_id"/>
+                <field name="rfq_date"/>
+                <field name="amount_total_etb" sum="total"/>
+                <field name="state" string="RFQ Status" decoration-warning="state in('Draft')" decoration-info="state in('Winner Picked')"
+                       decoration-danger="state == 'Cancel'"
+                       decoration-success="state in('CEO Approval','Committee Approval')" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- search view -->
+    <record id="droga_purchase_request_rfq_landed_cost_main_search" model="ir.ui.view">
+        <field name="name">Expected Costs</field>
+        <field name="model">droga.purchase.request.rfq.landed.cost.main</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="rfq_id"/>
+                <field name="product_id"/>
+                <field name="rfq_date"/>
+                <field name="amount_total_etb"/>
+                <field name="state" string="RFQ Status"/>
+                <separator/>
+                <filter name="Checked" string="Checked" domain="[('state', '=', 'Checked')]"/>
+                <filter name="Operation Manager" string="Operation Manager"
+                        domain="[('state', '=', 'Operation Manager')]"/>
+                <filter name="ceo_approved" string="CEO Approved" domain="[('state', '=', 'CEO Approval')]"/>
+                <separator/>
+                <filter name="rfq_date" string="Date" date="rfq_date"/>
+            </search>
+        </field>
+    </record>
+
+</odoo>

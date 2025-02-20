@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--header Template -->
+        <template id="droga_pharma_header_layout">
+            <t t-set="company" t-value="user.company_id"/>
+
+            <div class="header">
+                 <div class="row">
+                     <head>
+                <style>
+                    @font-face {
+                        font-family: amharic_font;
+                        src: url('/droga_pharma/static/fonts/amharic_font.ttf') format('truetype');
+                    }
+                </style>
+            </head>
+                <div style="content: ''; display: table; clear: both; height:50px; justify-content: space-between;">
+                    <div style="float: left; width: 33.33%; margin-left: 5%">
+                        <h2>DROGA PHARMACY</h2>
+                        <h5 style="margin-left: 19%; font-family: amharic_font, Arial, sans-serif;">ድሮጋ ፋርማሲ</h5>
+                        <h5>+251965757515, +251966565664</h5>
+                    </div>
+                    <div style="float: left; width: 28%; margin-left: 5%; margin-bottom:2%">
+                        <img t-if="company.logo_web" t-att-src="image_data_uri(company.logo_web)" style="width: 45%; height: 100%; object-fit: cover;"
+                             alt="Logo"/>
+                    </div>
+                    <div style="float: left; width: 28%;">
+                        <h2>Looking After Your Health!</h2>
+                        <h5 style="margin-left: 17%; font-family: amharic_font, Arial, sans-serif;">ጤናዎን በመጠበቅ ላይ!</h5>
+                    </div>
+                </div>
+            <hr style="height:2px;border-width:0;color:black;background-color:black"/>
+            </div>
+                <div t-if="company.logo or company.report_header" class="row zero_min_height">
+                    <div class="col-12">
+                        <div style="border-bottom: 1px solid black;"/>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <!--footer Template-->
+        <template id="droga_pharma_footer_layout">
+            <t t-set="company" t-value="user.company_id"/>
+            <div class="footer">
+                <div class="text-center" style="border-top: 1px solid black;">
+                    <div style="display: flex; justify-content: space-between; margin-left: 4.8%">
+                        <p style="display: inline; margin-right: 5%">Region: Addis Ababa</p>
+                        <p style="display: inline; margin-right: 5%">Subcity: Arada</p>
+                        <p style="display: inline; margin-right: 5%">Woreda: 08</p>
+                        <p style="display: inline; margin-right: 5%">Kebelle: 14</p>
+                        <p style="display: inline;">House No.: 379</p>
+                    </div>
+                    <div style="display: flex;">
+                        <p style="display: inline; margin-right: 5%">Email: info@drogapharmacy.com</p>
+                        <p style="display: inline; margin-right: 5%">Web: https://drogapharmacy.com</p>
+                        <p style="display: inline;">Tin: 0045080232</p>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </data>
+</odoo>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="sequence_market_analysis" model="ir.sequence">
+        <field name="name">Prescription Sequence</field>
+        <field name="code">droga.pharma.prescription.sequence</field>
+        <field name="prefix">PRP_</field>
+    </record>
+    <record id="droga_pharma_prescription_action" model="ir.actions.act_window">
+        <field name="name">Prescription</field>
+        <field name="res_model">droga.pharma.priscription</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="view_droga_pharma_prescription" model="ir.ui.view">
+        <field name="name">droga.prescription.tree</field>
+        <field name="model">droga.pharma.priscription</field>
+        <field name="arch" type="xml">
+            <tree string="">
+                <field name="code"/>
+                <field name="card_no"/>
+                <field name="client"/>
+                <field name="institution"/>
+            </tree>
+        </field>
+    </record>
+    <record id="droga_pharma_prescription_form" model="ir.ui.view">
+        <field name="name">droga.pharma.prescription.form</field>
+        <field name="model">droga.pharma.priscription</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="card_no"/>
+                            <field name="institution"/>
+                            <field name="tel"/>
+                            <field name="client"/>
+                            <field name="gender"/>
+                            <field name="mobile" readonly="0"/>
+                            <field name="inpatient"/>
+                        </group>
+                        <group>
+                            <field name="weight" string="Weight (KG)"/>
+                            <field name="dob"/>
+                            <field name="age"/>
+                            <field name="region"/>
+                            <field name="town"/>
+                            <field name="wereda"/>
+                            <field name="kebele"/>
+                            <field name="house_no"/>
+                            <field name="diagnosis"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Prescription Description">
+                            <field name="prescription_drugs">
+                                <tree editable="bottom">
+                                    <field name="drug" required="1"/>
+                                    <field name="quantity"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

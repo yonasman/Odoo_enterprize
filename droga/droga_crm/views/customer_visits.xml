@@ -1,0 +1,799 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<odoo>
+    <record id="droga_crm_customer_visit_view_tree" model="ir.ui.view">
+        <field name="name">droga.customer.visit.header.view.tree</field>
+        <field name="model">droga.customer.visit.header</field>
+        <field name="arch" type="xml">
+            <tree string="" editable="top" delete="0">
+                <field name="pr_sales" options='{"no_open": True, "no_create": True}'></field>
+                <field name="pr_sales_logged" invisible="1"></field>
+                <field name="is_record_owner" invisible="1"/>
+                <field name="id" invisible="1"/>
+                <field name="month" attrs="{'readonly': [('id', '!=', False)]}"></field>
+                <field name="year" attrs="{'readonly': [('id', '!=', False)]}"></field>
+                <field name="pr_avail_areas" invisible="1"/>
+                <field name="state"></field>
+                <field name="approver" options='{"no_open": True, "no_create": True}' readonly="True" required="True"></field>
+                <field name="is_record_owner" invisible="True"></field>
+                <field name="is_approver" invisible="True"></field>
+
+                <button icon="fa-credit-card-alt"
+                        attrs="{'invisible': [('state', 'not in', ('draft','requested','approved'))]}"
+                        type="object" string=" Visit detail"
+                        name="visit_detail_open" class="oe_stat_button"/>
+                <button icon="fa-credit-card-alt"
+                        attrs="{'invisible': ['|',('is_record_owner','=',False),('state', '!=', ('draft'))]}"
+                        type="object" string=" Request approval"
+                        name="request_approval" class="oe_stat_button"/>
+                <button icon="fa-credit-card-alt"
+                        type="object" string=" Plan analysis"
+                        name="plan_analysis" class="oe_stat_button"/>
+                <button icon="fa-credit-card-alt"
+                        attrs="{'invisible': ['|',('is_approver','=',False),('state', '!=', ('requested'))]}"
+                        type="object" string=" Revise"
+                        name="revise" class="oe_stat_button"/>
+                <button icon="fa-credit-card-alt"
+                        attrs="{'invisible': ['|',('is_approver','=',False),('state', '!=', ('requested'))]}"
+                        type="object" string=" Approve"
+                        name="approve" class="oe_stat_button"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_crm_customer_visit_view_kanban" model="ir.ui.view">
+        <field name="name">droga.customer.visit.header.view.kanban</field>
+        <field name="model">droga.customer.visit.header</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_small_column" on_create="quick_create" quick_create_view="droga_crm.droga_crm_customer_visit_view_form">
+                <field name="pr_sales"></field>
+                <field name="pr_sales_logged"></field>
+                <field name="is_record_owner"/>
+                <field name="id" invisible="1"/>
+                <field name="month" attrs="{'readonly': [('id', '!=', False)]}"></field>
+                <field name="year" attrs="{'readonly': [('id', '!=', False)]}"></field>
+                <field name="pr_avail_areas"/>
+                <field name="city_name"></field>
+                <field name="state"></field>
+                <field name="approver"></field>
+                <field name="is_record_owner"></field>
+                <field name="is_approver"></field>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click">
+                            <div class="oe_kanban_details">
+                                <ul>
+                                    <li>
+                                        <field name="descr"></field>
+                                    </li>
+                                    <li>
+                                        <b>Status: </b>
+                                        <field name="state"></field>
+                                    </li>
+                                    <li>
+                                        <strong>Approver: </strong>
+                                        <field name="approver" options='{"no_open": True, "no_create": True}'></field>
+                                    </li>
+
+                                    <table>
+                                        <tr>
+                                            <th>
+                                                <button type="object" class="btn btn-primary btn-sm"
+                                                        name="visit_detail_open">Visit detail
+                                                </button>
+                                            </th>
+                                            <th>
+                                                <button type="object" class="btn btn-primary btn-sm"
+                                                        attrs="{'invisible': ['|',('is_record_owner','=',False),('state', '!=', ('draft'))]}"
+                                                        name="request_approval">Request approval
+                                                </button>
+                                            </th>
+                                            <th>
+                                                <button type="object"
+                                                        name="plan_analysis" style="top-margin:3px">Plan analysis
+                                                </button>
+                                            </th>
+                                        </tr>
+                                    </table>
+
+
+                                </ul>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="droga_crm_customer_visit_view_form" model="ir.ui.view">
+        <field name="name">droga.customer.visit.header.view.form</field>
+        <field name="model">droga.customer.visit.header</field>
+        <field name="arch" type="xml">
+            <form delete="0">
+                <group>
+                    <field name="pr_sales" options='{"no_open": True, "no_create": True}' readonly="1"></field>
+                    <field name="pr_sales_logged" invisible="1"></field>
+                    <field name="is_record_owner" invisible="1"/>
+                    <field name="month" attrs="{'readonly': [('id', '!=', False)]}"></field>
+                    <field name="year" attrs="{'readonly': [('id', '!=', False)]}"></field>
+                    <field name="state"></field>
+                    <field name="approver" options='{"no_open": True, "no_create": True}' readonly="True" required="True"></field>
+                    <field name="is_record_owner" invisible="True"></field>
+                    <field name="is_approver" invisible="True"></field>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="droga_crm_customer_visit_header_view_form_popup" model="ir.ui.view">
+        <field name="name">droga.customer.visit.header.view.form_popup</field>
+        <field name="model">droga.customer.visit.header</field>
+        <field name="arch" type="xml">
+            <form delete="0">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button icon="fa-credit-card-alt"
+                                type="object" string=" Plan analysis"
+                                name="plan_analysis" class="oe_stat_button"/>
+                    </div>
+                    <notebook>
+                        <page string="Week 1 schedule">
+                            <div>
+                                <field name="wk1_from" readonly="True"></field>
+                                -
+                                <field name="wk1_to" readonly="True"></field>
+                            </div>
+                            <field name="week_1_domain" mode="tree,kanban">
+                                <tree editable="top" delete="1" expand="1">
+                                    <field name="visit_client" options="{'no_create':True,'no_open':True}"
+                                           domain="[('is_company', '=',True),('is_cust_available','=',True),('company_id','=',allowed_company_ids[0])]"></field>
+                                    <field name="cont_plan_des"></field>
+                                    <button icon="fa-credit-card-alt"
+                                            type="object" string=" Contact plan"
+                                            name="visit_contact_open" class="oe_stat_button"/>
+
+                                    <field name="city_name" invisible="1"></field>
+                                    <button icon="fa-credit-card-alt"
+                                            type="object" string=" Schedule"
+                                            name="visit_schedule_open" class="oe_stat_button"/>
+
+                                    <field name="visit_date"></field>
+                                    <button icon="fa-credit-card-alt"
+                                            type="object" string=" Add"
+                                            name="add_visit" class="oe_stat_button"/>
+                                    <field name="planned_visit_selection"></field>
+                                    <field name="remark" string='Comment'></field>
+                                </tree>
+                                <form string="Week 1">
+                                    <group>
+                                        <field name="visit_client" options="{'no_create':True,'no_open':True}"
+                                           domain="[('is_company', '=',True),('is_cust_available','=',True),('company_id','=',allowed_company_ids[0])]"></field>
+                                        <field name="visit_date"></field>
+                                        <field name="planned_visit_selection"></field>
+                                        <field name="remark" string='Comment'></field>
+                                        <button icon="fa-credit-card-alt"
+                                                type="object" string=" Contact plan"
+                                                name="visit_contact_open" class="oe_highlight"/>
+                                        <button icon="fa-credit-card-alt"
+                                                type="object" string=" Schedule"
+                                                name="visit_schedule_open" class="oe_highlight"/>
+                                        <button icon="fa-credit-card-alt"
+                                            type="object" string=" Add"
+                                            name="add_visit" class="oe_stat_button"/>
+                                    </group>
+                                </form>
+                                <kanban class="o_kanban_mobile" limit="500">
+                                    <field name="visit_client" options="{'no_create':True,'no_open':True}"
+                                           domain="[('is_company', '=',True),('is_cust_available','=',True),('company_id','=',allowed_company_ids[0])]"></field>
+                                    <field name="cont_plan_des"></field>
+
+                                    <field name="city_name" invisible="1"></field>
+
+
+                                    <field name="visit_date"></field>
+                                    <field name="remark" string='Comment'></field>
+                                    <field name="planned_visit_selection"></field>
+                                    <templates>
+                                        <t t-name="kanban-box">
+                                            <div t-attf-class="oe_kanban_global_click" on_create="quick_create">
+                                                <div class="oe_kanban_details">
+                                                    <ul>
+                                                        <li>
+                                                            <strong class="o_kanban_record_title">Customer:
+                                                                <field name="visit_client" options="{'no_create':True,'no_open':True}"
+                                           domain="[('is_company', '=',True),('is_cust_available','=',True),('company_id','=',allowed_company_ids[0])]"></field>
+                                                            </strong>
+                                                        </li>
+                                                        <li>
+                                                            Visit Date:
+                                                            <field name="visit_date"></field>
+                                                            <span> </span>
+                                                            <field name="planned_visit_selection"></field>
+                                                        </li>
+                                                        <li>
+                                                            Comment:
+                                                            <field name="remark"></field>
+                                                        </li>
+                                                        <button icon="fa-credit-card-alt"
+                                                            type="object" string=" Add"
+                                                            name="add_visit" class="oe_stat_button"/>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </templates>
+
+
+                                </kanban>
+                            </field>
+                        </page>
+                        <page string="Week 2 schedule">
+                            <div>
+                                <field name="wk2_from" readonly="True"></field>
+                                -
+                                <field name="wk2_to" readonly="True"></field>
+                            </div>
+                            <field name="week_2_domain" mode="kanban,tree">
+                                <tree editable="top" delete="1" expand="1">
+                                    <field name="visit_client" options="{'no_create':True,'no_open':True}"
+                                           domain="[('is_company', '=',True),('is_cust_available','=',True),('company_id','=',allowed_company_ids[0])]"></field>
+                                    <field name="cont_plan_des"></field>
+                                    <button icon="fa-credit-card-alt"
+                                            type="object" string=" Contact plan"
+                                            name="visit_contact_open" class="oe_stat_button"/>
+
+                                    <field name="city_name" invisible="1"></field>
+                                    <button icon="fa-credit-card-alt"
+                                            type="object" string=" Schedule"
+                                            name="visit_schedule_open" class="oe_stat_button"/>
+
+                                    <field name="visit_date"></field>
+                                    <button icon="fa-credit-card-alt"
+                                            type="object" string=" Add"
+                                            name="add_visit" class="oe_stat_button"/>
+                                    <field name="planned_visit_selection"></field>
+                                    <field name="remark" string='Comment'></field>
+                                </tree>
+                                <form string="Week 1">
+                                    <group>
+                                        <field name="visit_client" options="{'no_create':True,'no_open':True}"
+                                           domain="[('is_company', '=',True),('is_cust_available','=',True),('company_id','=',allowed_company_ids[0])]"></field>
+                                        <field name="visit_date"></field>
+                                        <field name="planned_visit_selection"></field>
+                                        <field name="remark" string='Comment'></field>
+                                        <button icon="fa-credit-card-alt"
+                                                type="object" string=" Contact plan"
+                                                name="visit_contact_open" class="oe_highlight"/>
+                                        <button icon="fa-credit-card-alt"
+                                                type="object" string=" Schedule"
+                                                name="visit_schedule_open" class="oe_highlight"/>
+                                        <button icon="fa-credit-card-alt"
+                                            type="object" string=" Add"
+                                            name="add_visit" class="oe_stat_button"/>
+                                    </group>
+                                </form>
+                                <kanban class="o_kanban_mobile" limit="500">
+                                    <field name="visit_client" options="{'no_create':True,'no_open':True}"
+                                           domain="[('is_company', '=',True),('is_cust_available','=',True),('company_id','=',allowed_company_ids[0])]"></field>
+                                    <field name="cont_plan_des"></field>
+
+                                    <field name="city_name" invisible="1"></field>
+
+
+                                    <field name="visit_date"></field>
+                                    <field name="remark" string='Comment'></field>
+                                    <field name="planned_visit_selection"></field>
+                                    <templates>
+                                        <t t-name="kanban-box">
+                                            <div t-attf-class="oe_kanban_global_click" on_create="quick_create">
+                                                <div class="oe_kanban_details">
+                                                    <ul>
+                                                        <li>
+                                                            <strong class="o_kanban_record_title">Customer:
+                                                                <field name="visit_client" options="{'no_create':True,'no_open':True}"
+                                           domain="[('is_company', '=',True),('is_cust_available','=',True),('company_id','=',allowed_company_ids[0])]"></field>
+                                                            </strong>
+                                                        </li>
+                                                        <li>
+                                                            Visit Date:
+                                                            <field name="visit_date"></field>
+                                                            <span> </span>
+                                                            <field name="planned_visit_selection"></field>
+                                                        </li>
+                                                        <li>
+                                                            Comment:
+                                                            <field name="remark"></field>
+                                                        </li>
+                                                        <button icon="fa-credit-card-alt"
+                                                            type="object" string=" Add"
+                                                            name="add_visit" class="oe_stat_button"/>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </templates>
+
+
+                                </kanban>
+                            </field>
+                        </page>
+                        <page string="Week 3 schedule">
+                            <div>
+                                <field name="wk3_from" readonly="True"></field>
+                                -
+                                <field name="wk3_to" readonly="True"></field>
+                            </div>
+                            <field name="week_3_domain" mode="tree,kanban">
+                                <tree editable="top" delete="1" expand="1">
+                                    <field name="visit_client" options="{'no_create':True,'no_open':True}"
+                                           domain="[('is_company', '=',True),('is_cust_available','=',True),('company_id','=',allowed_company_ids[0])]"></field>
+                                    <field name="cont_plan_des"></field>
+                                    <button icon="fa-credit-card-alt"
+                                            type="object" string=" Contact plan"
+                                            name="visit_contact_open" class="oe_stat_button"/>
+
+                                    <field name="city_name" invisible="1"></field>
+                                    <button icon="fa-credit-card-alt"
+                                            type="object" string=" Schedule"
+                                            name="visit_schedule_open" class="oe_stat_button"/>
+
+                                    <field name="visit_date"></field>
+                                    <button icon="fa-credit-card-alt"
+                                            type="object" string=" Add"
+                                            name="add_visit" class="oe_stat_button"/>
+                                    <field name="planned_visit_selection"></field>
+                                    <field name="remark" string='Comment'></field>
+                                </tree>
+                                <form string="Week 1">
+                                    <group>
+                                        <field name="visit_client" options="{'no_create':True,'no_open':True}"
+                                           domain="[('is_company', '=',True),('is_cust_available','=',True),('company_id','=',allowed_company_ids[0])]"></field>
+                                        <field name="visit_date"></field>
+                                        <field name="planned_visit_selection"></field>
+                                        <field name="remark" string='Comment'></field>
+                                        <button icon="fa-credit-card-alt"
+                                                type="object" string=" Contact plan"
+                                                name="visit_contact_open" class="oe_highlight"/>
+                                        <button icon="fa-credit-card-alt"
+                                                type="object" string=" Schedule"
+                                                name="visit_schedule_open" class="oe_highlight"/>
+                                        <button icon="fa-credit-card-alt"
+                                            type="object" string=" Add"
+                                            name="add_visit" class="oe_stat_button"/>
+                                    </group>
+                                </form>
+                                <kanban class="o_kanban_mobile" limit="500">
+                                    <field name="visit_client" options="{'no_create':True,'no_open':True}"
+                                           domain="[('is_company', '=',True),('is_cust_available','=',True),('company_id','=',allowed_company_ids[0])]"></field>
+                                    <field name="cont_plan_des"></field>
+
+                                    <field name="city_name" invisible="1"></field>
+
+
+                                    <field name="visit_date"></field>
+                                    <field name="remark" string='Comment'></field>
+                                    <field name="planned_visit_selection"></field>
+                                    <templates>
+                                        <t t-name="kanban-box">
+                                            <div t-attf-class="oe_kanban_global_click" on_create="quick_create">
+                                                <div class="oe_kanban_details">
+                                                    <ul>
+                                                        <li>
+                                                            <strong class="o_kanban_record_title">Customer:
+                                                                <field name="visit_client" options="{'no_create':True,'no_open':True}"
+                                           domain="[('is_company', '=',True),('is_cust_available','=',True),('company_id','=',allowed_company_ids[0])]"></field>
+                                                            </strong>
+                                                        </li>
+                                                        <li>
+                                                            Visit Date:
+                                                            <field name="visit_date"></field>
+                                                            <span> </span>
+                                                            <field name="planned_visit_selection"></field>
+                                                        </li>
+                                                        <li>
+                                                            Comment:
+                                                            <field name="remark"></field>
+                                                        </li>
+                                                        <button icon="fa-credit-card-alt"
+                                                            type="object" string=" Add"
+                                                            name="add_visit" class="oe_stat_button"/>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </templates>
+
+
+                                </kanban>
+                            </field>
+                        </page>
+                        <page string="Week 4 schedule">
+                            <div>
+                                <field name="wk4_from" readonly="True"></field>
+                                -
+                                <field name="wk4_to" readonly="True"></field>
+                            </div>
+                            <field name="week_4_domain" mode="tree,kanban">
+                                <tree editable="top" delete="1" expand="1">
+                                    <field name="visit_client" options="{'no_create':True,'no_open':True}"
+                                           domain="[('is_company', '=',True),('is_cust_available','=',True),('company_id','=',allowed_company_ids[0])]"></field>
+                                    <field name="cont_plan_des"></field>
+                                    <button icon="fa-credit-card-alt"
+                                            type="object" string=" Contact plan"
+                                            name="visit_contact_open" class="oe_stat_button"/>
+
+                                    <field name="city_name" invisible="1"></field>
+                                    <button icon="fa-credit-card-alt"
+                                            type="object" string=" Schedule"
+                                            name="visit_schedule_open" class="oe_stat_button"/>
+
+                                    <field name="visit_date"></field>
+                                    <button icon="fa-credit-card-alt"
+                                            type="object" string=" Add"
+                                            name="add_visit" class="oe_stat_button"/>
+                                    <field name="planned_visit_selection"></field>
+                                    <field name="remark" string='Comment'></field>
+                                </tree>
+                                <form string="Week 1">
+                                    <group>
+                                        <field name="visit_client" options="{'no_create':True,'no_open':True}"
+                                           domain="[('is_company', '=',True),('is_cust_available','=',True),('company_id','=',allowed_company_ids[0])]"></field>
+                                        <field name="visit_date"></field>
+                                        <field name="planned_visit_selection"></field>
+                                        <field name="remark" string='Comment'></field>
+                                        <button icon="fa-credit-card-alt"
+                                                type="object" string=" Contact plan"
+                                                name="visit_contact_open" class="oe_highlight"/>
+                                        <button icon="fa-credit-card-alt"
+                                                type="object" string=" Schedule"
+                                                name="visit_schedule_open" class="oe_highlight"/>
+                                        <button icon="fa-credit-card-alt"
+                                            type="object" string=" Add"
+                                            name="add_visit" class="oe_stat_button"/>
+                                    </group>
+                                </form>
+                                <kanban class="o_kanban_mobile" limit="500">
+                                    <field name="visit_client" options="{'no_create':True,'no_open':True}"
+                                           domain="[('is_company', '=',True),('is_cust_available','=',True),('company_id','=',allowed_company_ids[0])]"></field>
+                                    <field name="cont_plan_des"></field>
+
+                                    <field name="city_name" invisible="1"></field>
+
+
+                                    <field name="visit_date"></field>
+                                    <field name="remark" string='Comment'></field>
+                                    <field name="planned_visit_selection"></field>
+                                    <templates>
+                                        <t t-name="kanban-box">
+                                            <div t-attf-class="oe_kanban_global_click" on_create="quick_create">
+                                                <div class="oe_kanban_details">
+                                                    <ul>
+                                                        <li>
+                                                            <strong class="o_kanban_record_title">Customer:
+                                                                <field name="visit_client" options="{'no_create':True,'no_open':True}"
+                                           domain="[('is_company', '=',True),('is_cust_available','=',True),('company_id','=',allowed_company_ids[0])]"></field>
+                                                            </strong>
+                                                        </li>
+                                                        <li>
+                                                            Visit Date:
+                                                            <field name="visit_date"></field>
+                                                            <span> </span>
+                                                            <field name="planned_visit_selection"></field>
+                                                        </li>
+                                                        <li>
+                                                            Comment:
+                                                            <field name="remark"></field>
+                                                        </li>
+                                                        <button icon="fa-credit-card-alt"
+                                                            type="object" string=" Add"
+                                                            name="add_visit" class="oe_stat_button"/>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </templates>
+
+
+                                </kanban>
+                            </field>
+                        </page>
+                        <field name="week_5_count" invisible="1"/>
+                        <page string="Week 5 schedule" attrs="{'invisible': [('week_5_count', '=', 0)]}">
+                            <div>
+                                <field name="wk5_from" readonly="True"></field>
+                                -
+                                <field name="wk5_to" readonly="True"></field>
+                            </div>
+                            <field name="week_5_domain" mode="tree,kanban">
+                                <tree editable="top" delete="1" expand="1">
+                                    <field name="visit_client" options="{'no_create':True,'no_open':True}"
+                                           domain="[('is_company', '=',True),('is_cust_available','=',True),('company_id','=',allowed_company_ids[0])]"></field>
+                                    <field name="cont_plan_des"></field>
+                                    <button icon="fa-credit-card-alt"
+                                            type="object" string=" Contact plan"
+                                            name="visit_contact_open" class="oe_stat_button"/>
+
+                                    <field name="city_name" invisible="1"></field>
+                                    <button icon="fa-credit-card-alt"
+                                            type="object" string=" Schedule"
+                                            name="visit_schedule_open" class="oe_stat_button"/>
+
+                                    <field name="visit_date"></field>
+                                    <button icon="fa-credit-card-alt"
+                                            type="object" string=" Add"
+                                            name="add_visit" class="oe_stat_button"/>
+                                    <field name="planned_visit_selection"></field>
+                                    <field name="remark" string='Comment'></field>
+                                </tree>
+                                <form string="Week 1">
+                                    <group>
+                                        <field name="visit_client" options="{'no_create':True,'no_open':True}"
+                                           domain="[('is_company', '=',True),('is_cust_available','=',True),('company_id','=',allowed_company_ids[0])]"></field>
+                                        <field name="visit_date"></field>
+                                        <field name="planned_visit_selection"></field>
+                                        <field name="remark" string='Comment'></field>
+                                        <button icon="fa-credit-card-alt"
+                                                type="object" string=" Contact plan"
+                                                name="visit_contact_open" class="oe_highlight"/>
+                                        <button icon="fa-credit-card-alt"
+                                                type="object" string=" Schedule"
+                                                name="visit_schedule_open" class="oe_highlight"/>
+                                        <button icon="fa-credit-card-alt"
+                                            type="object" string=" Add"
+                                            name="add_visit" class="oe_stat_button"/>
+                                    </group>
+                                </form>
+                                <kanban class="o_kanban_mobile" limit="500">
+                                    <field name="visit_client" options="{'no_create':True,'no_open':True}"
+                                           domain="[('is_company', '=',True),('is_cust_available','=',True),('company_id','=',allowed_company_ids[0])]"></field>
+                                    <field name="cont_plan_des"></field>
+
+                                    <field name="city_name" invisible="1"></field>
+
+
+                                    <field name="visit_date"></field>
+                                    <field name="remark" string='Comment'></field>
+                                    <field name="planned_visit_selection"></field>
+                                    <templates>
+                                        <t t-name="kanban-box">
+                                            <div t-attf-class="oe_kanban_global_click" on_create="quick_create">
+                                                <div class="oe_kanban_details">
+                                                    <ul>
+                                                        <li>
+                                                            <strong class="o_kanban_record_title">Customer:
+                                                                <field name="visit_client" options="{'no_create':True,'no_open':True}"
+                                           domain="[('is_company', '=',True),('is_cust_available','=',True),('company_id','=',allowed_company_ids[0])]"></field>
+                                                            </strong>
+                                                        </li>
+                                                        <li>
+                                                            Visit Date:
+                                                            <field name="visit_date"></field>
+                                                            <span> </span>
+                                                            <field name="planned_visit_selection"></field>
+                                                        </li>
+                                                        <li>
+                                                            Comment:
+                                                            <field name="remark"></field>
+                                                        </li>
+                                                        <button icon="fa-credit-card-alt"
+                                                            type="object" string=" Add"
+                                                            name="add_visit" class="oe_stat_button"/>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </templates>
+
+
+                                </kanban>
+                            </field>
+                        </page>
+                        <page string="All weeks">
+                            <field name="plan_detail" mode="tree,kanban">
+                                <tree editable="top" delete="1" expand="1">
+                                    <field name="visit_client" options="{'no_create':True,'no_open':True}"
+                                           domain="[('is_company', '=',True),('is_cust_available','=',True),('company_id','=',allowed_company_ids[0])]"></field>
+                                    <field name="cont_plan_des"></field>
+                                    <button icon="fa-credit-card-alt"
+                                            type="object" string=" Contact plan"
+                                            name="visit_contact_open" class="oe_stat_button"/>
+
+                                    <field name="city_name" invisible="1"></field>
+                                    <button icon="fa-credit-card-alt"
+                                            type="object" string=" Schedule"
+                                            name="visit_schedule_open" class="oe_stat_button"/>
+
+                                    <field name="visit_date"></field>
+                                    <button icon="fa-credit-card-alt"
+                                            type="object" string=" Add"
+                                            name="add_visit" class="oe_stat_button"/>
+                                    <field name="planned_visit_selection"></field>
+                                    <field name="remark" string='Comment'></field>
+                                </tree>
+                                <form string="All weeks">
+                                    <group>
+                                        <field name="visit_client" options="{'no_create':True,'no_open':True}"
+                                           domain="[('is_company', '=',True),('is_cust_available','=',True),('company_id','=',allowed_company_ids[0])]"></field>
+                                        <field name="visit_date"></field>
+                                        <field name="planned_visit_selection"></field>
+                                        <field name="remark" string='Comment'></field>
+                                        <button icon="fa-credit-card-alt"
+                                                type="object" string=" Contact plan"
+                                                name="visit_contact_open" class="oe_highlight"/>
+                                        <button icon="fa-credit-card-alt"
+                                                type="object" string=" Schedule"
+                                                name="visit_schedule_open" class="oe_highlight"/>
+                                        <button icon="fa-credit-card-alt"
+                                            type="object" string=" Add"
+                                            name="add_visit" class="oe_stat_button"/>
+                                    </group>
+                                </form>
+                                <kanban class="o_kanban_mobile" limit="500">
+                                    <field name="visit_client" options="{'no_create':True,'no_open':True}"
+                                           domain="[('is_company', '=',True),('is_cust_available','=',True),('company_id','=',allowed_company_ids[0])]"></field>
+                                    <field name="cont_plan_des"></field>
+
+                                    <field name="city_name" invisible="1"></field>
+
+
+                                    <field name="visit_date"></field>
+                                    <field name="remark" string='Comment'></field>
+                                    <field name="planned_visit_selection"></field>
+                                    <templates>
+                                        <t t-name="kanban-box">
+                                            <div t-attf-class="oe_kanban_global_click" on_create="quick_create">
+                                                <div class="oe_kanban_details">
+                                                    <ul>
+                                                        <li>
+                                                            <strong class="o_kanban_record_title">Customer:
+                                                                <field name="visit_client" options="{'no_create':True,'no_open':True}"
+                                           domain="[('is_company', '=',True),('is_cust_available','=',True),('company_id','=',allowed_company_ids[0])]"></field>
+                                                            </strong>
+                                                        </li>
+                                                        <li>
+                                                            Visit Date:
+                                                            <field name="visit_date"></field>
+                                                            <span> </span>
+                                                            <field name="planned_visit_selection"></field>
+                                                        </li>
+                                                        <li>
+                                                            Comment:
+                                                            <field name="remark"></field>
+                                                        </li>
+                                                        <button icon="fa-credit-card-alt"
+                                                            type="object" string=" Add"
+                                                            name="add_visit" class="oe_stat_button"/>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </templates>
+
+
+                                </kanban>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="droga_crm_customer_visit_detail_view_form_popup" model="ir.ui.view">
+        <field name="name">droga.customer.visit.detail.view.form_popup</field>
+        <field name="model">droga.customer.visit.detail</field>
+        <field name="arch" type="xml">
+            <form delete="0">
+                <sheet>
+                    <notebook>
+                        <page string="Contacts schedule">
+                            <field name="contacts_schedule" mode="tree,kanban">
+                                <tree editable="bottom" delete="0">
+                                    <field name="cust"/>
+                                    <field name="contact_custom" domain="([('parent_customer','=',cust)])"
+                                           options="{'no_create':True,'no_open':True}"></field>
+                                    <field name="co_travel_crm" widget="many2many_tags"
+                                           options="{'no_create':True,'no_open':True}"/>
+                                    <field name="phone_no"/>
+                                    <field name="core_products" widget="many2many_tags" domain="([('is_prod_available','=',True)])"
+                                           options="{'no_create':True,'no_open':True}"/>
+                                </tree>
+                                <form>
+                                    <group>
+                                        <field name="cust"/>
+                                        <field name="contact_custom" domain="([('parent_customer','=',cust)])"
+                                               options="{'no_create':True,'no_open':True}"></field>
+                                        <field name="co_travel_crm" widget="many2many_tags"
+                                               options="{'no_create':True,'no_open':True}"/>
+                                        <field name="phone_no"/>
+                                        <field name="core_products" widget="many2many_tags" domain="([('is_prod_available','=',True)])"
+                                               options="{'no_create':True,'no_open':True}"/>
+                                    </group>
+                                </form>
+                                <kanban>
+                                    <field name="cust"/>
+                                    <field name="contact_custom" domain="([('parent_customer','=',cust)])"
+                                           options="{'no_create':True,'no_open':True}"></field>
+                                    <field name="co_travel_crm" widget="many2many_tags"
+                                           options="{'no_create':True,'no_open':True}"/>
+                                    <field name="phone_no"/>
+                                    <field name="core_products" widget="many2many_tags" domain="([('is_prod_available','=',True)])"
+                                           options="{'no_create':True,'no_open':True}"/>
+                                    <templates>
+                                        <t t-name="kanban-box">
+                                            <div t-attf-class="oe_kanban_global_click" on_create="quick_create">
+                                                <div class="oe_kanban_details">
+                                                    <ul>
+                                                        <li>
+                                                            <strong class="o_kanban_record_title">Contact:
+                                                                <field name="contact_custom"></field>
+                                                            </strong>
+                                                        </li>
+                                                        <li>
+                                                            Phone:
+                                                            <field name="phone_no"></field>
+                                                            <span></span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </templates>
+                                </kanban>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="droga_crm_customer_visit_action" model="ir.actions.act_window">
+        <field name="name">Customers visit log book</field>
+        <field name="res_model">droga.customer.visit.header</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('droga_crm_customer_visit_view_tree')}),
+                (0, 0, {'view_mode': 'kanban', 'view_id': ref('droga_crm_customer_visit_view_kanban')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('droga_crm_customer_visit_view_form')})]"/>
+        <field name="domain">[('is_record_owner','=',True)]</field>
+    </record>
+
+    <record id="droga_crm_customer_visit_to_approve_action" model="ir.actions.act_window">
+        <field name="name">Customers visit log approve book</field>
+        <field name="res_model">droga.customer.visit.header</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('droga_crm_customer_visit_view_tree')}),
+                (0, 0, {'view_mode': 'kanban', 'view_id': ref('droga_crm_customer_visit_view_kanban')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('droga_crm_customer_visit_view_form')})]"/>
+        <field name="domain">[('is_approver','=',True),('state','in',('requested','approved'))]</field>
+    </record>
+
+    <menuitem
+            id="menu_vist_log"
+            name="Visit plan and target"
+            parent="crm.crm_menu_root"
+            groups="crm_mr"
+            sequence="24"/>
+
+    <menuitem
+            id="droga_crm_customer_visit"
+            name="Customer visit log prepare"
+            action="droga_crm_customer_visit_action"
+            parent="menu_vist_log"
+            groups="crm_mr"
+            sequence="18"/>
+
+    <menuitem
+            id="droga_crm_customer_visit_to_approve_menu"
+            name="Customer visit log to approve"
+            action="droga_crm_customer_visit_to_approve_action"
+            parent="menu_vist_log"
+            groups="crm_rsm,crm_nsm,"
+            sequence="18"/>
+
+
+</odoo>

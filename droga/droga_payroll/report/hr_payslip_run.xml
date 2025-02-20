@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- inherited for view of purchase.order -->
+    <record id="inherit_for_hr_payslip_run_form" model="ir.ui.view">
+        <field name="name">Payslip Run</field>
+        <field name="model">hr.payslip.run</field>
+        <field name="inherit_id" ref="hr_payroll.hr_payslip_run_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_draft']" position="after">
+                <button string="Report" name="droga_payroll_sheet_report_action" type="object"/>
+                <button string="Send Payslip email" name="action_send_payslip_email" type="object"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

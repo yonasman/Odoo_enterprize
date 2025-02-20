@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="droga_inventory_transfer_custom_action" model="ir.actions.act_window">
+        <field name="name">Store transfer request</field>
+        <field name="res_model">droga.inventory.transfer.custom</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('create_uid','=',uid)]</field>
+    </record>
+
+    <record id="droga_inventory_transfer_custom_view_tree" model="ir.ui.view">
+        <field name="name">droga.inventory.transfer.custom.view.tree</field>
+        <field name="model">droga.inventory.transfer.custom</field>
+        <field name="arch" type="xml">
+            <tree string="" delete="0">
+                <field name="name"></field>
+                <field name="transfer_picking" widget="many2many_tags"></field>
+                <field name="location_dest_id"></field>
+                <field name="state"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_inventory_transfer_custom_view_form" model="ir.ui.view">
+        <field name="name">droga.inventory.transfer.custom.view.form</field>
+        <field name="model">droga.inventory.transfer.custom</field>
+        <field name="arch" type="xml">
+            <form string="Transfers" delete="0">
+                <header>
+                    <button name="request"
+                            attrs="{'invisible': [('state', 'not in', ('draft'))]}"
+                            string="Request" type="object" class="oe_highlight" data-hotkey="v"/>
+                    <button name="stmg_approve"
+                            attrs="{'invisible': [('state', 'not in', ('stmg'))]}"  groups="droga_inventory.stores_manager,droga_inventory.stores_manager_ws"
+                            string="Approve" type="object" class="oe_highlight" data-hotkey="v"/>
+                    <button name="amend"
+                            attrs="{'invisible': [('state', 'not in', ('stmg','stmgp'))]}"  groups="droga_inventory.stores_manager,droga_inventory.stores_manager_ws"
+                            string="Amend" type="object" class="oe_highlight btn-warning" data-hotkey="v"/>
+
+
+
+                    <button name="reset_order"
+                            attrs="{'invisible': [('state', 'not in', ('waiting','phmg','stmgp'))]}"  groups="droga_inventory.stores_manager,droga_inventory.stores_manager_ws,droga_pharma.pharma_supply_chain_manager"
+                            string="Reset to draft" type="object" class="oe_highlight btn-warning" data-hotkey="v"/>
+                    <button name="action_cancel"
+                            attrs="{'invisible': [('state', 'not in', ('draft'))]}"
+                            string="Cancel" type="object" class="oe_highlight" data-hotkey="v"/>
+
+
+                    <field name="state" widget="statusbar" statusbar_visible="draft,stmg,waiting,done"/>
+                </header>
+                <sheet>
+                    <group string="Store transfer request">
+                        <group>
+                            <field name="location_filter" invisible="1"></field>
+                            <field name="location_dest_id" options="{'no_create':True,'no_open':True}" domain="(['|',('has_read_access','=',True),('has_access','=',True),('con_type','=','SRL')])" attrs="{'readonly': [('state', 'in', ('waiting','reject','cancel','done'))]}"></field>
+                            <field name="transfer_picking" readonly="1" widget="many2many_tags" attrs="{'invisible': [('state', 'in', ('draft'))]}"></field>
+                        </group>
+                        <group>
+                            <field name="request_date" attrs="{'readonly': [('state', 'in', ('waiting','reject','cancel','processed','done'))]}"></field>
+                            <field name="location_id" required="0" options="{'no_create':True,'no_open':True}" attrs="{'invisible': [('state', 'not in', ('phmg'))]}" readonly="1"></field>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Product Details">
+                            <field name="detail_entries" attrs="{'readonly': [('state', 'in', ('waiting','reject','cancel','done','processed'))]}">
+                                <tree editable="bottom">
+                                    <field name="company_id" invisible="1"/>
+                                    <field name="product_id" required="1" options="{'no_create':True,'no_open':True}" context="{'default_detailed_type': 'product'}"/>
+                                    <field name="product_uom" domain="['|',('id', '=', import_uom),('id','=',pharma_uom)]"/>
+                                    <field name="product_uom_qty" string="Request"/>
+                                    <field name="available_qty" groups="droga_inventory.stores_manager,droga_inventory.stores_manager_ws"/>
+                                    <field name="product_uom_category_id" invisible="1"/>
+                                    <field name="import_uom" invisible="1"/>
+                                    <field name="pharma_uom" invisible="1"/>
+                                    <!--
+                                    <field name="location_source_id" domain="([('usage','=','internal')])" string="Source location"/>
+                                    -->
+                                    <field name="warehouse_id" options="{'no_create':True,'no_open':True}"></field>
+                                </tree>
+                            </field>
+                        </page>
+
+                    </notebook>
+                    <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+                </sheet>
+
+            </form>
+        </field>
+    </record>
+
+    <menuitem
+            id="droga_stock_transfer_menu"
+            name="Store transfer requests"
+            action="droga_inventory_transfer_custom_action"
+            groups="inventory_stk"
+            parent="stock.menu_stock_warehouse_mgmt"/>
+</odoo>

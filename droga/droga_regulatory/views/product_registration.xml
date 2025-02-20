@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="sequence_exhibition_registration" model="ir.sequence">
+            <field name="name">Exhibition registration Sequence</field>
+            <field name="code">droga.reg.exhibition_registration.sequence</field>
+            <field name="prefix">SUP-INFO_</field>
+        </record>
+
+        <record id="view_company_info_tree" model="ir.ui.view">
+            <field name="name">Company Information Tree</field>
+            <field name="model">droga.reg.company.info</field>
+            <field name="arch" type="xml">
+
+
+                <tree>
+
+                    <field name="company_name"/>
+                    <field name="country"/>
+                    <field name="registration_status"/>
+                    <field name="registered_products_agent"/>
+                    <field name="products_list"/>
+                    <field name="agreement_status" widget="badge"
+
+                           decoration-success="agreement_status == 'active'"
+                           decoration-info="agreement_status == 'pending'"
+                           decoration-warning="agreement_status == 'inactive'"/>
+
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_company_info_search" model="ir.ui.view">
+            <field name="name">Company Information Search</field>
+            <field name="model">droga.reg.company.info</field>
+            <field name="arch" type="xml">
+                <search string="Plan">
+                    <field name="bd_status"/>
+                    <separator/>
+                    <filter string="Agreement Sent" name="agreement" domain="[('bd_status', '=', 'agreement')]"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_company_info_form" model="ir.ui.view">
+            <field name="name">Company Information Form</field>
+            <field name="model">droga.reg.company.info</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <field name="bd_status" widget="statusbar"/>
+                        <button name="submit_to_ra" type="object" string="Submit to RA" class="oe_highlight"
+                                attrs="{'invisible': [('bd_status', '=', 'agreement')]}"/>
+
+                    </header>
+                    <sheet>
+
+                        <group>
+                            <field name="reg_num"/>
+                            <group>
+                                <field name="company_name" attrs="{'readonly': [('bd_status', '=', 'agreement')]}"/>
+                                <field name="products_list"/>
+                                <field name="remark"/>
+                                <field name="registration_status"/>
+                            </group>
+                            <group>
+                                <field name="country"/>
+                                <field name="agreement_status"/>
+                                <field name="registered_products_agent" widget="many2many_tags"/>
+                                <field name="gmp_approval_status"/>
+                                <field name="bd_status"/>
+                            </group>
+
+
+                        </group>
+                        <notebook>
+                            <page string="Contact Details">
+                                <group>
+                                    <field name="email"/>
+                                    <field name="phone_no"/>
+                                    <field name="website"/>
+                                </group>
+                            </page>
+                            <page string="Data For RA">
+                                <group>
+                                    <group>
+                                        <field name="tracking_number"/>
+                                        <field name="start_date"/>
+                                        <field name="extension_date"/>
+                                    </group>
+                                    <group>
+                                        <field name="applicant_type"/>
+                                        <field name="end_date"/>
+                                        <field name="agreement_status"
+                                               attrs="{'invisible': [('bd_status', '!=', 'agreement')]}"
+                                               groups="droga_regulatory.droga_regulatory_manager"/>
+
+                                    </group>
+                                </group>
+
+
+                            </page>
+
+                            <page string="Document Attachment">
+                                <group>
+                                    <group>
+                                        <field name="document_desc"/>
+
+                                    </group>
+                                    <group>
+                                        <button name="send_doc_notification" type="object" string="Send Notification"
+                                                class="oe_highlight"/>
+
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+
+
+                        <h2>
+                            Follow up
+                        </h2>
+                        <hr/>
+                        <field name="follow_up">
+                            <tree editable="top">
+                                <field name="follow_up_date"/>
+                                <field name="follow_up_status"/>
+                            </tree>
+                        </field>
+
+
+                    </sheet>
+
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+
+
+                </form>
+            </field>
+        </record>
+
+
+        <record id="view_company_info_kanban" model="ir.ui.view">
+            <field name="name">Company Information Kanban</field>
+            <field name="model">droga.reg.company.info</field>
+            <field name="arch" type="xml">
+
+                <kanban class="o_kanban_mobile" sample="1">
+                    <field name="company_name"/>
+                    <field name="tracking_number"/>
+                    <field name="agreement_status"/>
+                    <field name="document_sent"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_global_click">
+                                <div class="o_kanban_image">
+                                </div>
+                                <div class="oe_kanban_details">
+                                    <strong class="o_kanban_record_title"
+                                            attrs="{'invisible': [('document_sent', '!=', True)]}">
+                                        <field name="document_desc"/>
+                                    </strong>
+                                    <hr/>
+
+                                    <strong class="o_kanban_record_title">
+                                        Company Name:
+                                    </strong>
+                                    <field name="company_name"/>
+                                    <br/>
+                                    <strong class="o_kanban_record_title">
+                                        Products List:
+                                    </strong>
+                                    <field name="products_list"/>
+                                    <br/>
+                                    <strong class="o_kanban_record_title">
+                                        Tracking Number:
+                                    </strong>
+                                    <field name="tracking_number"/>
+                                    <br/>
+
+                                    <strong class="o_kanban_record_title">
+                                        Agreement Status:
+                                    </strong>
+                                    <field name="agreement_status"/>
+                                    <br/>
+                                    <hr/>
+
+                                    <button name="set_activity_done" string="Mark as read" type="object"
+                                            class="oe_highlight"/>
+
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+
+        <record id="action_company_info" model="ir.actions.act_window">
+            <field name="name">Company Information</field>
+            <field name="res_model">droga.reg.company.info</field>
+            <field name="view_mode">tree,form,kanban,search</field>
+        </record>
+
+
+    </data>
+</odoo>

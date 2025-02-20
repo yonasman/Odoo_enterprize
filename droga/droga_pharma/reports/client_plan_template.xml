@@ -1,0 +1,83 @@
+<odoo>
+    <template id="report_mtm_plan">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="droga_pharma.droga_pharma_header_layout">
+                </t>
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <div class="row mt32">
+                            <div class="col-12">
+                                <h2>Patient's Program of Action</h2>
+                                <h5>Date: <span t-field="doc.date_follow_up"/></h5>
+                                <br/>
+                                <h5>Based on what I've discussed with the pharmacist, I will complete these things.</h5>
+<!--                                <div t-raw="doc.plan"/>-->
+                                <br/>
+                                <table style="border-collapse: separate; border-spacing: 10%; width: 100%;">
+                                    <tbody>
+                                        <t t-foreach="doc.plan.split('\n')" t-as="line">
+                                            <tr>
+                                                <td>
+                                                    <t t-raw="line"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <t t-call="droga_pharma.droga_pharma_footer_layout">
+                    </t>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_mtm_plan_amharic">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="droga_pharma.droga_pharma_header_layout">
+                </t>
+                <t t-call="web.external_layout">
+                    <head>
+                        <style>
+                            @font-face {
+                                font-family: amharic_font;
+                                src: url('/droga_pharma/static/fonts/amharic_font.ttf') format('truetype');
+                            }
+                        </style>
+                    </head>
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <div class="row mt32">
+                            <div class="col-12">
+                                <h2 style="font-family: amharic_font, Arial, sans-serif;">የታካሚ መከታተያ</h2>
+                                <h5 style="font-family: amharic_font, Arial, sans-serif;">ቀን: <span t-field="doc.date_follow_up"/></h5>
+                                <br/>
+                                <h5 style="font-family: amharic_font, Arial, sans-serif;">በተሰጠኝ የመድኃኒት ክትትል አገልግሎት መሰረት ከታች የተዘረዘሩትን  ምክር እተገብራለሁ</h5>
+<!--                                <div t-raw="doc.plan"/>-->
+                                <br/>
+                                <table style="border-collapse: separate; border-spacing: 10%; width: 100%;">
+                                    <tbody>
+                                        <t t-foreach="doc.plan.split('\n')" t-as="line">
+                                            <tr>
+                                                <td>
+                                                    <t t-raw="line"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <t t-call="droga_pharma.droga_pharma_footer_layout">
+                    </t>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

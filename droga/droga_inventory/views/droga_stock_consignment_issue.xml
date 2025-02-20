@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="droga_inventory_consignment_issue_view_tree" model="ir.ui.view">
+        <field name="name">droga.inventory.consignment.issue.view.tree</field>
+        <field name="model">droga.inventory.consignment.issue</field>
+        <field name="arch" type="xml">
+            <tree string="" create="1" delete="0">
+                <field name="name"></field>
+                <field name="customer"></field>
+                <field name="cons_ref" attrs="{'invisible': [('cons_ref', '=', False)]}" widget="many2many_tags"
+                       readonly="1"></field>
+                <field name="state"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_inventory_consignment_issue_view_tree_sales" model="ir.ui.view">
+        <field name="name">droga.inventory.consignment.issue.view.tree.sales</field>
+        <field name="model">droga.inventory.consignment.issue</field>
+        <field name="arch" type="xml">
+            <tree string="" create="1" delete="0">
+                <field name="name"></field>
+                <field name="customer"></field>
+                <field name="cons_ref" attrs="{'invisible': [('cons_ref', '=', False)]}" widget="many2many_tags"
+                       readonly="1"></field>
+                <field name="state"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_inventory_consignment_issue_view_form" model="ir.ui.view">
+        <field name="name">droga.inventory.consignment.issue.view.form</field>
+        <field name="model">droga.inventory.consignment.issue</field>
+        <field name="arch" type="xml">
+            <form string="Consignment issue" delete="0">
+                <header>
+                    <!-- Sales and crm header part  -->
+                    <field name="menu_from" invisible="1"></field>
+                    <button name="request"
+                            attrs="{'invisible': ['|',('state', 'not in', ('draft')),('menu_from','not in',('SR','PH'))]}"
+                            string="Request" type="object" class="oe_highlight" data-hotkey="v"/>
+                    <button name="stmg_approve"
+                            attrs="{'invisible': [('state', 'not in', ('stmg'))]}"
+                            groups="droga_sales.sales_price_change_admin,droga_pharma.pharma_director"
+                            string="Approve" type="object" class="oe_highlight" data-hotkey="v"/>
+                    <button name="amend"
+                            attrs="{'invisible': [('state', 'not in', ('stmg','mtmg'))]}"
+                            groups="droga_sales.sales_price_change_admin,droga_pharma.pharma_director"
+                            string="Amend" type="object" class="oe_highlight btn-warning" data-hotkey="v"/>
+                    <button name="action_cancel"
+                            attrs="{'invisible': ['|',('state', 'not in', ('draft')),('menu_from','not in',('SR','PH'))]}"
+                            string="Cancel" type="object" class="oe_highlight" data-hotkey="v"/>
+
+                    <field name="state" widget="statusbar" attrs="{'invisible': [('menu_from','not in',('SR','PH'))]}" statusbar_visible="draft,stmg,waiting,processed"/>
+
+                </header>
+                <sheet>
+                    <group string="Store issue request">
+                        <group>
+                            <field name="customer"
+                                   attrs="{'readonly': [('state', 'in', ('waiting','stmg','reject','cancel','done','processed'))]}"></field>
+                            <field name="issue_type" required="True"
+                                   readonly="1"></field>
+                        </group>
+                        <group>
+                            <field name="issue_date"
+                                   attrs="{'readonly': [('state', 'in', ('waiting','stmg','reject','cancel','done','processed'))]}"></field>
+                            <field name="cons_ref" attrs="{'invisible': [('cons_ref', '=', False)]}"
+                                   widget="many2many_tags" readonly="1"></field>
+                            <field name="remark"></field>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Product Details">
+                            <field name="state" invisible="1"></field>
+                            <field name="detail_entries"
+                                   attrs="{'readonly': [('state', 'in', ('waiting','reject','cancel','done'))]}">
+                                <tree editable="bottom">
+                                    <field name="company_id" invisible="1"/>
+                                    <field name="product_id" required="1" options="{'no_create':True,'no_open':True}"
+                                           context="{'default_detailed_type': 'product'}"/>
+                                    <field name="product_uom" options="{'no_create':True,'no_open':True}"/>
+                                    <field name="product_uom_category_id" invisible="1"/>
+                                    <field name="state" invisible="1"/>
+                                    <field name="product_uom_qty" string="Quantity"/>
+                                    <field name="available_qty" groups="droga_sales.sales_price_change_admin"/>
+                                    <field name="warehouse_id"
+                                           string="Issuer warehouse" options="{'no_create':True,'no_open':True}"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                    </notebook>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="droga_inventory_consignment_issue_action" model="ir.actions.act_window">
+        <field name="name">Store issue order</field>
+        <field name="res_model">droga.inventory.consignment.issue</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('create_uid','=',uid)]</field>
+    </record>
+
+    <record id="droga_inventory_consignment_issue_action_sales" model="ir.actions.act_window">
+        <field name="name">Sales promotion items issuance</field>
+        <field name="res_model">droga.inventory.consignment.issue</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('droga_inventory_consignment_issue_view_tree_sales')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('droga_inventory_consignment_issue_view_form')})]"/>
+        <field name="context">{'default_issue_type': 'SIF'}</field>
+        <field name="domain">[('create_uid','=',uid)]</field>
+    </record>
+
+
+</odoo>

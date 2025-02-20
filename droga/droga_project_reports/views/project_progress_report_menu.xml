@@ -1,0 +1,16 @@
+<odoo>
+    <!--Add a submenu for project progress Excel report -->
+    <menuitem id="droga_project_task_report_menu"
+              name="Project progress Report"
+              parent="project.menu_project_report"
+              action="action_project_progress_wizard"
+              sequence="40"/>
+
+    <record id="action_project_progress_wizard" model="ir.actions.act_window">
+        <field name="name">Project Progress Report</field>
+        <field name="res_model">droga.project.progress.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="droga_pharma_product_categ" model="ir.actions.act_window">
+        <field name="name">Product categories</field>
+        <field name="res_model">droga.pharma.prod.categ</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="droga_pharma_current_status_tree" model="ir.ui.view">
+        <field name="name">droga.pharma.prod.categ.tree</field>
+        <field name="model">droga.pharma.prod.categ</field>
+        <field name="arch" type="xml">
+            <tree string="" editable="top" delete="0">
+                <field name="prod_categ"></field>
+                <field name="descr"></field>
+                <field name="categ_id" string="Import Product Category"></field>
+                <field name="status"></field>
+            </tree>
+        </field>
+    </record>
+
+</odoo>

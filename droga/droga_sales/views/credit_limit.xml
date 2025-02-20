@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="droga_sales_credit_limit_tree" model="ir.ui.view">
+        <field name="name">res.partner.credit.limit.tree</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <tree create="0" editable="bottom" delete="0">
+                <field name="name" readonly="1"></field>
+                <field name="vat" string="Tin No"></field>
+                <field name="city_name" string="City/sub-city"></field>
+                <field name="property_supplier_payment_term_id" string="Payment terms"
+                       options="{'no_create':True,'no_open':True}"></field>
+                <field name="cust_credit_limit"></field>
+                <field name="unsettled_amount" readonly="1"></field>
+                <field name="available_amount"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_sales_credit_limit_search" model="ir.ui.view">
+        <field name="name">res.partner.credit.limit.search</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"></field>
+                <field name="vat"></field>
+                <field name="city_name" string="City/sub-city"></field>
+                <field name="property_supplier_payment_term_id"></field>
+                <field name="cust_credit_limit"></field>
+                <field name="unsettled_amount"></field>
+                <field name="available_amount"></field>
+            </search>
+        </field>
+    </record>
+
+    <record id="droga_sales_credit_limit_action" model="ir.actions.act_window">
+        <field name="name">Credit limit</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">tree</field>
+        <field name="view_ids"
+               eval="[(5, 0, 0),(0, 0, {'view_mode': 'tree', 'view_id': ref('droga_sales_credit_limit_tree')})]"/>
+    </record>
+
+    <record id="account_invoice_addfilters_inherit" model="ir.ui.view">
+        <field name="name">account.move.filter.add</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='late']" position="after">
+                <filter string="Due in 10 days" name="in_10_days" domain="[
+                        ('invoice_date_due', '&lt;', (context_today() + relativedelta(days=10)).strftime('%Y-%m-%d')),
+                        ('invoice_date_due', '&gt;', context_today().strftime('%Y-%m-%d')),
+                        ('state', '=', 'posted'),
+                        ('payment_state', 'in', ('not_paid', 'partial'))
+                    ]"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="droga_sales_payment_term_exclusion" model="ir.ui.view">
+        <field name="name">Apply credit limit</field>
+        <field name="model">account.payment.term</field>
+        <field name="inherit_id" ref="account.view_payment_term_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/field[@name='display_on_invoice']" position="after">
+                <label for="apply_credit_limit"/>
+                <field name="apply_credit_limit"/>
+                <label for="deliv_after_payment"/>
+                <field name="deliv_after_payment"/>
+                <label for="min_amount"/>
+                <field name="min_amount"/>
+                <label for="used_under"></label>
+                <field name="used_under"></field>
+                <label for="allowed_terms"></label>
+                <field name="allowed_terms" widget="many2many_tags"></field>
+            </xpath>
+            <xpath expr="//form/sheet" position="after">
+                <div class="oe_chatter">
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </xpath>
+            <xpath expr="//form/sheet/field[@name='line_ids']" position="replace">
+                <notebook>
+                    <page string="Payment Terms">
+                        <field name="line_ids">
+                            <tree string="Payment Terms" editable="top" no_open="True">
+                                <field name="value" string="Due Type"/>
+                                <field name="value_amount" attrs="{'invisible': [('value', '=', 'balance')]}"
+                                       digits="[2, 2]"/>
+                                <field name="months"/>
+                                <field name="days"/>
+                                <field name="end_month" widget="boolean_toggle"/>
+                                <field name="days_after" attrs="{'invisible': [('end_month','=', False)]}"/>
+                                <field name="discount_percentage"/>
+                                <field name="discount_days"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+
+    <menuitem
+            id="droga_sales_credit_limit_menu"
+            name="Credit limit"
+            action="droga_sales_credit_limit_action"
+            parent="account.account_invoicing_menu"
+            sequence="20"/>
+
+</odoo>

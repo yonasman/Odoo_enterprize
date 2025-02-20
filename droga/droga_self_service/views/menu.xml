@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <menuitem id="self_service_main_menu" name="Self Service" groups="self_service_group"
+              web_icon="droga_self_service,static/description/icon.png" sequence="10"/>
+    <menuitem id="self_service_stock_menu" name="Stock" groups="self_service_group" sequence="1"
+              parent="self_service_main_menu">
+        <menuitem id="self_service_store_requisition_menu" name="Store Requisition" sequence="1"
+                  action="droga_inventory_office_supplies_request_self_service_action" groups="self_service_group"/>
+    </menuitem>
+
+
+    <menuitem id="self_service_procurement_menu" name="Procurement" groups="self_service_group" sequence="2"
+              parent="self_service_main_menu">
+
+        <menuitem id="self_service_purchase_request_local_menu" name="Local Purchase Request" sequence="2"
+                  action="droga_purchase_request_local_for_self_service_action" groups="self_service_group"/>
+        <!--<menuitem id="self_service_purchase_request_foreign_menu" name="Foreign Purchase Request" sequence="3"
+                  action="droga_purchase_request_foreign_for_self_service_action" groups="self_service_group"/>-->
+
+    </menuitem>
+    <menuitem id="self_service_finance_menu" name="Finance" groups="self_service_group" sequence="3"
+              parent="self_service_main_menu">
+
+        <!--<menuitem id="self_service_payment_request_normal_menu" name="Payment Request-Normal" sequence="1"
+                  action="droga_payment_request_normal_self_service_action" groups="self_service_group"/>
+        <menuitem id="self_service_payment_request_urgent_menu" name="Payment Request-Urgent" sequence="1"
+                  action="droga_payment_request_urgent_self_service_action" groups="self_service_group"/>-->
+        <menuitem id="self_service_payment_request_withoutpo_menu" name="Payment Request-Without PO" sequence="1"
+                  action="droga_payment_request_withoutpo_self_service_action" groups="self_service_group"/>
+
+
+    </menuitem>
+
+    <menuitem id="self_service_hr_menu" name="Human Resource" groups="self_service_group" sequence="4"
+              parent="self_service_main_menu">
+        <menuitem id="self_service_head_count_request_menu" name="Head Count Request" sequence="1"
+                  action="droga_hr_head_count_request_action" groups="self_service_group"/>
+         <menuitem id="self_service_letter_request_english_menu" name="Letter Request-English" sequence="2"
+                  action="droga_hr.droga_hr_letter_request_eng_action" groups="self_service_group"/>
+         <menuitem id="self_service_letter_request_amharic_menu" name="Letter Request-Amharic" sequence="3"
+                  action="droga_hr.droga_hr_letter_request_amharic_action" groups="self_service_group"/>
+        <menuitem id="hr_attendance_over_time_report_approval_menu" name="Over Time Approval"
+                  action="droga_hr.hr_attendance_over_time_report_approval_action" groups="self_service_group"
+                  sequence="4"/>
+    </menuitem>
+
+
+    <menuitem id="self_service_fleet_menu" name="Fleet request" groups="self_service_group" sequence="5"
+              parent="self_service_main_menu">
+        <menuitem id="self_service_fleet_request_menu" name="Fleet request" sequence="1"
+                  action="droga_fleet.droga_fleet_request_tree_action_user_only" groups="self_service_group"/>
+    </menuitem>
+</odoo>

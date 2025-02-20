@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="droga_inventory_reports_excel_action" model="ir.actions.act_window">
+        <field name="name">Stock card - Excel</field>
+        <field name="res_model">droga.inventory.reports.sc.excel</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="droga_inventory_reports_excel_sc_form" model="ir.ui.view">
+        <field name="name">droga.inventory.reports.excel.sc.view.form</field>
+        <field name="model">droga.inventory.reports.sc.excel</field>
+        <field name="arch" type="xml">
+            <form string="" delete="0">
+                <group>
+                    <group>
+                        <field name="warehouse" domain="[('has_access','=',True)]" options="{'no_create':True,'no_open':True}"></field>
+                        <field name="date_from"></field>
+                    </group>
+                    <group>
+                        <field name="product" options="{'no_create':True,'no_open':True}" domain="['|', ('active', '=', False), ('active', '=', True)]"></field>
+                        <field name="date_to"></field>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_get_xls" string="Get Excel" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <menuitem
+            id="droga_inventory_reports_sc_excel"
+            name="Stock card - Excel"
+            action="droga_inventory_reports_excel_action"
+            parent="stock.menu_warehouse_report"
+            groups="stock.group_stock_user"
+            sequence="10000"/>
+</odoo>

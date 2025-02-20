@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <record id="droga_grading_model_action" model="ir.actions.act_window">
+            <field name="name">Grading Models</field>
+            <field name="res_model">droga.grading.model.header</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="droga_grading_tree_view" model="ir.ui.view">
+            <field name="name">droga.grading.model.tree</field>
+            <field name="model">droga.grading.model.header</field>
+            <field name="arch" type="xml">
+
+                <tree string="Grading Model">
+                    <field name="header"/>
+                    <button type="object" string="delete" name="delete_record"/>
+                </tree>
+
+            </field>
+        </record>
+
+        <record id="droga_grading_form_view" model="ir.ui.view">
+            <field name="name">droga.grading.model.form</field>
+            <field name="model">droga.grading.model.header</field>
+            <field name="arch" type="xml">
+                <form>
+<!--                    <header>-->
+<!--                        <button type="object" name="check_weight" string="Save" class="oe_highlight"/>-->
+<!--                    </header>-->
+                    <sheet>
+                        <group>
+                            <field name="header" string='Grading model name'/>
+
+                        </group>
+
+
+                        <field name="grading_detail">
+                            <tree string="Grading criterias" editable="top">
+
+                                <field name="from_score"/>
+                                <field name="to_score"/>
+                                <field name="label"/>
+
+                            </tree>
+                        </field>
+                    </sheet>
+
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

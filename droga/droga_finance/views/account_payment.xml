@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- check followup window -->
+    <record id="droga_account_check_followup_action" model="ir.actions.act_window">
+        <field name="name">Check Followups</field>
+        <field name="res_model">account.payment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('payment_type','=','outbound'),('is_check_printed','=','No')]</field>
+        <field name="context">{'search_default_checks_to_send': 1}</field>
+        <field name="help" type="html">
+            <p>Account Payments</p>
+        </field>
+    </record>
+
+    <!-- payment for vendors -->
+    <record id="droga_account_payment_action" model="ir.actions.act_window">
+        <field name="name">Payment</field>
+        <field name="res_model">account.payment</field>
+        <field name="view_mode">tree,kanban,form,graph</field>
+        <field name="domain">[('payment_request_id','=',active_id)]</field>
+        <field name="context">{'default_payment_request_id':active_id,'default_payment_type':'outbound'}</field>
+        <field name="help" type="html">
+            <field name="help" type="html">
+                <p>Payments</p>
+            </field>
+        </field>
+    </record>
+
+
+    <record id="inherit_for_account_payment_tree" model="ir.ui.view">
+        <field name="name">Account Payment</field>
+        <field name="model">account.payment</field>
+        <field name="priority" eval="1"/>
+        <field name="inherit_id" ref="account.view_account_supplier_payment_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="payment_request_id"/>
+                <field name="is_check_printed" widget="badge" decoration-success="is_check_printed == 'Yes'"
+                       decoration-danger="is_check_printed == 'No'"/>
+            </xpath>
+
+
+        </field>
+    </record>
+
+    <record id="inherit_for_account_payment_form" model="ir.ui.view">
+        <field name="name">Account Payment</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//button[@name='mark_as_sent']" position="after">
+                <button type="object" name="print_check" string="Check print"
+                        attrs="{'invisible': [('payment_type', '!=', 'outbound'),('is_check_printed', '!=', 'Yes')]}"/>
+
+            </xpath>
+
+            <xpath expr="//field[@name='payment_method_line_id']" position="after">
+                <field name="transaction_type" options="{'no_create':True,'no_open':True}" invisible="1"/>
+                <field name="payment_request_id" options="{'no_create':True}" readonly="0"/>
+            </xpath>
+
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="vendor_supplier" string="Name"/>
+            </xpath>
+
+            <xpath expr="//field[@name='partner_bank_id']" position="after">
+                <field name="check_due_date"  attrs="{'required': [('payment_type', 'in', ('outbound'))]}"/>
+                <field name="purpose"/>
+                <field name="is_check_printed" string="Check Printed"/>
+                <field name="first_line_amount_word" invisible="1"/>
+                <field name="second_line_amount_word" invisible="1"/>
+            </xpath>
+
+
+        </field>
+    </record>
+
+
+    <!-- inherit payment register form -->
+
+    <record id="inherit_for_account_payment_register_form" model="ir.ui.view">
+        <field name="name">Account Payment Register</field>
+        <field name="model">account.payment.register</field>
+        <field name="inherit_id" ref="account.view_account_payment_register_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='payment_method_line_id']" position="after">
+                <field name="transaction_type" options="{'no_create':True,'no_open':True}" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='partner_bank_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='communication']" position="attributes">
+                <attribute name="string">Check No/Bank Ref</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!--Inherit quotations search view-->
+    <record id="view_account_payment_inherit_search" model="ir.ui.view">
+        <field name="name">account.payment.filter</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <field name="transaction_no"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

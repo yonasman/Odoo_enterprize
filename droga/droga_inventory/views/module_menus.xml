@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <!-- Stock.picking.type default filter per warehouse access -->
+    <record id="stock.stock_picking_type_action" model="ir.actions.act_window">
+        <field name="domain">[('has_access','=',True)]</field>
+    </record>
+
+    <!-- Stock transfers default filter per warehouse access -->
+    <record id="stock.action_picking_tree_all" model="ir.actions.act_window">
+        <field name="domain">[('has_access','=',True)]</field>
+        <field name="context">{'create': "0",'contact_display': 'partner_address', 'default_company_id': allowed_company_ids[0]}</field>
+    </record>
+
+    <!-- Stock transfers default filter per warehouse access -->
+    <record id="stock.action_picking_tree_ready" model="ir.actions.act_window">
+        <field name="domain">[('has_access','=',True)]</field>
+        <field name="context">{'show_title': True,'create': False,'contact_display': 'partner_address', 'search_default_available': 1}</field>
+    </record>
+
+    <!-- Location report filter per warehouse access -->
+    <record model="ir.actions.act_window" id="stock.dashboard_open_quants">
+        <field name="domain">[('has_read_access','=',True)]</field>
+        <field name="name">Stock on hand</field>
+    </record>
+
+    <!-- Location report filter per warehouse access -->
+    <record model="ir.actions.act_window" id="stock.location_open_quants">
+        <field name="domain">[('has_read_access','=',True)]</field>
+        <field name="name">Stock on hand</field>
+    </record>
+
+    <!-- Move lines history filter per warehouse access -->
+    <record id="stock.stock_move_action" model="ir.actions.act_window">
+        <field name="domain">[('has_read_access','=',True)]</field>
+        <field name="name">Stock summary by reference</field>
+    </record>
+
+    <!-- Move history rename -->
+    <record id="stock.stock_move_line_action" model="ir.actions.act_window">
+        <field name="domain">[('has_read_access','=',True)]</field>
+        <field name="name">Stock report by item</field>
+    </record>
+
+    <!-- Stock report on product.product admin only -->
+    <menuitem id="stock.menu_product_stock" name="Stock" action="stock.action_product_stock_view"
+        parent="stock.menu_warehouse_report" groups="stock.group_stock_manager" sequence="5"/>
+
+    <!--- Transfers menu avail for finance reconcile only -->
+    <menuitem id="stock.all_picking" name="Inventory correction" parent="account.menu_finance_entries_accounting_miscellaneous" sequence="20"
+              action="stock.action_picking_tree_all" groups="droga_inventory.inv_prod_fin"/>
+
+    <!--- OB adjustment menu avail for finance reconcile only -->
+    <menuitem id="stock.menu_action_inventory_tree" name="Stock take Adjustments" groups="droga_inventory.inv_prod_fin" parent="account.menu_finance_entries_accounting_miscellaneous" sequence="10" action="stock.action_view_inventory_tree" />
+
+    <!--- Pass context for reconciliation form -->
+    <record id="stock.action_picking_tree_all" model="ir.actions.act_window">
+            <field name="context">{'create': "1",'contact_display': 'partner_address', 'default_company_id': allowed_company_ids[0],'default_from_reconcile_menu':True}</field>
+        </record>
+
+    <!--- Inventory adjustment for administrators only -->
+    <menuitem id="stock.menu_stock_inventory_control" name="Products" parent="stock.menu_stock_root" sequence="5" groups="stock.group_stock_manager"/>
+
+    <!--- Inventory reporting menu avail for all -->
+    <menuitem id="stock.menu_warehouse_report" name="Reporting" sequence="99" parent="stock.menu_stock_root" groups="stock.group_stock_user"/>
+
+
+
+
+
+    <!-- Menu custom names -->
+    <menuitem id="stock.menu_valuation" name="Stock on hand"
+              parent="stock.menu_warehouse_report" sequence="150"
+              action="stock.action_view_quants" groups="stock.group_stock_multi_locations,stock.group_tracking_owner,base.group_no_one"/>
+
+    <menuitem
+        action="stock.stock_move_line_action"
+        id="stock.stock_move_line_menu" name="Stock report by item"
+        parent="stock.menu_warehouse_report" sequence="200"/>
+
+    <menuitem action="stock.stock_move_action" name="Stock summary by reference" id="stock.stock_move_menu" parent="stock.menu_warehouse_report" sequence="230" groups="stock.group_stock_manager"/>
+</odoo>

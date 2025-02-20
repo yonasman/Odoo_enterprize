@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- pre import tree view -->
+    <record id="droga_purhcase_request_rfq_line_pre_import_permit_view_tree" model="ir.ui.view">
+        <field name="name">droga.purhcase.request.rfq.line.view.tree</field>
+        <field name="model">droga.purhcase.request.rfq.line</field>
+        <field name="arch" type="xml">
+            <tree string="Pre Import" create="0" delete="0" editable="bottom">
+                <field name="product_id" options="{'no_create':True,'no_open':True}" readonly="1"/>
+                <field name="hs_code" />
+                <field name="hs_code_description" />
+                <field name="specification_code" />
+                <field name="specification_description" />
+                <field name="description_of_goods" />
+                <field name="common_name" />
+                <field name="no_of_packages" />
+                <field name="package_unit" />
+                <field name="net_weight" />
+                <field name="gross_weight" />
+                <field name="weight_unit_code" />
+                <field name="country_of_origin" />
+
+
+                <field name="supplier_id" optional="hide" readonly="1"/>
+                <field name="product_id" options="{'no_create':True,'no_open':True}" context="{'company_id': parent.company_id}" optional="hide" readonly="1"/>
+                <field name="product_uom" options="{'no_create':True,'no_open':True}" optional="hide" readonly="1"/>
+                <field name="product_qty" optional="hide" readonly="1"/>
+                <field name="unit_price" optional="hide" readonly="1"/>
+                <field name="tax_id" widget="many2many_tags" optional="hide" readonly="1"/>
+                <field name="price_tax" optional="hide" readonly="1"/>
+                <field name="total_price"  optional="hide" readonly="1"/>
+
+                <field name="state" string="Status"/>
+            </tree>
+        </field>
+    </record>
+
+</odoo>

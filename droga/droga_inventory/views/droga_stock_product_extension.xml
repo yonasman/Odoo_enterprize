@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="product_template_inventory_extension" model="ir.ui.view">
+        <field name="name">product.template.product.inventory.extension.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="priority" eval="100000000"/>
+        <field name="arch" type="xml">
+
+            <!--> Hide print and replinsh buttons -->
+            <xpath expr="//form/header" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+
+            <xpath expr="//div[@name='button_box']" position="inside">
+                    <button icon="fa-credit-card-alt" type="object" string="Stock on hand"
+                                name="open_stock_on_hand" class="oe_stat_button"></button>
+            </xpath>
+
+            <xpath expr="//form/sheet" position="before">
+                <header>
+                <field name="reg_status" invisible="1"/>
+                <button name="approve" type="object" class="btn-primary"
+                    attrs="{'invisible': [('reg_status', 'not in', ['waiting'])]}" groups="droga_inventory.droga_prod_app"
+                    string="Approve"/>
+                <button name="reject" type="object" class="btn-danger"
+                    attrs="{'invisible': [('reg_status', 'not in', ['waiting'])]}" groups="droga_inventory.droga_prod_app"
+                    string="Reject"/>
+                </header>
+                <button string="Print Labels" type="object" name="action_open_label_layout" class="oe_highlight"/>
+            </xpath>
+
+
+            <!--> Hide sales page -->
+            <xpath expr="//form/sheet/notebook/page[@name='sales']" position="attributes">
+                <attribute name="invisible">False</attribute>
+            </xpath>
+
+            <!--> Hide accounting page -->
+            <xpath expr="//page[@name='invoicing']" position="attributes">
+                <attribute name="invisible">False</attribute>
+            </xpath>
+
+            <!--> Hide purchase page -->
+            <xpath expr="//form/sheet/notebook/page[@name='purchase']" position="attributes">
+                <attribute name="invisible">False</attribute>
+            </xpath>
+
+            <!--> Hide inventory page -->
+            <xpath expr="//form/sheet/notebook/page[@name='inventory']" position="attributes">
+                <attribute name="invisible">False</attribute>
+            </xpath>
+
+
+            <!--> General info left side -->
+            <xpath expr="//form/sheet/notebook/page/group/group[@name='group_general']" position="replace">
+                <group col="1" name="group_general">
+
+                    <label for="list_price" invisible="1"/>
+                    <field name="list_price" invisible="1"/>
+
+
+                    <div invisible="1" name="standard_price_uom">
+                        <field name="standard_price" invisible="1"/>
+                    </div>
+                    <div invisible="1" name="pricing"></div>
+
+                    <field name="active" invisible="1"/>
+                    <group col="1">
+                        <field name="detailed_type"/>
+                        <field name="notification_for"></field>
+                        <field name="is_core_product" readonly="1"/>
+                        <field name="is_core_product" groups="droga_inventory.inventory_core"/>
+                    </group>
+
+                    <group string="Import and wholesale analysis">
+                        <field name="emergency_order_point" readonly="1"/>
+                        <field name="maximum_stock_level"/>
+                        <field name="average_month_consumption" readonly="1"/>
+                        <field name="lead_time_in_days"></field>
+                    </group>
+                    <group string="Pharmacy analysis">
+                        <field name="pharmacy_order_point"></field>
+                        <field name="average_month_consumption_phar" readonly="1"/>
+                    </group>
+                    <group string="Origin">
+                        <field name="manufacturing" required="True"></field>
+                        <field name="origin"
+                               options="{'no_create':True,'no_open':True}"/>
+                    </group>
+                    <group string="Tracebility">
+
+                        <field name="tracking" widget="radio" attrs="{'invisible': [('type', '=', 'service')]}"/>
+                        <field name="use_expiration_date" string="Expiration Date"
+                               attrs="{'invisible': [('tracking', '=','none')]}"/>
+                    </group>
+
+                    <group string="Dates" name="expiry_and_lots" groups="stock.group_production_lot"
+                           attrs="{'invisible': ['|', ('tracking', '=','none'), ('use_expiration_date', '=', False)]}">
+                        <label for="expiration_time"/>
+                        <div>
+                            <field name="expiration_time" class="oe_inline"/>
+                            <span>days after receipt</span>
+                        </div>
+                        <label for="use_time"/>
+                        <div>
+                            <field name="use_time" class="oe_inline"/>
+
+                        </div>
+                        <label for="removal_time"/>
+                        <div>
+                            <field name="removal_time" class="oe_inline"/>
+
+                        </div>
+                        <label for="alert_time"/>
+                        <div>
+                            <field name="alert_time" class="oe_inline"/>
+
+                        </div>
+                    </group>
+
+                    <field name="uom_po_id" invisible="1" groups="uom.group_uom" options="{'no_create': True}"/>
+                </group>
+            </xpath>
+
+            <!--> General info right side -->
+            <xpath expr="//form/sheet/notebook/page/group/group[@name='group_standard_price']" position="replace">
+                <group name="group_standard_price" col="1">
+                    <group string="Taxes, cost and sales price">
+                        <field name="standard_price" groups="droga_inventory.inv_prod_fin" readonly="1"
+                               widget='monetary'/>
+                        <field name="list_price" widget='monetary'/>
+                        <field name="list_price_phar" widget='monetary' groups="droga_inventory.pharmacy_price_change"/>
+                        <field name="taxes_id" widget="many2many_tags" options="{'no_create':True,'no_open':True}"/>
+                    </group>
+                    <group string="Unit of measures">
+                        <field name="from_pharma" invisible="1"></field>
+                        <field name="import_uom_new" required="1" string="Import UOM" options="{'no_create': True}" attrs="{'required': [('from_pharma', '=', True)]}"/>/>
+                        <field name="uom_id" string="Pharmacy UOM" options="{'no_create': True}" />
+                        <field name="categ" readonly="1" invisible="1"></field>
+                    </group>
+
+                    <group string="Categories">
+                        <field name="categ_id" invisible="1" string="Product Category"
+                               options="{'no_create':True,'no_open':True}"
+                               domain="[('complete_name','not like','All%'),('parent_id','=',False)]"/>
+                        <field name="pharmacy_group_id" required="True" options="{'no_create':True,'no_open':True}" domain="[('id_counter','&lt;',1000)]"
+                               groups="droga_inventory.inv_prod_mi_manager"></field>
+                        <field name="categ_id" string="Product Category" options="{'no_create':True,'no_open':True}"
+                               domain="[('complete_name','not like','All%'),('avail_in_product_master','=',True),('group_type','=','MI')]"
+                               groups="droga_inventory.inv_prod_mi_manager"/>
+                        <field name="categ_id" string="Product Category" options="{'no_create':True,'no_open':True}"
+                               domain="[('complete_name','not like','All%'),('avail_in_product_master','=',True),('group_type','=','EX')]"
+                               groups="droga_inventory.inv_prod_ex_manager"/>
+                        <field name="categ_id" string="Product Category" options="{'no_create':True,'no_open':True}"
+                               domain="[('complete_name','not like','All%'),('avail_in_product_master','=',True),('group_type','=','SC')]"
+                               groups="droga_inventory.inv_prod_sc_manager"/>
+                        <field name="categ_id" string="Product Category" options="{'no_create':True,'no_open':True}"
+                               domain="[('complete_name','not like','All%'),('avail_in_product_master','=',True),('group_type','=','OS')]"
+                               groups="droga_inventory.inv_prod_os_manager"/>
+                        <field name="sub_categ_id" string="Product sub-category"
+                               options="{'no_create':True,'no_open':True}"
+                               domain="[('complete_name','not like','All%'),('parent_id','=',categ_id)]"/>
+
+                        <field name="product_tag_ids" invisible="1"/>
+
+                        <field name="company_id" groups="base.group_multi_company"
+                               options="{'no_create': True}" invisible="1"/>
+                        <field name="currency_id" invisible="1"/>
+                        <field name="cost_currency_id" invisible="1"/>
+                        <field name="product_variant_id" invisible="1"/>
+                    </group>
+                    <group string="Miscellaneous">
+                        <field name="order_type" required="True"/>
+                        <field name="default_warehouse" string="Default warehouse"
+                               options="{'no_create':True,'no_open':True}"/>
+                        <field name="bought_locally"/>
+                        <field name="old_ref"></field>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="droga_pharma_only_product_action" model="ir.actions.act_window">
+        <field name="name">Products</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="search_view_id" ref="stock.product_template_search_form_view_stock"/>
+        <field name="context">{"search_default_consumable": 1, 'default_detailed_type': 'product','default_from_pharma':True}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No product found. Let's create one!
+            </p><p>
+                Track your stock quantities by creating storable products.
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="product_template_kanban_stock_view_import_uom">
+            <field name="name">Product Template Kanban Stock</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_kanban_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//kanban" position="inside">
+                    <field name="type"/>
+                    <field name="show_on_hand_qty_status_button" groups="stock.group_stock_user"/>
+                </xpath>
+                <xpath expr="//div[@name='product_lst_price']" position="after">
+                    <t groups="stock.group_stock_user">
+                    <div >On hand: <field name="qty_available_import"/> <field name="import_uom_new"/></div>
+                    </t>
+                </xpath>
+            </field>
+        </record>
+</odoo>
+
+

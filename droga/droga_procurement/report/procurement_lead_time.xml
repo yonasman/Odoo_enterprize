@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- tree view procurement lead time -->
+    <record id="droga_procurement_foreign_lead_time_report_tree_view" model="ir.ui.view">
+        <field name="name">Procurement</field>
+        <field name="model">droga.purchase.foreign.procurement.lead.time.report</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="pr_request_id" optional="show"/>
+                <field name="pr_date" optional="show"/>
+                <field name="pr_state" optional="hide"/>
+                <field name="rfq_request_id" optional="show"/>
+                <field name="rfq_date" optional="show"/>
+                <field name="rfq_state" optional="hide"/>
+                <field name="po_request_id" optional="show"/>
+                <field name="po_date" optional="show"/>
+                <field name="po_state" optional="hide"/>
+                <field name="grn_request_id" optional="show"/>
+                <field name="grn_date" optional="show"/>
+                <field name="grn_state" optional="hide"/>
+                <field name="pr_to_lc_lead_time" optional="show"/>
+                <field name="pr_to_grn_lead_time" optional="show"/>
+
+                <field name="company_id" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- pivot view procurement lead time -->
+    <record id="droga_procurement_foreign_lead_time_report_pivot_view" model="ir.ui.view">
+        <field name="name">Procurement</field>
+        <field name="model">droga.purchase.foreign.procurement.lead.time.report</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="pr_request_id" type="row"/>
+                <field name="grn_request_id" type="column"/>
+                <field name="pr_to_lc_lead_time" type="measure"/>
+                <field name="pr_to_grn_lead_time" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+
+    <!-- action procurement lead time -->
+    <record id="droga_procurement_foreign_lead_time_report_action" model="ir.actions.act_window">
+        <field name="name">Procurement Lead Time</field>
+        <field name="res_model">droga.purchase.foreign.procurement.lead.time.report</field>
+        <field name="view_mode">tree,pivot</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Procurement Lead Time Report
+            </p>
+        </field>
+    </record>
+
+
+    <!-- rule for filtering data specific data -->
+    <record model="ir.rule" id="droga_procurement_foreign_lead_time_report_rule">
+        <field name="name">Procurement Lead Time Multi-Company</field>
+        <field name="model_id" ref="model_droga_purchase_foreign_procurement_lead_time_report"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+
+</odoo>

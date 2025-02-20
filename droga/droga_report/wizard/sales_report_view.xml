@@ -1,0 +1,43 @@
+<odoo>
+    <record id="droga_inventory_reports_excel_action2" model="ir.actions.act_window">
+        <field name="name">Sales Report - Excel</field>
+        <field name="res_model">sales.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="droga_inventory_reports_excel_sc_form2" model="ir.ui.view">
+        <field name="name">droga.inventory.reports.excel.sc.view.form</field>
+        <field name="model">droga.inventory.reports.sc.excel</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <group>
+                    <group>
+                        <field name="date_from"></field>
+                        <field name="date_to"></field>
+                        <field name="item_code"></field>
+                        <field name="city"></field>
+                        <field name="payment_type"></field>
+                        <field name="sales_person"></field>
+                    </group>
+                    <group>
+                        <field name="product"></field>
+                        <field name="date_to"></field>
+                    </group>
+                </group>
+                <footer>
+                    <button string="Generate Report" name="generate_report" type="object" class="btn-primary"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <menuitem
+            id="droga_inventory_reports_sc_excel2"
+            name="Sales Report - Excel"
+            action="droga_inventory_reports_excel_action"
+            parent="stock.menu_warehouse_report"
+            sequence="10000"/>
+</odoo>
+

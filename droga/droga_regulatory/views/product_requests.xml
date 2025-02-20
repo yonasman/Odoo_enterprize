@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="sequence_bdr_requests" model="ir.sequence">
+            <field name="name">BDR requests Sequence</field>
+            <field name="code">droga.reg.master.custom.sequence</field>
+            <field name="prefix">REQ_D_</field>
+        </record>
+        <!-- Form View -->
+        <record id="view_droga_bdr_requests_header_form" model="ir.ui.view">
+            <field name="name">droga.bdr.requests.header.form</field>
+            <field name="model">droga.bdr.requests.header</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <field name="status" widget="statusbar"/>
+                        <button name="submit_req" string="Submit" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('status', '!=', 'draft')]}"/>
+
+
+                    </header>
+
+                    <sheet>
+
+                        <group>
+
+
+                            <group>
+                                <field name="request_no" readonly="1"/>
+                                <field name="requested_by"/>
+                                <field name="date"/>
+                            </group>
+                            <group>
+                                <field name="department"/>
+                                <field name="company_id"/>
+                            </group>
+
+                        </group><br/><br/>
+
+                        <h3>Product Details</h3>
+                        <hr/>
+                        <notebook>
+                            <page string="Product Requisition">
+
+                                <group>
+                                    <group>
+                                        <field name="description"/>
+                                        <field name="private_tender"/>
+                                        <field name="competitors" widget="many2many_tags"/>
+                                    </group>
+                                    <group>
+                                        <field name="price"/>
+                                        <field name="sales_forecast"/>
+                                        <field name="remark"/>
+                                    </group>
+
+
+                                </group>
+
+                            </page>
+                        </notebook>
+
+
+                    </sheet>
+
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+
+                </form>
+            </field>
+        </record>
+
+        <!-- Tree View -->
+        <record id="view_droga_bdr_requests_header_tree" model="ir.ui.view">
+            <field name="name">droga.bdr.requests.header.tree</field>
+            <field name="model">droga.bdr.requests.header</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="request_no"/>
+                    <field name="requested_by"/>
+                    <field name="date"/>
+                    <field name="department"/>
+                    <field name="company_id"/>
+                </tree>
+            </field>
+        </record>
+    </data>
+
+    <!-- Action -->
+    <record id="action_droga_bdr_requests_header" model="ir.actions.act_window">
+        <field name="name">BDR Requests</field>
+        <field name="res_model">droga.bdr.requests.header</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+
+</odoo>

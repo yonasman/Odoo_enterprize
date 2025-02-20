@@ -1,0 +1,43 @@
+<odoo>
+    <data noupdate="1">
+        <record id="seq_reg_dev" model="ir.sequence">
+            <field name="name">Buisness development sequence</field>
+            <field name="code">droga.reg.master.custom.sequence</field>
+            <field name="prefix">REQD/%(y)s/</field>
+            <field name="suffix"/>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_prod_analysis_dev" model="ir.sequence">
+            <field name="name">Product analysis sequence</field>
+            <field name="code">droga.reg.prod.analysis.custom.sequence</field>
+            <field name="prefix">PRODAN/%(y)s/</field>
+            <field name="suffix"/>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_market_analysis" model="ir.sequence">
+            <field name="name">Market analysis sequence</field>
+            <field name="code">droga.reg.market.analysis.sequence</field>
+            <field name="prefix">MARKAN/%(y)s/</field>
+            <field name="suffix"/>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+         <record id="seq_exbh_reg_num" model="ir.sequence">
+            <field name="name">Market analysis sequence</field>
+            <field name="code">droga.reg.exhibition_registration.sequence</field>
+            <field name="prefix">EX-REG/%(y)s/</field>
+            <field name="suffix"/>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

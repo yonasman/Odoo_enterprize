@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="droga_export_status_tree" model="ir.ui.view">
+        <field name="name">droga.export.status.tree</field>
+        <field name="model">droga.export.status</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom" create="0" delete="0">
+                <field name="status" readonly="1"></field>
+                <field name="completed"></field>
+                <field name="remark"></field>
+            </tree>
+        </field>
+    </record>
+</odoo>

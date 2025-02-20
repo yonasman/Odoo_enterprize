@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <record id="droga_report_failed_tenders" model="ir.ui.view">
+        <field name="name">droga.report.failed.cancelled.tender</field>
+        <field name="model">droga.tender.submission.detail</field>
+        <field name="arch" type="xml">
+            <tree string="" create="false" delete="false" expand="1">
+                <field name="ten_id" string="Tender ID"></field>
+                <field name="customer"></field>
+                <field name="customer_type"></field>
+                <field name="procurement_title"></field>
+                <field name="amount"></field>
+                <field name="status"></field>
+                <field name="remark"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_tender_failed_cancelled_search_tree" model="ir.ui.view">
+        <field name="name">droga.tender.failed.cancelled.search.tree</field>
+        <field name="model">droga.tender.submission.detail</field>
+        <field name="arch" type="xml">
+            <search string="Upcoming Tenders">
+                <field name="ten_id" string="Tender ID"></field>
+                <field name="customer"></field>
+                <field name="customer_type"></field>
+                <field name="procurement_title"></field>
+                <field name="amount"></field>
+                <field name="status"></field>
+                <filter string="Lost and cancelled" domain="[('status', 'in',['cancelled','lost'])]"
+                        name="status_cancelled_lost"></filter>
+                <filter string="Lost" domain="[('status', 'in',['lost'])]"
+                        name="status_lost"></filter>
+                <filter string="Cancelled" domain="[('status', 'in',['cancelled'])]"
+                        name="status_cancelled"></filter>
+                <filter name="group_type_customer" string="Customer" context="{'group_by':'customer'}"/>
+                <filter name="group_type_status" string="Status" context="{'group_by':'status'}"/>
+                <filter name="group_type_cust_type" string="Customer type" context="{'group_by':'customer_type'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="droga_tender_report_failed_cancelled" model="ir.actions.act_window">
+        <field name="name">Failed/cancelled tenders</field>
+        <field name="res_model">droga.tender.submission.detail</field>
+        <field name="view_mode">tree</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('droga_report_failed_tenders')})]"/>
+        <field name="search_view_id" ref="droga_tender_failed_cancelled_search_tree"></field>
+        <field name="context">{'search_default_status_cancelled': 1,'search_default_group_type_status':1}</field>
+    </record>
+
+    <menuitem
+            id="droga_report_failed_cancelled_tenders"
+            name="Failed/cancelled tenders"
+            action="droga_tender_report_failed_cancelled"
+            parent="tender_reports"
+            groups="tender_user"
+            sequence="11"/>
+</odoo>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="droga_tender_settings_media_action" model="ir.actions.act_window">
+        <field name="name">Media registry</field>
+        <field name="res_model">droga.tender.settings.media</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="droga_tender_settings_media_view_tree" model="ir.ui.view">
+        <field name="name">droga.tender.settings.media.view.tree</field>
+        <field name="model">droga.tender.settings.media</field>
+        <field name="arch" type="xml">
+            <tree string="" delete="0">
+                <field name="media_name"></field>
+                <field name="media_descr"></field>
+                <field name="status"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_tender_settings_media_view_form" model="ir.ui.view">
+        <field name="name">droga.tender.settings.media.view.form</field>
+        <field name="model">droga.tender.settings.media</field>
+        <field name="arch" type="xml">
+            <form string="" delete="0">
+                <sheet>
+                    <group>
+                        <field name="media_name"></field>
+                        <field name="media_descr"></field>
+                        <field name="status"></field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <menuitem
+            id="droga_tender_settings_media"
+            name="Medias Registry"
+            action="droga_tender_settings_media_action"
+            parent="tender_settings_menu"
+            sequence="13"/>
+</odoo>

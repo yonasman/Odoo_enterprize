@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <!-- Form View -->
+        <record id="view_pre_import_permit_form" model="ir.ui.view">
+            <field name="name">Pre-Import Permit</field>
+            <field name="model">droga.reg.pre.import.permit.header</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <field name="ra_status" invisible="1"></field>
+                        <button name="activty_for_ra" type="object" string="Submit to RA"
+                                class="btn-primary"
+                                attrs="{'invisible': [('ra_status', '=', 'ra')]}"/>
+                    </header>
+                    <sheet>
+                        <h2>Pre-Import Permit</h2>
+                        <group>
+                            <group>
+                                <field name="preimport_permit_no"/>
+                            </group>
+
+                            <group>
+                                <field name="manufacturer"/>
+                                <field name="invoice_amount"/>
+                                <field name="date_received"/>
+                                <field name="discrepancy"/>
+                            </group>
+                            <group>
+                                <field name="proforma_invoice_no"/>
+                                <field name="app_no"/>
+                                <field name="date_generated"/>
+                                <field name="no_days"/>
+
+                            </group>
+
+
+                        </group>
+                    </sheet>
+
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+
+
+                </form>
+            </field>
+        </record>
+
+        <!-- Tree View -->
+        <record id="view_pre_import_permit_tree" model="ir.ui.view">
+            <field name="name">pre.import.permit.tree</field>
+            <field name="model">droga.reg.pre.import.permit.header</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="manufacturer"/>
+                    <field name="proforma_invoice_no"/>
+                    <field name="app_no"/>
+                    <field name="invoice_amount"/>
+                    <field name="date_received"/>
+                    <field name="date_generated"/>
+                    <field name="no_days"/>
+
+                </tree>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_pre_import_permit" model="ir.actions.act_window">
+            <field name="name">Pre Import Permits</field>
+            <field name="res_model">droga.reg.pre.import.permit.header</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo>

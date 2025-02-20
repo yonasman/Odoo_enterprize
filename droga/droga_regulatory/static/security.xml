@@ -1,0 +1,27 @@
+<odoo>
+
+    <record model="ir.module.category" id="droga_regulatory">
+        <field name="name">Regulatory</field>
+        <field name="description">User access level for Regulatory Management</field>
+        <field name="sequence">30</field>
+    </record>
+
+    <record id="droga_regulatory_manager" model="res.groups">
+        <field name="name">Regulatory Manager</field>
+        <field name="category_id" ref="droga_regulatory"/>
+    </record>
+
+    <record id="droga_regulatory_head" model="res.groups">
+        <field name="name">Regulatory Head</field>
+        <field name="category_id" ref="droga_regulatory"/>
+    </record>
+
+    <record id="access_rule_regulatory_manager" model="ir.rule">
+    <field name="name">Restrict Regulatory Managers from Creating Entries</field>
+    <field name="model_id" ref="model_droga_reg_company_info"/>
+    <field name="groups" eval="[(4, ref('droga_regulatory.droga_regulatory_manager'))]"/>
+    <field name="perm_create" eval="False"/>
+</record>
+
+
+</odoo>

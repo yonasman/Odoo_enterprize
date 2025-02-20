@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_market_analysis_report" model="ir.ui.view">
+        <field name="name">market.analysis.report.wizard.form</field>
+        <field name="model">market.analysis.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string=" Market Analysis Report">
+                <group>
+
+                    <field name="date_from"/>
+                    <field name="local_agent"/>
+                    <field name="brand_name"/>
+
+                </group>
+
+                <group>
+
+                    <field name="date_to"/>
+                    <field name="manufacturer"/>
+                    <field name="generic_name"/>
+
+                </group>
+                <footer>
+                    <button name="action_wizard_print_excel_report" type="object" string="Create Report"
+                            class="btn-primary"/>
+                    <button name="action_cancel" string="Cancel" type="object" class="btn-secondary"/>
+                </footer>
+
+            </form>
+        </field>
+    </record>
+
+
+
+
+    <record model="ir.actions.act_window" id="action_market_analysis_report">
+        <field name="name">droga.market.analysis.report.wizard.report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">market.analysis.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_market_analysis_report"/>
+        <field name="target">new</field>
+
+    </record>
+
+
+     <record id="report_market_analysis_xlsx" model="ir.actions.report">
+        <field name="name">Market Analysis Excel_xlsx Report</field>
+        <field name="model">market.analysis.report.wizard</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">report.droga.marekt-analysis.xls</field>
+        <field name="report_file">report.droga.marekt-analysis.xls</field>
+        <field name="binding_type">report</field>
+    </record>
+
+</odoo>

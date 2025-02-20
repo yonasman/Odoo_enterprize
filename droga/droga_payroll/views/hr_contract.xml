@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="inherit_hr_contract_view_action" model="ir.actions.act_window">
+        <field name="name">Salary Detail</field>
+        <field name="res_model">hr.job.salary</field>
+        <field name="view_mode">form</field>
+        <field name="domain">[]</field>
+        <field name="target">new</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Salary Detail
+            </p>
+        </field>
+    </record>
+
+    <!--inherit contract -->
+    <record id="inherit_hr_contract_view_form" model="ir.ui.view">
+        <field name="name">Contract</field>
+        <field name="model">hr.contract</field>
+        <field name="priority" eval="1"/>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//page[@name='other']" position="before">
+                <page string="Salary and Benefits" name="salaryandbenefits">
+                    <group cols="1">
+                        <field name="custom_salary_structure" string="Custom Salary"/>
+                        <field name="pension_contribution"/>
+                        <field name="sales"/>
+                        <field name="canteen"/>
+                        <field name="job_id"/>
+                        <field name="sales_commission"/>
+                        <field name="has_company_vehicle"/>
+                        <field name="paid_by_usd"/>
+                    </group>
+                    <field name="salary_structure" mode="tree"
+                           attrs="{'invisible': [('custom_salary_structure', '==',True )]}">
+                        <tree editable="bottom">
+                            <field name="name" width="20"/>
+                            <field name="date_from" width="20" required="1"/>
+                            <field name="date_to" width="20"/>
+                            <field name="state" width="20"/>
+
+
+                        </tree>
+                    </field>
+                    <field name="salary_structure_custom" mode="tree"
+                           attrs="{'invisible': [('custom_salary_structure', '==', False)]}">
+                        <tree context="{'default_contract_id':active_id,'default_job_id':job_id}">
+                            <field name="job_id" invisible="1"/>
+                            <field name="name" width="20"/>
+                            <field name="date_from" width="20" required="1"/>
+                            <field name="date_to" width="20"/>
+                            <field name="state" width="20"/>
+
+
+                        </tree>
+                    </field>
+                    <field name="payment_deductions" mode="tree" string="Payment and Deductions">
+                        <tree editable="bottom" string="Payment and Deductions">
+                            <field name="input_type" string="PD"/>
+                            <field name="input_types" string="PD Type"/>
+                            <field name="date_from" string="Date From"/>
+                            <field name="date_to" string="Date To"/>
+                            <field name="amount" string="Amount"/>
+                            <field name="total_amount" string="Total Amount"/>
+                            <field name="rem_amount" readonly="1"/>
+                        </tree>
+                    </field>
+                </page>
+
+                <page string="Benefits" name="benefits" invisible="1">
+                    <group>
+                        <group>
+                            <field name="pension_contribution"/>
+                            <field name="sales"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="housing_allowance"/>
+                            <field name="transport_allowance"/>
+                            <field name="representation_allowance"/>
+                        </group>
+                        <group>
+                            <field name="fuel_allowance"/>
+                            <field name="acting_allowance"/>
+                            <field name="telephone_allowance"/>
+                        </group>
+                    </group>
+                </page>
+
+                <xpath expr="//page[@name='information']" position="attributes">
+
+                    <attribute name="attrs">{'invisible': True}</attribute>
+
+                </xpath>
+                <xpath expr="//page[@name='salary_info']" position="attributes">
+
+                    <attribute name="attrs">{'invisible': 1}</attribute>
+
+                </xpath>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,17 @@
+<odoo>
+    <record id="view_project_progress_wizard" model="ir.ui.view">
+        <field name="name">droga.project.progress.wizard.form</field>
+        <field name="model">droga.project.progress.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Generate Project Progress Report">
+                <group>
+                    <field name="project_id"/>
+                </group>
+                <footer>
+                    <button name="action_generate_xlsx_report" type="object" string="Generate Report" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

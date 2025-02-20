@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="export_seq_items_comp" model="ir.sequence">
+            <field name="name">Items composition sequence</field>
+            <field name="code">droga.export.items.composition.sequence</field>
+            <field name="prefix">ITCM/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="implementation">no_gap</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="export_sub_contractor_issue" model="ir.sequence">
+            <field name="name">Subcontractor issue sequence</field>
+            <field name="code">droga.export.items.sub.contractor.issue.sequence</field>
+            <field name="prefix">SUBI/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="implementation">no_gap</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="export_sub_contractor_return" model="ir.sequence">
+            <field name="name">Subcontractor return sequence</field>
+            <field name="code">droga.export.items.sub.contractor.return.sequence</field>
+            <field name="prefix">SUBR/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="implementation">no_gap</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

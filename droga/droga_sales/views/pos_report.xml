@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- form view -->
+    <record id="test_form_view" model="ir.ui.view">
+        <field name="name">pos_report_form_view</field>
+        <field name="model">droga.sales.pos.reports</field>
+        <field name="arch" type="xml">
+            <form js_class="pos_report_form_view" create="false" edit="false">
+                <sheet>
+                    <group>
+                        <field name="report"/>
+
+                        <group>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                        </group>
+                        <group>
+                            <field name="z_no_start"/>
+                            <field name="z_no_end"/>
+                        </group>
+                    </group>
+                </sheet>
+
+            </form>
+        </field>
+
+    </record>
+
+    <!-- action -->
+    <record id="pos_report_action" model="ir.actions.act_window">
+        <field name="name">POS Reports</field>
+        <field name="res_model">droga.sales.pos.reports</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="pos_report" name="POS Reports" sequence="1"
+              parent="account_accountant.menu_accounting" action="pos_report_action">
+    </menuitem>
+
+</odoo>

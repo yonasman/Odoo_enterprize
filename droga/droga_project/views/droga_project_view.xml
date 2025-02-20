@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="droga_project_inherited_form" model="ir.ui.view">
+        <field name="name">droga.project.inherited</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.project_project_view_form_simplified"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/div/h1" position="after">
+                <group>
+                    <field name="parent_project"/>
+                    <field name="project_progress"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="parent_project_view_kanban_inherit_documents" model="ir.ui.view">
+        <field name="name">parent.project.kanban.inherit</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.view_project_kanban"/>
+        <field name="priority">27</field>
+        <field name="arch" type="xml">
+            <xpath expr="//kanban/templates/t/div/div/div/div/div" position="inside">
+                <div role="menuitem">
+                    <field name="parent_project"/>
+                    Project Progress:
+                    <field name="project_progress"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="parent_project_view_form_inherit" model="ir.ui.view">
+        <field name="name">parent.project.form.inherit</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="priority">27</field>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/group/group/field[@name='company_id']" position="before">
+                    <field name="parent_project"/>
+                    <field name="project_progress"/>
+            </xpath>
+
+            <xpath expr="//form/sheet/group/group/field[@name='user_id']" position="after">
+                <field name="project_forman"/>
+                <field name="project_engineer"/>
+            </xpath>
+
+            <xpath expr="//field[@name='label_tasks']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+            <xpath expr="//field[@name='tag_ids']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/group/group/field[@name='company_id']" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </xpath>
+
+            <xpath expr="//form/sheet/notebook/page[@name='description']" position="before">
+                <page name="tasks_weight" string="Tasks Weight">
+
+                    <field name="type_ids">
+                        <tree editable="bottom" create="0" delete="0" context="{'delete': False}">
+                            <field name="name"></field>
+                            <field name="task_stage_weight"></field>
+                            <button icon="fa-credit-card-alt" type="object" string="Stage tasks weight" name="tasks_weight"
+                                    class="oe_stat_button"></button>
+                        </tree>
+                    </field>
+                </page>
+                <page name="project_wh" string="Project warehouses">
+
+                    <field name="warehouses">
+                        <tree editable="bottom" create="1" delete="0" context="{'delete': False}">
+                            <field name="name"></field>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="droga_pharma_area_coun_action" model="ir.actions.act_window">
+        <field name="name">Area of counsel</field>
+        <field name="res_model">droga.pharma.area_counsel</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="droga_pharma_area_coun_tree" model="ir.ui.view">
+        <field name="name">droga.pharma.area_counsel.tree</field>
+        <field name="model">droga.pharma.area_counsel</field>
+        <field name="arch" type="xml">
+            <tree string="" editable="top" delete="0">
+                <field name="area_coun"></field>
+                <field name="descr"></field>
+                <field name="status"></field>
+            </tree>
+        </field>
+    </record>
+
+</odoo>

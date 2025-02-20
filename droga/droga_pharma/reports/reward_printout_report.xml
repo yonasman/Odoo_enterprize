@@ -1,0 +1,21 @@
+<odoo>
+    <record id="droga_reward_printout_action" model="ir.actions.report">
+        <field name="name">Reward Paper(English)</field>
+        <field name="model">droga.inventory.consignment.issue</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">droga_pharma.report_reward_english</field>
+        <field name="report_file">droga_pharma.report_reward_english</field>
+        <field name="binding_model_id" ref="model_droga_inventory_consignment_issue"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="droga_reward_printout_action_amharic" model="ir.actions.report">
+        <field name="name">Reward Paper(Amharic)</field>
+        <field name="model">droga.inventory.consignment.issue</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">droga_pharma.report_reward_amharic</field>
+        <field name="report_file">droga_pharma.report_reward_amharic</field>
+        <field name="binding_model_id" ref="model_droga_inventory_consignment_issue"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

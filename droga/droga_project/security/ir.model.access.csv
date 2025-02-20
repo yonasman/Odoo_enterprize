@@ -1,0 +1,14 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_project_contractors,droga.project.contractors,model_droga_project_contractors,base.group_user,1,1,1,1
+access_project_consultants,droga.project.consultant,model_droga_project_consultant,base.group_user,1,1,1,1
+access_project_predecessor,droga.project.predecessor,model_droga_sub_task_predecessor,base.group_user,1,1,1,1
+
+access_droga_project_deliverables,project.deliverables,model_project_deliverables,base.group_user,1,1,1,1
+access_droga_project_objectives,project.objectives,model_project_objectives,base.group_user,1,1,1,1
+access_droga_project_tasks,project.tasks,model_project_tasks_scope,base.group_user,1,1,1,1
+access_droga_project_out_of_scope,project.out.of.scope,model_project_out_of_scope,base.group_user,1,1,1,1
+access_droga_project_assumption,project.assumption,model_project_assumption,base.group_user,1,1,1,1
+access_droga_project_approval,project.approval,model_project_approval,base.group_user,1,1,1,1
+access_droga_project_constraints,project.constraints,model_project_constraints,base.group_user,1,1,1,1
+access_droga_project_scope_version,droga.project.scope.version,model_project_scope_version,base.group_user,1,1,1,1
+access_droga_project_task_problems,droga.project.task.problems,model_project_task_problems,base.group_user,1,1,1,1

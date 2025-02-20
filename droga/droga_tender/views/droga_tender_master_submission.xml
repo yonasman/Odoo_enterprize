@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="droga_tender_upcoming_view_tree" model="ir.ui.view">
+        <field name="name">droga.tender.upcoming.view.tree</field>
+        <field name="model">droga.tender.master</field>
+        <field name="arch" type="xml">
+            <tree string="" create="false" delete="false">
+                <field name="ten_id" string="Tender ID"></field>
+                <field name="customer"></field>
+                <field name="posted_date_gre" string="Floated date"></field>
+                <field name="closing_date_gre" string="Closing date"></field>
+                <field name="open_date_gre" invisible="1"></field>
+                <field name="extension_date_gre" invisible="1"></field>
+                <field name="extension_date_eth" invisible="1"></field>
+                <field name="open_date_eth" invisible="1"></field>
+                <field name="closing_date_eth" invisible="1"></field>
+                <field name="float_period" invisible="1"></field>
+                <field name="bid_submit_place" invisible="1"></field>
+                <field name="price_validity_period" invisible="1"></field>
+                <field name="remark"></field>
+                <field name="customer_tender_no" invisible="1"></field>
+                <field name="period_type" invisible="1"></field>
+                <field name="bid_type" invisible="1"></field>
+                <field name="bid_doc_purch_price" invisible="1"></field>
+                <field name="refloat" invisible="1"></field>
+                <field name="status" decoration-success="status == 'active'" decoration-muted="status == 'closed'"
+                       widget="badge"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_import_tender_details" model="ir.actions.client">
+        <field name="name">Tender submission details import</field>
+        <field name="tag">import</field>
+        <field name="params">{ 'model': 'droga.tender.submission.detail'}</field>
+    </record>
+
+    <record id="action_import_tech_spec" model="ir.actions.client">
+        <field name="name">Tender technical specification import</field>
+        <field name="tag">import</field>
+        <field name="params">{ 'model': 'droga.tender.specs.detail'}</field>
+    </record>
+
+    <record id="droga_tender_upcoming_view_form" model="ir.ui.view">
+        <field name="name">droga.tender.upcoming.view.form</field>
+        <field name="model">droga.tender.master</field>
+        <field name="arch" type="xml">
+
+            <form delete="0">
+
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+
+                            <button icon="fa-credit-card-alt" type="object" string="Bid Security" name="bid_security_open"
+                                    class="oe_stat_button"></button>
+                            <button icon="fa-credit-card-alt" name="%(action_import_tender_details)d"
+                                    string="Import sub. details" class="oe_stat_button" type="action"/>
+                            <button icon="fa-credit-card-alt" name="%(action_import_tech_spec)d"
+                                    string="Import tech. spec." class="oe_stat_button" type="action"/>
+                            <button icon="fa-credit-card-alt" type="object" string="Initiate sales order" name="order_sales"
+                                    class="oe_stat_button"></button>
+                        </div>
+
+                        <notebook>
+                            <page string="Technical detail">
+                                <field name="detail_submissions_tec" mode="tree">
+                                    <tree editable="bottom" multi_line="1">
+
+                                        <field name="lot_number"/>
+                                        <field name="item_num"/>
+                                        <field name="type_item" options="{'no_create':True,'no_open':True}"/>
+                                        <field name="item_des_list"/>
+                                        <field name="item_pro"/>
+                                        <field name="uom_reg_field" options="{'no_open':True}"/>
+                                        <field name="quantity"/>
+                                        <field name="supplier_new"/>
+                                        <field name="brand_model"/>
+                                        <field name="country" string="Country" options="{'no_create':True,'no_open':True}"/>
+                                        <field name="expiry_date_char"/>
+                                        <field name="deliv_period_text"/>
+                                        <field name="tech_result"/>
+                                        <field name="id"/>
+
+                                        <button icon="fa-credit-card-alt" type="object" string="Tech. Spec."
+                                                name="tech_specs_open" class="oe_stat_button"></button>
+
+                                    </tree>
+                                </field>
+
+                            </page>
+
+
+                            <page string="Financial detail">
+                                <field name="detail_submissions_fin" mode="tree">
+                                    <tree editable="1" create="0">
+                                        <field name="lot_number"/>
+                                        <field name="item_num"/>
+                                        <field name="type_item" options="{'no_create':True,'no_open':True}"/>
+                                        <field name="item_pro"/>
+                                        <field name="uom_reg_field"></field>
+                                        <field name="quantity" sum="Total"/>
+                                        <field name="unit_price" widget='monetary'/>
+                                        <field name="amount" sum="Total" widget='monetary'/>
+                                        <field name="status"/>
+                                        <field name="remark"/>
+                                        <button icon="fa-credit-card-alt" type="object" string="Competitors"
+                                                name="competitors_open" class="oe_stat_button"></button>
+                                    </tree>
+                                </field>
+                                </page>
+                                <page string="Additional info">
+                                <field name="detail_submissions_additional" mode="tree">
+                                    <tree editable="1" create="0">
+                                        <field name="lot_number"/>
+                                        <field name="item_num"/>
+                                        <field name="item_pro"/>
+                                        <field name="incoterm" options="{'no_create':True,'no_open':True}"/>
+                                        <field name="currency" options="{'no_create':True,'no_open':True}"/>
+                                        <field name="fin_open"/>
+                                        <field name="award_fold_num"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Awarded tenders">
+                                <field name="detail_performance" mode="tree">
+                                    <tree editable="bottom" create="0">
+                                        <field name="lot_number"/>
+                                        <field name="item_num"/>
+                                        <field name="type_item" options="{'no_create':True,'no_open':True}"/>
+                                        <field name="item_pro"/>
+                                        <field name="droga_product"/>
+                                        <button icon="fa-edit" string="" type="object" attrs="{'invisible': [('droga_product', '!=', False)]}"
+                                                name="reg_products" class="oe_stat_button"/>
+                                        <field name="ordered_qty"/>
+                                        <field name="delivered_qty"/>
+                                        <field name="remaining_qty"/>
+                                        <field name="init_sales_order"/>
+                                        <field name="quantity" sum="Total"/>
+                                        <field name="award_quantity" sum="Total"/>
+                                        <field name="unit_price" widget='monetary'/>
+                                        <field name="amount" sum="Total" widget='monetary'/>
+                                        <field name="award_cost" sum="Total"/>
+                                    </tree>
+                                </field>
+                            </page>
+
+                            <page string="Contract agreement">
+                                <field name="detail_contract" mode="tree">
+                                    <tree editable="bottom">
+                                        <field name="lot_number"/>
+                                        <field name="type_item" options="{'no_create':True,'no_open':True}"/>
+                                        <field name="cont_num"/>
+                                        <field name="signing_date"/>
+                                        <field name="cont_period"/>
+                                        <field name="agree_deadline"/>
+                                        <field name="ext_period"/>
+                                        <field name="ext_deadline"/>
+                                        <field name="amount"/>
+                                        <field name="remark"/>
+
+                                        <button icon="fa-credit-card-alt" type="object" string="Advance Security"
+                                                name="adv_security_open" class="oe_stat_button"/>
+                                        <button icon="fa-credit-card-alt" type="object" string="Performance Security"
+                                                name="performance_security_open" class="oe_stat_button"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+
+            </form>
+        </field>
+
+    </record>
+
+
+    <record id="droga_tender_upcoming_search_tree" model="ir.ui.view">
+        <field name="name">droga.tender.upcoming.search.tree</field>
+        <field name="model">droga.tender.master</field>
+        <field name="arch" type="xml">
+            <search string="Upcoming Tenders">
+                <field name="customer"></field>
+                <filter string="Active tenders"
+                        domain="[('closing_date_gre', '&gt;', datetime.datetime.combine(context_today(), datetime.time(0,0,0)))]"
+                        name="is_active"></filter>
+                <filter string="To submit within a week"
+                        domain="[('closing_date_gre', '&gt;', datetime.datetime.combine(context_today(), datetime.time(0,0,0))),('closing_date_gre', '&lt;', (context_today()+datetime.timedelta(days=7)).strftime('%%Y-%%m-%%d'))]"
+                        name="submit_week"></filter>
+                <filter string="To submit within a month"
+                        domain="[('closing_date_gre', '&gt;', datetime.datetime.combine(context_today(), datetime.time(0,0,0))),('closing_date_gre', '&lt;', (context_today()+datetime.timedelta(days=30)).strftime('%%Y-%%m-%%d'))]"
+                        name="submit_month"></filter>
+                <filter string="Submitted within the last week"
+                        domain="[('closing_date_gre', '&lt;', datetime.datetime.combine(context_today(), datetime.time(0,0,0))),('closing_date_gre', '&gt;', (context_today()-datetime.timedelta(days=7)).strftime('%%Y-%%m-%%d'))]"
+                        name="submitted_within3days"></filter>
+            </search>
+        </field>
+    </record>
+
+    <record id="droga_tender_master_upcoming_tenders" model="ir.actions.act_window">
+        <field name="name">Upcoming Tenders</field>
+        <field name="res_model">droga.tender.master</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('droga_tender_upcoming_view_tree')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('droga_tender_upcoming_view_form')})]"/>
+        <field name="search_view_id" ref="droga_tender_upcoming_search_tree"></field>
+        <field name="context">{'search_default_submit_week': 1}</field>
+    </record>
+
+    <record id="droga_tender_activities" model="ir.actions.act_window">
+        <field name="name">Tender activities</field>
+        <field name="res_model">droga.tender.master</field>
+        <field name="view_mode">activity,form</field>
+    </record>
+
+
+    <menuitem
+            id="droga_tender_master_upcoming_tenders_menu"
+            name="Upcoming Tenders"
+            action="droga_tender_master_upcoming_tenders"
+            parent="tender_main_menu"
+            groups="tender_user"
+            sequence="17"/>
+
+    <menuitem
+            id="droga_tender_master_activities_menu"
+            name="Tender activities"
+            action="droga_tender_activities"
+            parent="tender_main_menu"
+            groups="tender_user"
+            sequence="17"/>
+
+</odoo>

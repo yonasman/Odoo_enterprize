@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="inherit_for_purchase_order_uom_domain" model="ir.ui.view">
+        <field name="name">Purchase Order</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='product_uom'][2]" position="replace">
+                <field name="import_uom" invisible="1"/>
+                <field name="pharma_uom" invisible="1"/>
+                <field name="product_uom_pharma" string="UoM" groups="uom.group_uom" options="{'no_create':True,'no_open':True}"
+                       domain="['|',('id', '=', import_uom),('id','=',pharma_uom)]"
+                                        attrs="{
+                                        'column_invisible':[('parent.request_type','!=','Pharmacy')],
+                                            'readonly': [('state', 'in', ('purchase', 'done', 'cancel'))],
+                                            'required': [('parent.request_type','=','Pharmacy')]
+                                        }"
+                                        force_save="1" optional="show"/>
+                <field name="product_uom" string="UoM" groups="uom.group_uom" options="{'no_create':True,'no_open':True}"
+                                        attrs="{
+                                        'column_invisible':[('parent.request_type','=','Pharmacy')],
+                                            'readonly': [('state', 'in', ('purchase', 'done', 'cancel'))],
+                                            'required': [('display_type', '=', False)]
+                                        }"
+                                        force_save="1" optional="show"/>
+
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

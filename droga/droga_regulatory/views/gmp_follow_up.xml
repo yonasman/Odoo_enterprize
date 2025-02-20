@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- gmp_inspection_views.xml -->
+<odoo>
+    <data noupdate="1">
+       <record id="ir_cron_scheduler_gmp_notify" model="ir.cron">
+           <field name="name">GMP Due date notification</field>
+           <field name="model_id" ref="model_droga_reg_gmp_inspection"/>
+           <field name="state">code</field>
+           <field name="code">model.send_insurance_reminder()</field>
+<!--           <field name="user_id" ref="base.user_root"/>-->
+           <field name="interval_number">1</field>
+           <field name="interval_type">days</field>
+           <field name="numbercall">-1</field>
+       </record>
+    </data>
+    <data>
+        <!-- Tree View -->
+        <record id="view_gmp_inspection_tree" model="ir.ui.view">
+            <field name="name">gmp.inspection.tree</field>
+            <field name="model">droga.reg.gmp.inspection</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="company_name"/>
+                    <field name="product_line_description"/>
+                    <field name="gmp_application_date"/>
+                    <field name="renewal"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form View -->
+        <record id="view_gmp_inspection_form" model="ir.ui.view">
+            <field name="name">gmp.inspection.form</field>
+            <field name="model">droga.reg.gmp.inspection</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <h2>GMP Inspection Follow Up</h2>
+                        <group>
+                            <group>
+                                <field name="company_name"/>
+                                <field name="fee_letter_receival_date"/>
+                                <field name="scheduled_inspection_date"/>
+                                <field name="gmp_certificate_receival_date"/>
+                                <field name="contract_renewal"/>
+                                <field name="document_sent"/>
+
+                            </group>
+                            <group>
+
+                                <field name="product_line_description"/>
+                            <field name="fee_paid_submit_date"/>
+                            <field name="gmp_application_date"/>
+                            <field name="inspection_report_receival_date"/>
+                            <field name="remark"/>
+
+                            </group>
+
+                        </group>
+
+                        <notebook>
+                            <page string="Document Attachment" attrs="{'invisible': [('document_sent', '=', False)]}">
+                                <group>
+                                    <field name="document_desc" />
+                                    <button name="send_doc_notification" type="object" string="Send Notification" class="oe_highlight"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="view_gmp_follow_up_kanban" model="ir.ui.view">
+            <field name="name">GMP Follow up Kanban</field>
+            <field name="model">droga.reg.gmp.inspection</field>
+            <field name="arch" type="xml">
+
+                <kanban class="o_kanban_mobile" sample="1">
+                    <field name="company_name"/>
+                    <field name="contract_renewal"/>
+                    <field name="product_line_description"/>
+                    <field name="document_sent"/>
+                    <field name="document_desc"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_global_click">
+                                <div class="o_kanban_image">
+                                </div>
+                                <div class="oe_kanban_details">
+                                    <strong class="o_kanban_record_title" attrs="{'invisible': [('document_sent', '!=', True)]}">
+                                        <field name="document_desc"/>
+                                    </strong>
+                                    <hr/>
+
+                                    <strong class="o_kanban_record_title">
+                                        Company Name:
+                                    </strong>
+                                    <field name="company_name"/>
+                                    <br/>
+                                    <strong class="o_kanban_record_title">
+                                        Products Line Description:
+                                    </strong>
+                                    <field name="product_line_description"/>
+                                    <br/>
+                                    <strong class="o_kanban_record_title">
+                                        Renewal Date:
+                                    </strong>
+                                    <field name="contract_renewal"/>
+                                    <br/>
+                                    <hr/>
+
+                                    <button name="set_activity_done" string="Mark as read" type="object" class="oe_highlight"/>
+
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        <!-- Action -->
+        <record id="action_gmp_inspection" model="ir.actions.act_window">
+            <field name="name">GMP Inspections</field>
+            <field name="res_model">droga.reg.gmp.inspection</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo>

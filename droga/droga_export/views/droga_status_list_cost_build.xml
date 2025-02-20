@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="droga_export_cost_build_list_tree" model="ir.ui.view">
+        <field name="name">droga.export.cost.buildup.tree</field>
+        <field name="model">droga.export.cost.buildup</field>
+        <field name="arch" type="xml">
+            <tree string="" editable="bottom" create="1" delete="0">
+                <field name="type" options="{'no_create':True,'no_open':True}" required="True"></field>
+                <field name="payment_ref" options="{'no_create':True,'no_open':True}" required="True"></field>
+                <field name="amount"></field>
+                <field name="amount_for_order"></field>
+                <field name="remark"></field>
+            </tree>
+        </field>
+    </record>
+
+
+
+
+    <record id="droga_export_status_list_tree" model="ir.ui.view">
+        <field name="name">droga.export.status.list.tree</field>
+        <field name="model">droga.export.status.list</field>
+        <field name="arch" type="xml">
+            <tree string="" editable="bottom" create="1" delete="0">
+                <field name="status_list"></field>
+                <field name="status"></field>
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="droga_export_status_list_action" model="ir.actions.act_window">
+        <field name="name">Export status list</field>
+        <field name="res_model">droga.export.status.list</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <menuitem
+            id="droga_export_status_list_menu"
+            name="Export status list"
+            action="droga_export_status_list_action"
+            parent="sale.menu_sales_config"
+            sequence="40"/>
+</odoo>

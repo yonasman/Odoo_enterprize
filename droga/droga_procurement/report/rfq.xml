@@ -1,0 +1,625 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <!-- action for offer anlysis report -->
+    <record id="droga_purhcase_offer_analysis_report_action" model="ir.actions.report">
+        <field name="name">Offer Analysis Sheet</field>
+        <field name="model">droga.purhcase.request.rfq</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">droga_procurement.droga_purhcase_offer_analysis1_report</field>
+        <field name="report_file">droga_procurement.droga_purhcase_offer_analysis1_report</field>
+        <field name="print_report_name">'Offer Analysis Report - %s' % (object.name)
+        </field>
+        <field name="paperformat_id" ref="droga_procurement.paperformat_droga_a4"/>
+        <field name="binding_model_id" ref="model_droga_purhcase_request_rfq"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="droga_purhcase_offer_analysis_report" name="Offer Analysis Sheet">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-foreach="docs" t-as="o">
+
+
+                    <!-- get unique items -->
+                    <t t-set="suppliers" t-value="set(o.rfq_lines.mapped('supplier_id'))"/>
+                    <t t-set="products" t-value="set(o.rfq_lines.mapped('product_id'))"/>
+                    <t t-set="supplier_orders" t-value="[]"/>
+
+
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <h2>Offer Analysis Sheet #
+                            <span t-field="o.name"/>
+                        </h2>
+
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-3 bm-2">
+                                <strong>Purchase Request No:</strong>
+                                <p t-field="o.purhcase_request_id.name" class="m-0"/>
+                            </div>
+
+                            <div class="col-3 bm-2">
+                                <strong>Date:</strong>
+                                <p t-field="o.date" class="m-0"/>
+                            </div>
+
+                        </div>
+                        <br/>
+
+
+                        <table style="width:100%" class="table table-hover table-sm table-pos-info">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th name="th_no">
+                                        <strong class="small">No</strong>
+                                    </th>
+                                    <th name="th_description">
+                                        <strong class="small">Description</strong>
+                                    </th>
+                                    <th name="th_quantity">
+                                        <strong class="small">Qty</strong>
+                                    </th>
+                                    <th name="th_uom">
+                                        <strong class="small">UoM</strong>
+                                    </th>
+
+                                    <t t-foreach="suppliers" t-as="supplier">
+                                        <th colspan="2" class="text-center">
+                                            <strong class="small" t-esc="supplier.name"/>
+                                        </th>
+                                    </t>
+
+                                </tr>
+                                <tr>
+                                    <th colspan="4">
+                                    </th>
+                                    <t t-foreach="suppliers" t-as="supplier">
+                                        <th>
+                                            <strong class="small float-right">Unit Price</strong>
+                                        </th>
+                                        <th>
+                                            <strong class="small float-right">Total Price</strong>
+                                        </th>
+                                    </t>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="products" t-as="product">
+                                    <tr colspan="2">
+                                        <td>
+                                            <span t-esc="product_index + 1"/>
+                                        </td>
+
+                                        <td>
+                                            <span t-esc="product.name" class="small"/>
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                        <t t-foreach="o.rfq_lines" t-as="line">
+                                            <div t-if="line.product_id.id == product.id">
+
+                                                <td>
+                                                    <span t-esc="'{0:,.2f}'.format(line.unit_price)"
+                                                          class="small float-right"/>
+                                                </td>
+                                                <td>
+                                                    <span t-esc="'{0:,.2f}'.format(line.total_price)"
+                                                          class="small float-right"/>
+                                                </td>
+                                            </div>
+
+
+                                        </t>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- offer analysis report -->
+    <template id="droga_purhcase_offer_analysis1_report" name="Offer Analysis Sheet">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-foreach="docs" t-as="o">
+
+
+                    <!-- get unique items -->
+                    <t t-set="suppliers" t-value="set(o.rfq_lines.mapped('supplier_id'))"/>
+                    <t t-set="products" t-value="set(o.rfq_lines.mapped('product_id'))"/>
+                    <t t-set="supplier_orders" t-value="[]"/>
+                    <t t-set="line_counter" t-value="1"/>
+
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <h3>Offer Analysis Sheet #
+                            <span t-field="o.name"/>
+                        </h3>
+
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-3 bm-2">
+                                <strong>Purchase Request No:</strong>
+                                <p t-field="o.purhcase_request_id.name" class="m-0"/>
+                            </div>
+
+                            <div class="col-3 bm-2">
+                                <strong>Date:</strong>
+                                <p t-field="o.date" class="m-0"/>
+                            </div>
+
+                        </div>
+                        <br/>
+
+
+                        <table style="width:100%" class="table table-hover table-sm table-pos-info">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th name="th_no">
+                                        <strong class="small">No</strong>
+                                    </th>
+                                    <th name="th_description">
+                                        <strong class="small">Description</strong>
+                                    </th>
+                                    <th name="th_quantity">
+                                        <strong class="small">Qty</strong>
+                                    </th>
+                                    <th name="th_uom">
+                                        <strong class="small">UoM</strong>
+                                    </th>
+                                    <th name="th_unit_price">
+                                        <strong class="small float-right">Unit Price</strong>
+                                    </th>
+                                    <th name="th_total_price">
+                                        <strong class="small float-right">Total Price</strong>
+                                    </th>
+                                    <th class="text-center">
+                                        <strong class="small">Winner</strong>
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+                            <tbody>
+                                <t t-foreach="products" t-as="product">
+                                    <tr>
+                                        <td colspan="4">
+
+                                            <strong t-esc="product.name"/>
+
+                                        </td>
+                                    </tr>
+
+                                    <t t-foreach="o.rfq_lines" t-as="line">
+                                        <t t-if="product.id==line.product_id.id">
+
+
+                                            <tr>
+                                                <td>
+                                                    <span t-esc="line_counter" class="small"/>
+                                                </td>
+                                                <td>
+                                                    <span t-esc="line.supplier_id.name" class="small"/>
+                                                </td>
+                                                <td>
+                                                    <span t-esc="line.product_qty" class="small"/>
+                                                </td>
+                                                <td>
+                                                    <span t-esc="line.product_uom.name" class="small"/>
+                                                </td>
+                                                <td>
+                                                    <span t-esc="'{0:,.2f}'.format(line.unit_price)"
+                                                          class="small float-right"/>
+                                                </td>
+                                                <td>
+                                                    <span t-esc="'{0:,.2f}'.format(line.total_price)"
+                                                          class="small float-right"/>
+                                                </td>
+                                                <td class="text-center">
+                                                    <t t-if="line.winner=='Yes'">
+                                                        <span t-esc="line.winner" class="small"/>
+                                                        <i class="fas fa-check"></i>
+
+                                                    </t>
+
+                                                    <t t-else="">
+                                                        <span t-esc="line.winner" class="small"/>
+                                                    </t>
+
+                                                </td>
+                                            </tr>
+                                            <t t-set="line_counter" t-value="line_counter+1"/>
+
+                                        </t>
+
+                                    </t>
+                                    <t t-set="line_counter" t-value="1"/>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <br></br>
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-3 bm-2">
+                                <strong>Prepared By:</strong>
+                                <p t-field="o.create_uid.name" class="m-0"/>
+                            </div>
+
+                            <div class="col-3 bm-2">
+                                <strong>Chceked By:</strong>
+                                <p t-field="o.create_uid.name" class="m-0"/>
+                            </div>
+
+                        </div>
+
+                        <br></br>
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-12 bm-2">
+                                <strong>Remark</strong>
+                                <p t-field="o.remark" class="m-0"/>
+                            </div>
+                        </div>
+
+                        <br></br>
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-12 bm-2">
+                                <strong>Technical remark</strong>
+                                <p t-field="o.technical_remark" class="m-0"/>
+                            </div>
+                        </div>
+                        <br></br>
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-6 bm-2">
+                                <t t-foreach="request.env['droga.purhcase.committee'].search([])" t-as="committees">
+                                    <table style="width:100%" class="table table-hover table-sm table-pos-info">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <td>Name of Committee</td>
+                                                <td>Signature</td>
+                                            </tr>
+                                        </thead>
+                                        <t t-foreach="committees.names" t-as="committee">
+                                            <tr>
+                                                <td>
+                                                    <span t-esc="committee.name"/>
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                        </t>
+                                        <t t-foreach="o.procurement_committee" t-as="committee1">
+                                            <tr>
+                                                <td>
+                                                    <span t-esc="committee1.name"/>
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                        </t>
+
+                                    </table>
+                                </t>
+                            </div>
+                        </div>
+                        <br></br>
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-3 bm-2">
+                                <strong>Approved By:</strong>
+                                <p t-field="o.create_uid.name" class="m-0"/>
+                            </div>
+
+                            <div class="col-3 bm-2">
+                                <strong>Authorized By:</strong>
+                                <p t-field="o.create_uid.name" class="m-0"/>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- action for foregin rfq -->
+    <record id="droga_purhcase_rfq_without_price_foreign_report_action" model="ir.actions.report">
+        <field name="name">Request for Quotation</field>
+        <field name="model">droga.purhcase.request.rfq</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">droga_procurement.droga_purhcase_rfq_without_price_report</field>
+        <field name="report_file">droga_procurement.droga_purhcase_rfq_without_price_report</field>
+        <field name="print_report_name">'Request for Quotation - %s' % (object.name)
+        </field>
+        <field name="paperformat_id" ref="droga_procurement.paperformat_droga_a4"/>
+        <field name="binding_model_id" ref="model_droga_purhcase_request_rfq"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="droga_purhcase_rfq_without_price_report" name="Request for Quotation">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-foreach="docs" t-as="o">
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <h2>Request for Quotation #
+                            <span t-field="o.name"/>
+                        </h2>
+
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-3 bm-2">
+                                <strong>Supplier:</strong>
+                                <p t-field="o.supplier_id.name" class="m-0"/>
+                            </div>
+
+                            <div class="col-3 bm-2">
+                                <strong>Date:</strong>
+                                <p t-field="o.date" class="m-0"/>
+                            </div>
+
+                            <div class="col-3 bm-2">
+                                <strong>Currency:</strong>
+                                <p t-field="o.currency_id.name" class="m-0"/>
+                            </div>
+
+                        </div>
+                        <br/>
+
+                        <table style="width:100%" class="table table-hover table-sm table-pos-info">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>
+                                        <strong class="small">No</strong>
+                                    </th>
+                                    <th>
+                                        <strong class="small">Product</strong>
+                                    </th>
+
+                                    <th>
+                                        <strong class="small">UoM</strong>
+                                    </th>
+                                    <th>
+                                        <strong class="small">Qty</strong>
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.rfq_lines" t-as="rfq_lines">
+                                    <td>
+                                        <t t-esc="rfq_lines_index+1"/>
+                                    </td>
+                                    <td class="small">
+                                        <t t-esc="rfq_lines.product_id.name"/>
+                                    </td>
+
+                                    <td class="small">
+                                        <t t-esc="rfq_lines.product_uom.name"/>
+                                    </td>
+                                    <td class="small">
+                                        <t t-esc="rfq_lines.product_qty"/>
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+
+
+                        <t t-if="o.request_type=='Foregin'">
+                            <div class="row">
+                                <h3>Terms and Conditions</h3>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 bm-2">
+                                    <ol>
+                                        <li>Products should have minimum 80% of its shelf life on arrival at Addis
+                                            Ababa/Port of entry.
+                                        </li>
+                                        <li>Language used for writing label, leaflet and other documents shall be
+                                            English.
+                                        </li>
+                                        <li>All packing should be suitable for road, air and sea transport under
+                                            tropical conditions.
+                                        </li>
+                                        <li>The label of the immediate container should at least include:-
+                                            <ul>
+                                                <li>The name of the product, brand and Generic/INN</li>
+                                                <li>Pharmaceutical dosage form and route of administration.</li>
+                                                <li>Qualitative and quantitative composition of active ingredients</li>
+                                                <li>Quantity in container, Technical directions for use.</li>
+                                                <li>Handling and storage requirements</li>
+                                                <li>Batch number, manufacturing and Expiry dates</li>
+                                                <li>Name and address of the manufacturer</li>
+                                            </ul>
+
+                                        </li>
+                                        <li>Name and address of the manufacturer</li>
+                                        <li>A leaflet in its immediate container should accompany every product.
+                                            A leaflet must bear adequate information for use and it should at least
+                                            include:
+                                            <ul>
+                                                <li>The name of the product: brand and generic/INN</li>
+                                                <li>Description appearance, pharmaceutical dosage form and route of
+                                                    administration.
+                                                </li>
+                                                <li>Qualitative and quantitative composition of active ingredients</li>
+                                                <li>Clinical pharmacology, indication(s), warnings, precautions,
+                                                    contraindications.
+                                                </li>
+                                                <li>Adverse reactions/side effects.</li>
+                                                <li>Dosage and administration (directions for use)</li>
+                                                <li>Over dosage, withdrawal time, storage instruction, package quantity,
+                                                    Name and address of Manufacturer.
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li>This purchase order is valid for 90 days shipment and presentation of
+                                            document from ---------------onwards.
+                                        </li>
+
+
+                                    </ol>
+                                </div>
+                            </div>
+                        </t>
+
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- action for rfq report -->
+    <record id="droga_purchase_request_rfq_foregin_report_action" model="ir.actions.act_window">
+        <field name="name">Request for Quotation</field>
+        <field name="res_model">droga.purhcase.request.rfq</field>
+        <field name="view_mode">pivot,graph</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+
+         (0, 0, {'view_mode': 'pivot', 'view_id': ref('droga_purhcase_request_rfq_foregin_view_pivot')}),
+         (0, 0, {'view_mode': 'graph', 'view_id': ref('droga_purhcase_request_rfq_foregin_view_graph')})]"/>
+        <field name="domain">[('request_type','=','Foregin')]</field>
+        <field name="context">{'search_default_ceo_approved': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Request for Quotation
+            </p>
+        </field>
+    </record>
+
+
+    <!-- Air Vs sea by value and count -->
+    <!-- pivot -->
+    <record id="droga_purchase_rfq_mod_of_shipment_pivot" model="ir.ui.view">
+        <field name="name">Air Vs Sea by Amount and Count</field>
+        <field name="model">droga.purhcase.request.rfq</field>
+        <field name="arch" type="xml">
+            <pivot string="Air Vs Sea by Amount and Count" display_quantity="1" sample="1">
+                <field name="mod_of_shipment" type="row"/>
+                <field name="total_amount_usd" type="measure"/>
+                <field name="total_amount_etb" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- graph-->
+    <record id="droga_purchase_rfq_mod_of_shipment_graph" model="ir.ui.view">
+        <field name="name">Air Vs Sea by Amount and Count</field>
+        <field name="model">droga.purhcase.request.rfq</field>
+        <field name="arch" type="xml">
+            <graph string="Air Vs Sea by Amount and Count">
+                <field name="mod_of_shipment"/>
+                <field name="total_amount_usd" type="measure"/>
+                <field name="total_amount_etb" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Action for Air Vs sea by value and count -->
+    <!-- action for rfq report -->
+    <record id="droga_purchase_rfq_mod_of_shipment_report_action" model="ir.actions.act_window">
+        <field name="name">Request for Quotation</field>
+        <field name="res_model">droga.purhcase.request.rfq</field>
+        <field name="view_mode">pivot,graph</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+
+         (0, 0, {'view_mode': 'pivot', 'view_id': ref('droga_purchase_rfq_mod_of_shipment_pivot')}),
+         (0, 0, {'view_mode': 'graph', 'view_id': ref('droga_purchase_rfq_mod_of_shipment_graph')})]"/>
+        <field name="domain">[('request_type','=','Foregin')]</field>
+        <field name="context">{'search_default_ceo_approved': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Request for Quotation
+            </p>
+        </field>
+    </record>
+
+
+
+    <!-- LCs Vs TT by amount and count -->
+    <!-- pivot -->
+    <record id="droga_purchase_rfq_lc_vs_tt_pivot" model="ir.ui.view">
+        <field name="name">Air Vs Sea by Amount and Count</field>
+        <field name="model">droga.purhcase.request.rfq</field>
+        <field name="arch" type="xml">
+            <pivot string="Air Vs Sea by Amount and Count" display_quantity="1" sample="1">
+                <field name="payment_term" type="row"/>
+                <field name="total_amount_usd" type="measure"/>
+                <field name="total_amount_etb" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- graph-->
+    <record id="droga_purchase_rfq_lc_vs_tt_graph" model="ir.ui.view">
+        <field name="name">Air Vs Sea by Amount and Count</field>
+        <field name="model">droga.purhcase.request.rfq</field>
+        <field name="arch" type="xml">
+            <graph string="Air Vs Sea by Amount and Count">
+                <field name="payment_term"/>
+                <field name="total_amount_usd" type="measure"/>
+                <field name="total_amount_etb" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Action for LCs Vs TT by amount and count -->
+    <!-- action for rfq report -->
+    <record id="droga_purchase_rfq_lc_vs_tt_action" model="ir.actions.act_window">
+        <field name="name">Request for Quotation</field>
+        <field name="res_model">droga.purhcase.request.rfq</field>
+        <field name="view_mode">pivot,graph</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+
+         (0, 0, {'view_mode': 'pivot', 'view_id': ref('droga_purchase_rfq_lc_vs_tt_pivot')}),
+         (0, 0, {'view_mode': 'graph', 'view_id': ref('droga_purchase_rfq_lc_vs_tt_graph')})]"/>
+        <field name="domain">[('request_type','=','Foregin')]</field>
+        <field name="context">{'search_default_ceo_approved': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Request for Quotation
+            </p>
+        </field>
+    </record>
+
+
+
+    <!-- RFQ Products by unit and total cost -->
+    <record id="droga_purchase_rfq__line_product_by_unit_and_total_pivot" model="ir.ui.view">
+        <field name="name">Product Report By Unit and Total Price</field>
+        <field name="model">droga.purhcase.request.rfq.line</field>
+        <field name="arch" type="xml">
+            <pivot string="Product Report By Unit and Total Price" display_quantity="1" sample="1" disable_linking="True">
+                <field name="product_id" type="row"/>
+                <field name="product_qty" type="measure"/>
+                <field name="unit_price" type="measure" string="Unit Price ETB"/>
+                <field name="total_price" type="measure" string="Total Price ETB"/>
+
+                <field name="unit_price_foregin" type="measure" string="Unit Price USD"/>
+                <field name="total_price_foregin" type="measure" string="Total Price USD"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- action for rfq report -->
+    <record id="droga_purchase_rfq__line_product_by_unit_and_total_action" model="ir.actions.act_window">
+        <field name="name">Product Report By Unit and Total Price</field>
+        <field name="res_model">droga.purhcase.request.rfq.line</field>
+        <field name="view_mode">pivot</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                RFQ Products by unit and total cost
+            </p>
+        </field>
+    </record>
+
+
+
+</odoo>

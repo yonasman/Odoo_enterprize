@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Inherit Purchase  report (from module purchase) -->
+    <template id="report_purchase_order_inherit" inherit_id="purchase.report_purchaseorder_document">
+        <xpath expr="/t[1]/t[1]/div[1]/table[1]/tbody[1]/t[2]/tr[1]/t[1]/td[4]/span[2]" position="replace">
+            <span t-field="line.product_uom.uom_title" groups="uom.group_uom"/>
+        </xpath>
+        <xpath expr="//div[@id='total']" position="after">
+            <t t-if="o.request_type=='Foregin'">
+                <div class="row">
+                    <h3>Terms and Conditions</h3>
+                </div>
+                <div class="row">
+                    <div class="col-12 bm-2">
+                        <ol>
+                            <li>Products should have minimum 80% of its shelf life on arrival at Addis Ababa/Port of
+                                entry.
+                            </li>
+                            <li>Language used for writing label, leaflet and other documents shall be English.</li>
+                            <li>All packing should be suitable for road, air and sea transport under tropical
+                                conditions.
+                            </li>
+                            <li>The label of the immediate container should at least include:-
+                                <ul>
+                                    <li>The name of the product, brand and Generic/INN</li>
+                                    <li>Pharmaceutical dosage form and route of administration.</li>
+                                    <li>Qualitative and quantitative composition of active ingredients</li>
+                                    <li>Quantity in container, Technical directions for use.</li>
+                                    <li>Handling and storage requirements</li>
+                                    <li>Batch number, manufacturing and Expiry dates</li>
+                                    <li>Name and address of the manufacturer</li>
+                                </ul>
+
+                            </li>
+                            <li>Name and address of the manufacturer</li>
+                            <li>A leaflet in its immediate container should accompany every product.
+                                A leaflet must bear adequate information for use and it should at least include:
+                                <ul>
+                                    <li>The name of the product: brand and generic/INN</li>
+                                    <li>Description appearance, pharmaceutical dosage form and route of
+                                        administration.
+                                    </li>
+                                    <li>Qualitative and quantitative composition of active ingredients</li>
+                                    <li>Clinical pharmacology, indication(s), warnings, precautions,
+                                        contraindications.
+                                    </li>
+                                    <li>Adverse reactions/side effects.</li>
+                                    <li>Dosage and administration (directions for use)</li>
+                                    <li>Over dosage, withdrawal time, storage instruction, package quantity, Name and
+                                        address of Manufacturer.
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>This purchase order is valid for 90 days shipment and presentation of document from
+                                ---------------onwards.
+                            </li>
+
+
+                        </ol>
+                    </div>
+                </div>
+            </t>
+
+        </xpath>
+    </template>
+
+    <!-- different cost types purchase order report -->
+    <!--pivot -->
+    <record id="droga_purchase_order_cost_report_pivot" model="ir.ui.view">
+        <field name="name">Purchase Order Pivot</field>
+        <field name="model">purchase.order</field>
+        <field name="arch" type="xml">
+            <pivot string="Purchase Order">
+                <field name="name" type="row"/>
+                <field name="freight_payment_by_air" type="measure"/>
+                <field name="freight_payment_by_sea" type="measure"/>
+                <field name="custom_duty_withholding_tax" type="measure"/>
+                <field name="demurrage_cost" type="measure"/>
+                <field name="storage_cost" type="measure"/>
+                <field name="custom_duty_tax_amount" type="measure"/>
+                <field name="custom_duty_tax_additional_amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!--action for cost report -->
+    <record id="droga_purchase_order_cost_report_action" model="ir.actions.act_window">
+        <field name="name">Purchase Order</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">pivot</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+
+         (0, 0, {'view_mode': 'pivot', 'view_id': ref('droga_purchase_order_cost_report_pivot')}),]"/>
+        <field name="domain">[('request_type','=','Foregin')]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Foreign Purchase Order
+            </p>
+        </field>
+    </record>
+
+
+    <!-- pivot report by product for foreign purchases -->
+    <record id="droga_purchase_order_by_product_report_pivot" model="ir.ui.view">
+        <field name="name">Purchase Order Report By Product</field>
+        <field name="model">purchase.order.line</field>
+        <field name="arch" type="xml">
+            <pivot string="Purchase Order">
+                <field name="product_qty" type="measure" string="Quantity"/>
+                <field name="total_price_foregin" type="measure" string="Total USD"/>
+                <field name="price_subtotal" type="measure" string="Total ETB"/>
+                <field name="product_id" type="row"/>
+            </pivot>
+        </field>
+    </record>
+
+
+    <!--action for cost report -->
+    <record id="droga_purchase_order_by_product_report_action" model="ir.actions.act_window">
+        <field name="name">Purchase Order</field>
+        <field name="res_model">purchase.order.line</field>
+        <field name="view_mode">pivot</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+
+         (0, 0, {'view_mode': 'pivot', 'view_id': ref('droga_purchase_order_by_product_report_pivot')}),]"/>
+        <field name="domain">[('order_id.request_type','=','Foregin')]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Foreign Purchase Order
+            </p>
+        </field>
+    </record>
+
+    <!-- pivot report by product for price variance on RFQ and PO -->
+    <record id="droga_purchase_order_by_product_price_variance_rfq_po_report_tree" model="ir.ui.view">
+        <field name="name">Price Variance Between RFQ and PO</field>
+        <field name="model">purchase.order.line</field>
+        <field name="arch" type="xml">
+            <tree string="Purchase Order">
+                <field name="order_id"  />
+                <field name="product_id" />
+                <field name="price_total" string="PO Price"/>
+                <field name="rfq_price_total_etb" string="RFQ Price"/>
+                <field name="price_variance_with_rfq" string="Variance"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- pivot report by product for price variance on RFQ and PO -->
+    <record id="droga_purchase_order_by_product_price_variance_rfq_po_report_action" model="ir.actions.act_window">
+        <field name="name">Purchase Order</field>
+        <field name="res_model">purchase.order.line</field>
+        <field name="view_mode">pivot</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+
+         (0, 0, {'view_mode': 'tree', 'view_id': ref('droga_purchase_order_by_product_price_variance_rfq_po_report_tree')}),]"/>
+        <field name="domain">[('order_id.request_type','=','Foregin')]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Foreign Purchase Order
+            </p>
+        </field>
+    </record>
+
+
+
+</odoo>

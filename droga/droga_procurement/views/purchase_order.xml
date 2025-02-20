@@ -1,0 +1,685 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <!-- action for purchase order -->
+    <record id="droga_purchase_rfq_order_action" model="ir.actions.act_window">
+        <field name="name">Purchase order from RFQ</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('rfq_id', '=', active_id)]</field>
+        <field name="context">{'default_rfq_id': active_id}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Purchase order from Request for Quotation
+            </p>
+        </field>
+    </record>
+
+    <record id="droga_purchase_request_order_action" model="ir.actions.act_window">
+        <field name="name">Purchase order from RFQ</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('purchase_request_id', '=', active_id)]</field>
+        <field name="context">{'default_purchase_request_id': active_id}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Purchase order from Purchase Request for Foregin Purchases
+            </p>
+        </field>
+    </record>
+
+    <!-- inherited for view of purchase.order -->
+    <record id="inherit_for_purchase_order_form" model="ir.ui.view">
+        <field name="name">Purchase Order</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='product_id']" position="before">
+                <field name="seq_no"/>
+            </xpath>
+
+            <xpath expr="//field[@name='partner_ref']" position="after">
+                <field name="rfq_id" options="{'no_create':True}" readonly="1" string="Request for Quotation"
+                       attrs="{'invisible': [('request_type', '==', 'Local')]}"/>
+                <field name="rfq_local_id" options="{'no_create':True}" readonly="1" string="Request for Quotation"
+                       attrs="{'invisible': [('request_type', '==', 'Foregin')]}"/>
+
+                <field name="purchase_request_id" options="{'no_create':True}" readonly="1" string="Purchase Request"
+                       invisible="1"/>
+                <field name="request_type" required="1"/>
+                <field name="amount_total_usd" invisible="1"/>
+                <field name="bank" invisible="1"/>
+                <field name="branch" invisible="1"/>
+                <field name="currency_approved_date" invisible="1"/>
+                <field name="amount_total" invisible="1"/>
+            </xpath>
+
+            <xpath expr="//field[@name='currency_id']" position="after">
+                <field name="exchange_rate" attrs="{'invisible': [('request_type', '==', 'Local')]}"/>
+            </xpath>
+
+            <xpath expr="/form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='price_subtotal']"
+                   position="after">
+                <field name="price_variance_with_rfq" attrs="{'invisible': [('parent.request_type', '==', 'Local')]}"/>
+            </xpath>
+
+            <xpath expr="//button[@name='action_view_invoice']" position="after">
+                <button name="%(droga_finance.droga_account_payment_request1_action)d" type="action"
+                        string="Payment Request" states="purchase" class="oe_stat_button" icon="fa-file-text"
+                        data-hotkey="l" context="{'default_pay_to': partner_id,'default_total_amount':amount_total}"/>
+                <button name="%(droga_finance.droga_account_payment_request_urgent1_action)d" type="action"
+                        string="Payment Request-U" states="purchase" class="oe_stat_button" icon="fa-file-text"
+                        data-hotkey="l" context="{'default_pay_to': partner_id,'default_total_amount':amount_total}"/>
+
+            </xpath>
+
+            <xpath expr="/form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='price_unit']"
+                   position="before">
+
+                <field name="unit_price_foregin" string="Unit Price USD"
+                       attrs="{'invisible': [('parent.request_type', '==', 'Local')]}"/>
+                <field name="total_price_foregin" string="Subtotal USD" sum="Total"
+                       attrs="{'invisible': [('parent.request_type', '==', 'Local')]}"/>
+            </xpath>
+
+            <xpath expr="//page[@name='purchase_delivery_invoice']" position="after">
+
+
+                <page string="Ordering" attrs="{'invisible': [('request_type', 'in', ('Local','Pharmacy'))]}">
+
+                    <notebook>
+
+                        <page string="Import Permit and Insurance">
+                            <group>
+                                <group string="Insurance Detail">
+                                    <field name="insurance_policy_no"/>
+                                    <field name="insurance_name" string="Insurer Name"/>
+                                    <field name="insurance_date"/>
+                                    <field name="insurance_premium_cost"/>
+                                </group>
+                                <group string="Import Permit Detail">
+                                    <field name="import_permit_no"/>
+                                    <field name="import_permit_date"/>
+                                    <field name="import_permit_approved"/>
+                                    <field name="lpco_number"/>
+                                    <field name="margin"/>
+                                    <field name="deposit_amount"/>
+                                    <field name="deposit_date"/>
+                                    <field name="bank_service_charge"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page name="lc" string="LC">
+
+
+                            <field name="lcs" mode="tree"
+                                   context="{'default_purchase_order_id':active_id,'default_bank':bank,'default_branch':branch,'default_request_approved_date':currency_approved_date}">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="bank_name"/>
+                                    <field name="branch"/>
+                                    <field name="start_date"/>
+                                    <field name="count_days"/>
+                                    <field name="state"/>
+                                    <button name="open_lc_detail" string="LC Reconciliation" type="object"
+                                            class="oe_stat_button" icon="fa-file-text"/>
+
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Margins" name="margins">
+                            <group>
+                                <field name="is_delivery_partial" invisible="1"/>
+                            </group>
+
+                            <field name="lc_margins" mode="tree">
+                                <tree editable="bottom">
+                                    <field name="margin_order" width="15"
+                                           attrs="{'readonly': [('move_id', '!=', False)]}"/>
+                                    <field name="margin_percent" sum="Total" width="10"
+                                           attrs="{'readonly': [('move_id', '!=', False)]}"/>
+
+                                    <field name="margin_calculation"
+                                           attrs="{'readonly': ['|',('margin_order', 'in', ('1','3')),('move_id', '!=', False)],'required': [('margin_order', 'in', ('2'))]}"
+                                           width="10"
+                                           string="Calculation"/>
+                                    <field name="foreign_amount" sum="Total" width="15" string="USD"
+                                           attrs="{'readonly': ['|',('move_id', '!=', False),('margin_order', 'not in', ('3'))]}"/>
+                                    <field name="exchange_rate" width="10"
+                                           attrs="{'readonly': [('move_id', '!=', False)]}"/>
+                                    <field name="amount_etb" sum="total" width="15" string="ETB"/>
+                                    <field name="account" options="{'no_create':True,'no_open':True}" width="15"
+                                           attrs="{'readonly': [('move_id', '!=', False)]}"/>
+                                    <field name="lc" options="{'no_create':True,'no_open':True}" width="15"
+                                           attrs="{'readonly': [('move_id', '!=', False)]}"/>
+
+                                    <field name="move_id" options="{'no_create':True}" readonly="1"
+                                           width="10"/>
+                                    <button name="create_vendor_invoice" type="object" string="Create Invoice"
+                                            id="checked" data-hotkey="v" class="oe_highlight" width="10"
+                                            attrs="{'invisible': [('move_id', '!=', False)]}"/>
+
+                                </tree>
+                            </field>
+                        </page>
+
+                        <page string="Status Tracking" invisible="1">
+                            <field name="order_phase_status" mode="tree">
+                                <tree editable="bottom" create="0" delete="0">
+                                    <field name="order" width="5" string="Order" readonly="1"/>
+                                    <field name="step" width="30" readonly="1"/>
+                                    <field name="status" width="15"/>
+                                    <field name="done_date" width="10" string="Date"/>
+                                    <field name="remark" width="30"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Documents" invisible="1">
+
+                            <field name="order_phase_documents" mode="tree">
+                                <tree editable="bottom" create="0" delete="0">
+                                    <field name="order" width="5" string="Order" readonly="1"/>
+                                    <field name="document" width="30" readonly="1"/>
+                                    <field name="done" width="15"/>
+                                    <field name="done_date" width="10" string="Date"/>
+                                    <field name="remark" width="30"/>
+                                </tree>
+                            </field>
+                        </page>
+
+
+                    </notebook>
+                </page>
+
+                <page string="Shipment" attrs="{'invisible': [('request_type', 'in', ('Local','Pharmacy'))]}">
+                    <notebook>
+                        <page string="Status Tracking" invisible="1">
+                            <field name="shipment_phase_status" mode="tree">
+                                <tree editable="bottom" create="0" delete="0">
+                                    <field name="order" width="5" string="Order" readonly="1"/>
+                                    <field name="step" width="30" readonly="1"/>
+                                    <field name="status" width="15"/>
+                                    <field name="done_date" width="10" string="Date"/>
+                                    <field name="remark" width="30"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Documents" invisible="1">
+
+                            <field name="shipment_phase_documents" mode="tree">
+                                <tree editable="bottom" create="0" delete="0">
+                                    <field name="order" width="5" string="Order" readonly="1"/>
+                                    <field name="document" width="30" readonly="1"/>
+                                    <field name="done" width="15"/>
+                                    <field name="done_date" width="10" string="Date"/>
+                                    <field name="remark" width="30"/>
+                                </tree>
+                            </field>
+                        </page>
+
+
+                    </notebook>
+                    <group>
+                        <group string="Shipment Document">
+                            <field name="shipment_percent"/>
+                            <field name="is_shipment_partial"/>
+                            <field name="shipment_date" string="Estimated Shipment Date"/>
+                            <field name="production_completion_date"
+                                   string="Estimated Production Completion Date"/>
+
+                            <field name="shipment_scan_copy_doc_recived_date"/>
+                            <field name="shipment_original_copy_doc_recived_date"/>
+                            <field name="shipment_doc_original_sent_from_supplier"/>
+
+
+                        </group>
+                        <group string="Shipment Document">
+                            <field name="shipment_doc_original_sent_from_supplier_courier"/>
+                            <field name="document_tracking_number"/>
+                            <field name="shipment_doc_original_recived_by_applicant_bank"/>
+
+                            <field name="discrepancy"/>
+                            <field name="accept_discrepancy"
+                                   attrs="{'invisible': [('discrepancy', '!=', 'Yes')]}"/>
+                            <field name="discrepancy_comment"
+                                   attrs="{'invisible': ['|',('accept_discrepancy', '!=', True),('discrepancy', '!=', 'Yes')]}"/>
+
+                            <field name="discrepancy_amount"
+                                   attrs="{'invisible': ['|',('accept_discrepancy', '!=', True),('discrepancy', '!=', 'Yes')]}"/>
+
+
+                            <field name="shipment_doc_collected_from_applicant_bank"/>
+                            <field name="exchange_rate_lc_settlement"/>
+                            <field name="shipment_lc_amount"/>
+                            <field name="lc_settlement_deposited"/>
+
+                            <field name="shipment_doc_handed_to_finance"/>
+                            <field name="supplier_payment_date"/>
+                        </group>
+                        <group string="Deliver Order">
+                            <field name="is_it_do"/>
+                            <field name="do_amount" attrs="{'invisible': [('is_it_do', '!=', True)]}"/>
+                        </group>
+
+                    </group>
+                    <br></br>
+                    <group>
+                        <field name="shipping_reconcilations" mode="tree">
+                            <tree create="0" delete="0" editable="bottom">
+                                <field name="order"/>
+                                <field name="name"/>
+                                <field name="state"/>
+                                <field name="remark"/>
+                            </tree>
+                        </field>
+                    </group>
+                </page>
+
+                <page string="Good Clearance" attrs="{'invisible': [('request_type', 'in', ('Local','Pharmacy'))]}">
+                    <notebook>
+                        <page string="Status Tracking" invisible="1">
+                            <field name="clearance_phase_status" mode="tree">
+                                <tree editable="bottom" create="0" delete="0">
+                                    <field name="order" width="5" string="Order" readonly="1"/>
+                                    <field name="step" width="30" readonly="1"/>
+                                    <field name="status" width="15"/>
+                                    <field name="done_date" width="10" string="Date"/>
+                                    <field name="remark" width="30"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Documents" invisible="1">
+
+                            <field name="clearance_phase_documents" mode="tree">
+                                <tree editable="bottom" create="0" delete="0">
+                                    <field name="order" width="5" string="Order" readonly="1"/>
+                                    <field name="document" width="30" readonly="1"/>
+                                    <field name="done" width="15"/>
+                                    <field name="done_date" width="10" string="Date"/>
+                                    <field name="remark" width="30"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Other Information" invisible="1">
+
+                            <br></br>
+                            <field name="ports" mode="tree">
+                                <tree editable="bottom">
+                                    <field name="name" width="50"/>
+                                    <field name="arrival_date" width="50"/>
+                                </tree>
+                            </field>
+
+                        </page>
+
+
+                    </notebook>
+
+                    <group>
+                        <group string="Freight Payment">
+                            <field name="mode_of_transport"/>
+                            <field name="goods_arrival_date" invisible="1"/>
+                            <field name="goods_arrival_date_final_destination"/>
+
+                            <field name="freight_payment_by_air"
+                                   attrs="{'invisible': [('mode_of_transport', '!=', 'Air')]}"/>
+                            <field name="freight_payment_by_sea"
+                                   attrs="{'invisible': [('mode_of_transport', '!=', 'Sea')]}"/>
+                            <field name="freight_payment_by_sea_dg"
+                                   attrs="{'invisible': [('mode_of_transport', '!=', 'Sea')]}"/>
+                            <field name="freight_payment_by_sea_gp"
+                                   attrs="{'invisible': [('mode_of_transport', '!=', 'Sea')]}"/>
+                            <field name="freight_paid_date"/>
+                            <field name="freight_settlement_advice_to_finance"/>
+                            <field name="container_deposit_amount"/>
+                            <field name="container_deposit_status"/>
+                            <field name="shipping_doc_to_transitor"/>
+
+                            <field name="declaration_number"/>
+                            <field name="custom_duty_tax_amount"/>
+                            <field name="custom_duty_withholding_tax"/>
+                            <field name="custom_duty_tax_paid_date"/>
+                            <field name="custom_tax_acceptance"/>
+                            <field name="custom_duty_tax_additional_amount"
+                                   attrs="{'invisible': [('custom_tax_acceptance', '==', True)]}"/>
+                            <field name="custom_duty_tax_additional_amount"
+                                   attrs="{'invisible': [('custom_tax_acceptance', '==', True)]}"/>
+
+
+                        </group>
+                        <group string="Additional Info">
+
+
+                            <field name="release_permit_applied_to_fda"/>
+                            <field name="release_permit_received_from_fda"/>
+                            <field name="storage_cost"/>
+                            <field name="demurrage_cost"/>
+                            <field name="local_transport_cost"/>
+                            <field name="loading_unloading_cost"/>
+                            <field name="release_date_from_customs_delivery"/>
+                        </group>
+
+                    </group>
+
+                </page>
+
+                <page string="Post Clearance" attrs="{'invisible': [('request_type', 'in', ('Local','Pharmacy'))]}">
+                    <notebook>
+                        <page string="Status Tracking" invisible="1">
+                            <field name="post_clearance_phase_status" mode="tree">
+                                <tree editable="bottom" create="0" delete="0">
+                                    <field name="order" width="5" string="Order" readonly="1"/>
+                                    <field name="step" width="30" readonly="1"/>
+                                    <field name="status" width="15"/>
+                                    <field name="done_date" width="10" string="Date"/>
+                                    <field name="remark" width="30"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Documents" invisible="1">
+
+                            <field name="post_clearance_phase_documents" mode="tree">
+                                <tree editable="bottom" create="0" delete="0">
+                                    <field name="order" width="5" string="Order" readonly="1"/>
+                                    <field name="document" width="30" readonly="1"/>
+                                    <field name="done" width="15"/>
+                                    <field name="done_date" width="10" string="Date"/>
+                                    <field name="remark" width="30"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Other Information" invisible="1">
+
+
+                        </page>
+                    </notebook>
+
+                    <group>
+                        <group string="Inventory">
+                            <field name="packing_list_shared_with_inventory"/>
+                            <field name="goods_arrival_date"/>
+                            <field name="grn_reconcilation_form_recived_date"/>
+                            <field name="reconcilation_discrepancy"/>
+                            <field name="discrepancy_comment"
+                                   attrs="{'invisible': [('reconcilation_discrepancy', '!=', True)]}"/>
+                            <field name="discrepancy_action"
+                                   attrs="{'invisible': [('reconcilation_discrepancy', '!=', True)]}"/>
+
+
+                        </group>
+                        <group string="Additional Info">
+                            <field name="grn_submitted_to_finance"/>
+                            <field name="stamped_declaration_recived_date"/>
+                            <field name="delinquent_settlement_date"/>
+                            <field name="transistor_service_payment_Amount"/>
+                            <field name="container_deposit_reimbursed_date"/>
+                            <field name="transistor_service_payment_done_date"/>
+                        </group>
+                    </group>
+                </page>
+
+                <page string="Partial Shipment"
+                      attrs="{'invisible': ['|',('request_type', 'in', ('Local','Pharmacy')),('is_shipment_partial', '!=', True)]}">
+                    <field name="purchase_order_partial_shipments" mode="tree"
+                           context="{'default_purchase_order_id':active_id}">
+                        <tree>
+                            <field name="shipment_description" width="45"/>
+                            <field name="shipment_percent" width="15"/>
+                            <field name="shipment_date" width="15"/>
+                        </tree>
+
+                    </field>
+                </page>
+            </xpath>
+
+            <xpath expr="/form/sheet/notebook/page/field[@name='order_line']/tree" position="attributes">
+                <attribute name="limit">500</attribute>
+            </xpath>
+
+
+        </field>
+    </record>
+
+
+    <!-- inherited for tree view of purchase.order -->
+    <record id="inherit_for_purchase_order_tree" model="ir.ui.view">
+        <field name="name">Purchase Order</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_view_tree"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='date_planned']" position="after">
+                <field name="request_type" invisible="1"/>
+                <field name="payment_status" widget="badge" decoration-success="payment_status == 'Paid'"
+                       decoration-danger="payment_status == 'Not Paid'"
+                       attrs="{'invisible': [('request_type', 'in',('Local','Pharmacy'))]}"/>
+                <field name="payment_lead_time" attrs="{'invisible': [('request_type', 'in',('Local','Pharmacy'))]}"
+                       widget="badge"/>
+                <field name="delinquent_status" attrs="{'invisible': [('request_type', 'in',('Local','Pharmacy'))]}"
+                       widget="badge" decoration-success="delinquent_status == 'Delinquent'"
+                       decoration-danger="delinquent_status == 'Non Delinquent'"/>
+            </xpath>
+
+        </field>
+    </record>
+
+
+    <!-- partial shipment view -->
+    <record id="droga_purchase_order_partial_shipment_view_form" model="ir.ui.view">
+        <field name="name">Partial Shipment</field>
+        <field name="model">purchase.order.partial.shipment</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="purchase_order_id" readonly="1" options="{'no_create':True,'no_open':True}"
+                                   invisible="1"/>
+                            <field name="shipment_description"/>
+                            <field name="shipment_percent"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Shipment">
+                            <group>
+                                <group string="Shipment Document">
+                                    <field name="shipment_date" string="Estimated Shipment Date"/>
+                                    <field name="production_completion_date"
+                                           string="Estimated Production Completion Date"/>
+
+                                    <field name="shipment_scan_copy_doc_recived_date"/>
+                                    <field name="shipment_original_copy_doc_recived_date"/>
+                                    <field name="shipment_doc_original_sent_from_supplier"/>
+
+
+                                </group>
+                                <group string="Shipment Document">
+                                    <field name="shipment_doc_original_sent_from_supplier_courier"/>
+                                    <field name="document_tracking_number"/>
+                                    <field name="shipment_doc_original_recived_by_applicant_bank"/>
+
+                                    <field name="discrepancy"/>
+                                    <field name="accept_discrepancy"
+                                           attrs="{'invisible': [('discrepancy', '!=', 'Yes')]}"/>
+                                    <field name="discrepancy_comment"
+                                           attrs="{'invisible': ['|',('accept_discrepancy', '!=', True),('discrepancy', '!=', 'Yes')]}"/>
+
+                                    <field name="discrepancy_amount"
+                                           attrs="{'invisible': ['|',('accept_discrepancy', '!=', True),('discrepancy', '!=', 'Yes')]}"/>
+
+
+                                    <field name="shipment_doc_collected_from_applicant_bank"/>
+                                    <field name="exchange_rate_lc_settlement"/>
+                                    <field name="shipment_lc_amount"/>
+                                    <field name="lc_settlement_deposited"/>
+
+                                    <field name="shipment_doc_handed_to_finance"/>
+                                    <field name="supplier_payment_date"/>
+                                </group>
+
+                                <group string="Deliver Order">
+                                    <field name="is_it_do"/>
+                                    <field name="do_amount" attrs="{'invisible': [('is_it_do', '!=', True)]}"/>
+                                </group>
+
+
+                            </group>
+
+                        </page>
+
+                        <page string="Good Clearance">
+
+
+                            <group>
+                                <group string="Freight Payment">
+                                    <field name="mode_of_transport" invisible="1"/>
+                                    <field name="goods_arrival_date" invisible="1"/>
+                                    <field name="goods_arrival_date_final_destination"/>
+
+                                    <field name="freight_payment_by_air"
+                                           attrs="{'invisible': [('mode_of_transport', '!=', 'Air')]}"/>
+                                    <field name="freight_payment_by_sea"
+                                           attrs="{'invisible': [('mode_of_transport', '!=', 'Sea')]}"/>
+                                    <field name="freight_payment_by_sea_dg"
+                                           attrs="{'invisible': [('mode_of_transport', '!=', 'Sea')]}"/>
+                                    <field name="freight_payment_by_sea_gp"
+                                           attrs="{'invisible': [('mode_of_transport', '!=', 'Sea')]}"/>
+                                    <field name="freight_paid_date"/>
+                                    <field name="freight_settlement_advice_to_finance"/>
+                                    <field name="container_deposit_amount"/>
+                                    <field name="container_deposit_status"/>
+                                    <field name="shipping_doc_to_transitor"/>
+
+                                    <field name="declaration_number"/>
+                                    <field name="custom_duty_tax_amount"/>
+                                    <field name="custom_duty_withholding_tax"/>
+                                    <field name="custom_duty_tax_paid_date"/>
+                                    <field name="custom_tax_acceptance"/>
+                                    <field name="custom_duty_tax_additional_amount"
+                                           attrs="{'invisible': [('custom_tax_acceptance', '==', True)]}"/>
+
+
+                                </group>
+                                <group string="Additional Info">
+
+
+                                    <field name="release_permit_applied_to_fda"/>
+                                    <field name="release_permit_received_from_fda"/>
+                                    <field name="storage_cost"/>
+                                    <field name="demurrage_cost"/>
+                                    <field name="local_transport_cost"/>
+                                    <field name="loading_unloading_cost"/>
+                                    <field name="release_date_from_customs_delivery"/>
+                                </group>
+
+                            </group>
+
+                        </page>
+
+                        <page string="Post Clearance">
+
+                            <group>
+                                <group string="Inventory">
+                                    <field name="packing_list_shared_with_inventory"/>
+                                    <field name="goods_arrival_date"/>
+                                    <field name="grn_reconcilation_form_recived_date"/>
+                                    <field name="reconcilation_discrepancy"/>
+                                    <field name="discrepancy_comment"
+                                           attrs="{'invisible': [('reconcilation_discrepancy', '!=', True)]}"/>
+                                    <field name="discrepancy_action"
+                                           attrs="{'invisible': [('reconcilation_discrepancy', '!=', True)]}"/>
+
+
+                                </group>
+                                <group string="Additional Info">
+                                    <field name="grn_submitted_to_finance"/>
+                                    <field name="stamped_declaration_recived_date"/>
+                                    <field name="delinquent_settlement_date"/>
+                                    <field name="transistor_service_payment_Amount"/>
+                                    <field name="container_deposit_reimbursed_date"/>
+                                    <field name="transistor_service_payment_done_date"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+
+        </field>
+    </record>
+
+
+    <record id="purchase_form_local_action" model="ir.actions.act_window">
+        <field name="name">Purchase Orders</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">tree,kanban,form,pivot,graph,calendar,activity</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('purchase.purchase_order_view_tree')}),
+            (0, 0, {'view_mode': 'kanban', 'view_id': ref('purchase.purchase_order_view_kanban_without_dashboard')}),
+        ]"/>
+        <field name="domain">[('request_type','=','Local')]</field>
+        <field name="search_view_id" ref="purchase.purchase_order_view_search"/>
+        <field name="context">{'default_request_type':'Local'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No purchase order found. Let's create one!
+            </p>
+            <p>
+                Once you ordered your products to your supplier, confirm your request for quotation and it will turn
+                into a purchase order.
+            </p>
+        </field>
+    </record>
+
+
+    <record id="purchase_form_pharmacy_action" model="ir.actions.act_window">
+        <field name="name">Purchase Orders</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">tree,kanban,form,pivot,graph,calendar,activity</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('purchase.purchase_order_view_tree')}),
+            (0, 0, {'view_mode': 'kanban', 'view_id': ref('purchase.purchase_order_view_kanban_without_dashboard')}),
+        ]"/>
+        <field name="domain">[('request_type','=','Pharmacy')]</field>
+        <field name="context">{'default_request_type': 'Pharmacy'}</field>
+        <field name="search_view_id" ref="purchase.purchase_order_view_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No purchase order found. Let's create one!
+            </p>
+            <p>
+                Once you ordered your products to your supplier, confirm your request for quotation and it will turn
+                into a purchase order.
+            </p>
+        </field>
+    </record>
+
+    <record id="purchase_form_foreign_action" model="ir.actions.act_window">
+        <field name="name">Purchase Orders</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">tree,kanban,form,pivot,graph,calendar,activity</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('purchase.purchase_order_view_tree')}),
+            (0, 0, {'view_mode': 'kanban', 'view_id': ref('purchase.purchase_order_view_kanban_without_dashboard')}),
+        ]"/>
+        <field name="domain">[('request_type','=','Foregin')]</field>
+        <field name="search_view_id" ref="purchase.purchase_order_view_search"/>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No purchase order found. Let's create one!
+            </p>
+            <p>
+                Once you ordered your products to your supplier, confirm your request for quotation and it will turn
+                into a purchase order.
+            </p>
+        </field>
+    </record>
+
+</odoo>

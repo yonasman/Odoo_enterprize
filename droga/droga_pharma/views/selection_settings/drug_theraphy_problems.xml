@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="droga_pharma_drug_therapy_problem_action" model="ir.actions.act_window">
+        <field name="name">Drug therapy problems</field>
+        <field name="res_model">droga.pharma.drug.therapy.problem</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="droga_pharma_drug_therapy_problem_tree" model="ir.ui.view">
+        <field name="name">droga.pharma.drug.therapy.problem.view.tree</field>
+        <field name="model">droga.pharma.drug.therapy.problem</field>
+        <field name="arch" type="xml">
+            <tree string="" editable="top" delete="0">
+                <field name="dtp"></field>
+                <field name="descr"></field>
+                <field name="status"></field>
+            </tree>
+        </field>
+    </record>
+
+</odoo>

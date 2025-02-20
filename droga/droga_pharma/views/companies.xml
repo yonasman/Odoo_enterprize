@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <record id="pharma_partner_view" model="ir.ui.view">
+        <field name="name">res.partner.form</field>
+        <field name="model">res.partner</field>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <form string="Partners" delete="0">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <field name="show_beauty_button" invisible="1"></field>
+                        <field name="show_vit_button" invisible="1"></field>
+                        <button name="action_beautypicks"
+                                type="object"
+                                class="oe_stat_button"
+                                string="Reward"
+                                attrs="{'invisible': [('show_beauty_button', '=', False)]}"
+                                icon="fa-credit-card-alt">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Reward</span>
+                                <span class="o_stat_text">Beauty-picks</span>
+                            </div>
+                        </button>
+                        <button name="action_supp_rewards"
+                                type="object"
+                                class="oe_stat_button"
+                                attrs="{'invisible': [('show_vit_button', '=', False)]}"
+                                icon="fa-credit-card-alt">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Reward</span>
+                                <span class="o_stat_text">Supplements</span>
+                            </div>
+                        </button>
+                        <button icon="fa-credit-card-alt" type="object" string="Children" name="open_children"
+                                class="oe_stat_button"></button>
+
+                    </div>
+                    <header>
+                    <button name="request"
+                            attrs="{'invisible': ['|',('profession', 'not in', ('hp')),('state', 'not in', ('draft'))]}"
+                            string="Request" type="object" class="oe_highlight" data-hotkey="v"/>
+                    <button name="approve"
+                            attrs="{'invisible': ['|',('profession', 'not in', ('hp')),('state', 'not in', ('requested'))]}"
+                            groups="droga_pharma.pharma_director"
+                            string="Approve" type="object" class="oe_highlight" data-hotkey="v"/>
+                    <button name="amend"
+                            attrs="{'invisible': ['|',('profession', 'not in', ('hp')),('state', 'not in', ('requested'))]}"  groups="droga_pharma.pharma_director"
+                            string="Amend" type="object" class="oe_highlight btn-warning" data-hotkey="v"/>
+                    <field name="state" attrs="{'invisible': [('profession', 'not in', ('hp'))]}" widget="statusbar" statusbar_visible="draft,requested,active"/>
+                    <field name="profession" invisible="1"></field>
+                    </header>
+
+
+
+                    <div class="oe_button_box" name="button_box">
+
+                            </div>
+
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger"
+                            attrs="{'invisible': [('active', '=', True)]}"/>
+                    <field name="avatar_128" invisible="1"/>
+                    <field name="image_1920" widget='image' class="oe_avatar"
+                           options='{"preview_image": "avatar_128"}'/>
+                    <div class="oe_title mb24">
+                        <field name="is_company" invisible="1"/>
+                        <field name="commercial_partner_id" invisible="1"/>
+                        <field name="active" invisible="1"/>
+                        <field name="company_id" invisible="1"/>
+                        <field name="country_code" invisible="1"/>
+                        <field name="company_type" widget="radio" options="{'horizontal': true}"/>
+                        <h1>
+                            <field id="company" class="text-break" name="name" default_focus="1"
+                                   placeholder="e.g. Lumber Inc"
+                                   attrs="{  'invisible': [('is_company','=', False)]}"/>
+                            <field id="individual" class="text-break" name="name" default_focus="1"
+                                   placeholder="e.g. Brandom Freeman"
+                                   attrs="{  'invisible': [('is_company','=', True)]}"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="vat" placeholder="e.g. BE0477472701"/>
+                            <field name="dob" string="Date of birth" attrs="{'invisible': [('is_company','=', True)]}"></field>
+                            <field name="profession" string="Profession" attrs="{'invisible': [('is_company','=', True)]}"></field>
+
+                            <label for="height" string="height (in meters)"/>
+                            <div >
+
+                                <field name="height" class="oe_inline"></field>
+
+                                <label for="weight" string="Weight"/>
+                                <field name="weight" class="oe_inline"></field>
+                            </div>
+                        </group>
+                        <group>
+                            <field name="mobile" widget="phone"/>
+                            <field name="age" string="Age" attrs="{'invisible': [('is_company','=', True)]}"></field>
+                            <field name="gender" string="Gender" attrs="{'invisible': [('is_company','=', True)]}"></field>
+                            <field name="bmi"></field>
+                        </group>
+                    </group>
+                    <group string="Past history">
+
+                            <group>
+                            <field name="medical_history"></field>
+                            <field name="medication_history"></field>
+                        </group>
+                        <group>
+                            <field name="adr_allergy"></field>
+                            <field name="immunization"></field>
+                        </group>
+
+                    </group>
+
+                    <notebook>
+                        <page string="Employees" attrs="{'invisible': [('is_company','=', False)]}"
+                              groups="droga_pharma.pharma_br_admin,droga_pharma.pharma_dp_admin,droga_pharma.pharma_di_admin">
+                            <field name="employees" mode="tree,kanban">
+                                <tree editable="1" create="1">
+                                    <field name="employee_name"/>
+                                    <field name="gender"/>
+                                    <field name="cust_id"/>
+                                    <field name="profession"></field>
+                                    <field name="phone_no"/>
+                                    <field name="dob"/>
+                                    <field name="age"/>
+                                </tree>
+                                <form>
+                                    <group>
+                                        <field name="employee_name"/>
+                                        <field name="job_position"/>
+                                        <field name="gender"/>
+                                        <field name="cust_id"/>
+                                        <field name="profession"></field>
+                                        <field name="mobile"/>
+                                        <field name="dob"/>
+                                        <field name="age"/>
+                                    </group>
+                                </form>
+                                <kanban class="o_kanban_mobile">
+                                    <field name="employee_name"/>
+                                    <field name="job_position"/>
+                                    <field name="gender"/>
+                                    <field name="cust_id"/>
+                                    <field name="profession"></field>
+                                    <field name="mobile"/>
+                                    <field name="dob"/>
+                                    <field name="age"/>
+                                    <templates>
+                                        <t t-name="kanban-box">
+                                            <div t-attf-class="oe_kanban_global_click" on_create="quick_create">
+                                                <div class="oe_kanban_details">
+                                                    <ul>
+                                                        <li>
+                                                            <field name="employee_name"></field>
+                                                        </li>
+                                                        <li>
+                                                            <span></span>
+                                                            Job Position:
+                                                            <field name="job_position"></field>
+
+                                                            <span></span>
+                                                            Profession:
+                                                            <field name="profession"></field>
+                                                            <span></span>
+                                                            Customer ID:
+                                                            <field name="cust_id"/>
+                                                        </li>
+                                                        <li>
+                                                            Gender:
+                                                            <field name="gender"></field>
+                                                            <span></span>-
+                                                            <span></span>
+                                                            Mobile:
+                                                            <field name="mobile"></field>
+                                                        </li>
+
+
+                                                    </ul>
+
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </templates>
+
+                                </kanban>
+                            </field>
+                        </page>
+                        <page string="Memberships" attrs="{'invisible': [(1, '>', 0)]}"
+                              groups="droga_pharma.pharma_br_admin,droga_pharma.pharma_dp_admin,droga_pharma.pharma_di_admin">
+                            <field name="memberships_partner" mode="tree,kanban">
+                                <tree editable="0" create="0">
+                                    <field name="prod"/>
+                                    <field name="prod_descr"/>
+                                    <field name="sales_ref"/>
+                                    <field name="paid_amount"></field>
+                                    <field name="left_amount"/>
+                                    <field name="date_from"/>
+                                    <field name="date_to"/>
+                                    <field name="status"/>
+                                </tree>
+                                <form>
+                                    <group>
+                                        <field name="prod"/>
+                                        <field name="prod_descr"/>
+                                        <field name="sales_ref"/>
+                                        <field name="paid_amount"></field>
+                                        <field name="left_amount"/>
+                                        <field name="date_from"/>
+                                        <field name="date_to"/>
+                                        <field name="status"/>
+                                        <button icon="fa-credit-card-alt" type="object"
+                                                attrs="{'invisible': [('status', '!=', 'Active')]}" string="Sales Order"
+                                                name="sales_req"
+                                                class="oe_stat_button"></button>
+                                    </group>
+                                </form>
+                                <kanban class="o_kanban_mobile">
+                                    <field name="prod"/>
+                                    <field name="prod_descr"/>
+                                    <field name="sales_ref"/>
+                                    <field name="paid_amount"></field>
+                                    <field name="left_amount"/>
+                                    <field name="date_from"/>
+                                    <field name="date_to"/>
+                                    <field name="status"/>
+                                    <templates>
+                                        <t t-name="kanban-box">
+                                            <div t-attf-class="oe_kanban_global_click" on_create="quick_create">
+                                                <div class="oe_kanban_details">
+                                                    <ul>
+                                                        <li>
+                                                            <field name="prod_descr"></field>
+                                                        </li>
+                                                        <li>
+                                                            <span></span>
+                                                            Sales ref:
+                                                            <field name="sales_ref"></field>
+
+                                                            <span></span>
+                                                            Paid amount:
+                                                            <field name="paid_amount"></field>
+                                                            <span></span>
+                                                            Left amount:
+                                                            <field name="left_amount"/>
+                                                        </li>
+                                                        <li>
+                                                            Date from:
+                                                            <field name="date_from"></field>
+                                                            <span></span>-
+                                                            <span></span>
+                                                            Date to:
+                                                            <field name="date_to"></field>
+                                                        </li>
+
+
+                                                    </ul>
+
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </templates>
+
+                                </kanban>
+                            </field>
+                        </page>
+                    </notebook>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

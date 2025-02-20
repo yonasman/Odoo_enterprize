@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="droga_pharma_breast_cont_type_action" model="ir.actions.act_window">
+        <field name="name">Discount for profession and mothers</field>
+        <field name="res_model">droga.breast.feed.reward.contact.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="droga_pharma_breast_cont_type_tree" model="ir.ui.view">
+        <field name="name">droga.breast.feed.reward.contact.type.view.tree</field>
+        <field name="model">droga.breast.feed.reward.contact.type</field>
+        <field name="arch" type="xml">
+            <tree string="" delete="0">
+                <field name="cont_type"></field>
+                <field name="pharmacy_group_id" widget="many2many_tags"></field>
+                <field name="discount"></field>
+                <field name="status"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_pharma_breast_cont_type_form" model="ir.ui.view">
+        <field name="name">droga.breast.feed.reward.contact.type.view.form</field>
+        <field name="model">droga.breast.feed.reward.contact.type</field>
+        <field name="arch" type="xml">
+            <form string="" delete="0">
+                <sheet>
+                    <group>
+                        <field name="cont_type"></field>
+                        <field name="pharmacy_group_id" widget="many2many_tags"></field>
+                        <field name="discount"></field>
+                        <field name="remark"></field>
+                        <field name="status"></field>
+                    </group>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

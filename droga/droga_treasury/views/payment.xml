@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+<record id="account_loan_repayment_view_tree" model="ir.ui.view">
+        <field name="name">account.loan.view.tree</field>
+        <field name="model">account.loan</field>
+        <field name="arch" type="xml">
+            <tree string="Loan">
+                <field name="name"/>
+                
+
+                <field name="loan_type"/>
+                <field name="anual_interest_rate"/>
+                <field name="loan_amount"/>
+                
+                
+                 
+                            
+            </tree>
+        </field>
+    </record>
+
+     <record id="account_loan_repaymen_view_form" model="ir.ui.view">
+        <field name="name">account_loan.view.form</field>
+        <field name="model">account.loan</field>
+        <field name="arch" type="xml">
+            <form string="">
+                
+                <sheet>
+                   
+ <!-- you can display child data like code below -->
+                            <field name="loan_repayment_ids" >
+                                <tree editable="bottom" create="0" delete="0">
+                                    <field name="payment_term" width="11"/>
+                                    <field name="expected_payment_date" width="12"/>
+
+                                    <field name="value_date" width="11"/>
+                                    <field name="principal_repayment" width="11"/>
+
+                                    <field name="is_interest" width="11"/>
+                                    <field name="is_penality" width="11"/>
+                                    <field name="total_payment" width="11"/>
+                                    <field name="with_out" width="11"/>
+                                    <button name="open_detail" string="Payment Detail" type="object" />
+                                   <!-- <button name="compute_inte" string="Calculate" type="object"/>
+                                    -->
+
+
+
+                                </tree>
+                            </field>
+                            
+              
+
+            </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record> 
+    <record id="account_loan_repayment_action" model="ir.actions.act_window">
+        <field name="name">Repayment</field>
+        <field name="res_model">account.loan</field>
+        <!-- <field name="view_type">form</field> -->
+        <field name="view_mode">tree,form</field>
+    
+    </record>
+    
+    <record id="account_loan_repayment_form_action" model="ir.actions.act_window.view">
+           <field name="view_mode">form</field>
+           <field name="view_id" ref="account_loan_repaymen_view_form" />
+           <field name="act_window_id" ref="account_loan_repayment_action" />
+    </record> 
+    <record id="account_loan_repayment_tree_action" model="ir.actions.act_window.view">
+           <field name="view_mode">tree</field>
+           <field name="view_id" ref="account_loan_repayment_view_tree" />
+           <field name="act_window_id" ref="account_loan_repayment_action" />
+    </record>
+    <menuitem
+        id="bank_loan_repayment_menu"
+        name="Repayment"
+        sequence="9"
+        action="account_loan_repayment_action"
+        parent="bank_loan_menu"
+       />
+</odoo>

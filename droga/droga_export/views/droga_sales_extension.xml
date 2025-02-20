@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="droga_sale_order_warehouse_line" model="ir.ui.view">
+        <field name="name">Sales order line warehouse extension</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/header/button[@name='action_cancel']" position="after">
+                <button name="pay_req_open" type="object" class="oe_stat_button" groups="droga_export.export_user"
+                        attrs="{'invisible': [('state', 'not in', ('sale','done'))]}" string="Payment request"/>
+                <button name="po_open" type="object" class="oe_stat_button"  groups="droga_export.export_user"
+                        attrs="{'invisible': [('state', 'not in', ('sale','done'))]}" string="Purchase order"/>
+            </xpath>
+            <xpath expr="//form/sheet/div/button[@name='action_preview_sale_order']" position="before">
+                <button name="subcontract_issue_open"
+                        type="object"
+                        class="oe_stat_button"
+                        attrs="{'invisible': [('state', 'not in', ('sale','done'))]}"
+                        groups="droga_export.export_user"
+                        icon="fa-car icon">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_text">Send to</span>
+                            <span class="o_stat_text">Cleaning unit</span>
+                        </div>
+                    </button>
+                <button name="po_open"
+                        type="object"
+                        class="oe_stat_button"
+                        attrs="{'invisible': [('state', 'not in', ('sale','done'))]}"
+                        groups="droga_export.export_user"
+                        icon="fa-car icon">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_text">Purchase</span>
+                            <span class="o_stat_text">Order</span>
+                        </div>
+                    </button>
+                <button name="items_issue_order"
+                        type="object"
+                        class="oe_stat_button"
+                        attrs="{'invisible': [('state', 'not in', ('sale','done'))]}"
+                        groups="droga_export.export_user"
+                        icon="fa-cog icon">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_text">Bag issue</span>
+                            <span class="o_stat_text">Order</span>
+                        </div>
+                    </button>
+                <button name="export_status_list"
+                        type="object"
+                        class="oe_stat_button"
+                        attrs="{'invisible': [('state', 'not in', ('sale','done'))]}"
+                        groups="droga_export.export_user"
+                        icon="fa-credit-card-alt">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_text">Export</span>
+                            <span class="o_stat_text">Status</span>
+                        </div>
+                    </button>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="droga_export_payment_request" model="ir.ui.view">
+        <field name="name">droga.account.payment.request.export.inherited</field>
+        <field name="model">droga.account.payment.request</field>
+        <field name="inherit_id" ref="droga_finance.droga_account_payment_request_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/group/group/field[@name='currency_id']" position="after">
+                <field string='Export origin' name="export_origin_form" attrs="{'invisible': [('export_origin_form', '=', False)]}"></field>
+                <field string='Cleaning unit issue origin' name="issue_export_origin_form" attrs="{'invisible': [('issue_export_origin_form', '=', False)]}"></field>
+            </xpath>
+        </field>
+    </record>
+</odoo>

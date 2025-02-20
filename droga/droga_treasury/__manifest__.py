@@ -1,0 +1,23 @@
+{
+    'name': 'Droga Treasury',
+    'author': 'Afomsoft Technologies',
+    'category': 'Accounting',
+    'version': '1.0',
+    'author': "Afomsoft Technologies",
+    'website': "https://afomsoft.com",
+    'depends': ['base', 'web_studio'],
+    'data': ['security/ir.model.access.csv',
+             'views/account_loan.xml',
+             'views/monthlyclosing.xml',
+             'views/acout_setting.xml',
+             'views/payment_detail.xml',
+             'views/menus.xml',
+             'views/reciept.xml',
+             'views/payment.xml',
+             'views/loan_closing.xml',
+             'report/loan_amortization.xml',
+             'data/crron_interest.xml'],
+
+    'installable': True,
+    'application': True,
+}

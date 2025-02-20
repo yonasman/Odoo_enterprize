@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="droga_crm_customer_settings_city_action" model="ir.actions.act_window">
+        <field name="name">City/sub-city settings</field>
+        <field name="res_model">droga.crm.settings.city</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="droga_crm_customer_city_view_tree" model="ir.ui.view">
+        <field name="name">droga.crm.settings.city.view.tree</field>
+        <field name="model">droga.crm.settings.city</field>
+        <field name="arch" type="xml">
+            <tree string="" editable="top" delete="0">
+                <field name="parent_id" options="{'no_create':True,'no_open':True}" domain="([('status','=','Active')])"></field>
+                <field name="city_name"></field>
+                <field name="city_descr"></field>
+                <field name="status"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.rule" id="droga_crm_city_rule">
+        <field name="name">City multi-company</field>
+        <field name="model_id" ref="model_droga_crm_settings_city"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <menuitem
+        id="droga_crm_customer_settings_city"
+        name="City/sub-city settings"
+        action="droga_crm_customer_settings_city_action"
+        parent="customer_settings_sub_menu"
+        sequence="18"/>
+
+</odoo>

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- tree view report for lc -->
+    <record id="droga_purchase_lc_view_tree" model="ir.ui.view">
+        <field name="name">droga.purchase.lc.view.tree</field>
+        <field name="model">droga.purchase.lc</field>
+        <field name="arch" type="xml">
+            <tree string="LC Tracking" create="0" delete="0" edit="0" duplicate="0">
+                <field name="name" optional="show"/>
+                <field name="purchase_order_id" optional="show"/>
+                <field name="rfq_no" optional="show" string="RFQ No"/>
+                <field name="supplier_id" optional="show"/>
+                <field name="bank" optional="show"/>
+                <field name="branch" optional="show"/>
+                <field name="start_date" optional="show"/>
+                <field name="count_days" decoration-success="count_days &lt;= 30"
+                       decoration-warning="count_days &lt;= 69" decoration-danger="count_days &gt;= 70" widget="badge"
+                       optional="show"/>
+                <field name="total_amount_etb" optional="show" sum="Total"/>
+                <field name="total_amount_usd" optional="show" sum="Total"/>
+                <field name="state" decoration-warning="state in('Draft')" decoration-success="state == 'Active'"
+                       decoration-danger="state == 'Expired'" decoration-muted="state in('Closed')" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- pivot table -->
+    <record id="droga_purchase_lc_view_pivot" model="ir.ui.view">
+        <field name="name">droga.purchase.lc.view.pivot</field>
+        <field name="model">droga.purchase.lc</field>
+        <field name="arch" type="xml">
+            <pivot string="" disable_linking="true" display_quantity="1" sample="1">
+                <field name="bank" type="row"/>
+                <field name="name" type="row"/>
+
+                <field name="state" type="column"/>
+
+                <field name="total_amount_etb" type="measure"/>
+                <field name="total_amount_usd" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- form view for lc -->
+    <record id="droga_purchase_lc_view_form" model="ir.ui.view">
+        <field name="name">droga.purchase.lc.view.form</field>
+        <field name="model">droga.purchase.lc</field>
+        <field name="arch" type="xml">
+            <form string="" create="0" delete="0">
+                <header>
+                    <button name="submit_request" type="object" states="Draft" string="Submit" class="oe_highlight"
+                            id="submit_request" data-hotkey="v" confirm="Are you sure the request is approved?"/>
+                    <button name="cancel_request" type="object" states="Active" string="Submit" class="oe_highlight"
+                            id="cancel_request" data-hotkey="v"
+                            confirm="Are you sure you want to cancel the LC request?"/>
+
+                    <field name="state" widget="statusbar" options="{'clickable': '1'}"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="rfq_id" invisible="1" options="{'no_create':True,'no_open':True}"/>
+                            <field name="purchase_order_id" readonly="1" options="{'no_create':True,'no_open':True}"/>
+                            <field name="name"/>
+                            <field name="start_date"/>
+                            <field name="expire_date"/>
+                            <field name="last_day_shipment"/>
+
+                        </group>
+                        <group>
+                            <field name="bank" options="{'no_create':True,'no_open':True}"/>
+                            <field name="branch"/>
+                            <field name="request_approved_date"/>
+                            <field name="total_amount_usd"/>
+                            <field name="exchange_rate"/>
+                            <field name="total_amount_etb"/>
+
+                        </group>
+
+
+                    </group>
+                    <group>
+
+                        <group string="Approved Dates">
+                            <field name="draft_lc_approved_date"/>
+                            <field name="draft_lc_approved_date_supplier"/>
+                        </group>
+                        <group name="name" string="Approved Dates">
+                            <field name="lc_send_date_to_supplier"/>
+                            <field name="lc_recived_date_from_supplier"/>
+
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="LC Draft Reconciliation">
+                            <field name="lc_details" mode="tree">
+                                <tree editable="bottom" create="0" delete="0">
+                                    <field name="order" width="10"/>
+                                    <field name="name" width="30"/>
+                                    <field name="state" width="15"/>
+                                    <field name="remark" width="25"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <!--<page string="Shipping Reconciliation">
+                            <field name="shipping_details" mode="tree">
+                                <tree editable="bottom" create="0" delete="0">
+                                    <field name="order" />
+                                    <field name="name" />
+                                    <field name="state" />
+                                    <field name="remark" />
+                                </tree>
+                            </field>
+                        </page>-->
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="droga_purchase_lc_view_search" model="ir.ui.view">
+        <field name="name">droga.purchase.lc.view.form</field>
+        <field name="model">droga.purchase.lc</field>
+        <field name="arch" type="xml">
+            <search string="">
+                <field name="name"/>
+                <field name="purchase_order_id"/>
+                <field name="rfq_no"/>
+                <field name="supplier_id"/>
+                <field name="bank"/>
+                <field name="branch"/>
+                <field name="start_date"/>
+                <field name="total_amount_etb"/>
+                <field name="total_amount_usd"/>
+                <field name="state"/>
+                <separator/>
+                <filter name="Draft" string="Draft" domain="[('state', '=', 'Draft')]"/>
+                <filter name="Active" string="Active" domain="[('state', '=', 'Active')]"/>
+                <filter name="Expired" string="Expired" domain="[('state', '=', 'Expired')]"/>
+                <filter name="Closed" string="Closed" domain="[('state', '=', 'Closed')]"/>
+                <separator/>
+                <filter name="start_date" string="Date" date="start_date"/>
+
+                <group expand="0" string="Group By">
+                    <filter string="Vendor" name="vendor" domain="[]" context="{'group_by': 'supplier_id'}"/>
+                    <filter string="Date" name="start_date" domain="[]" context="{'group_by': 'start_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="droga_purchase_lc_report_action" model="ir.actions.act_window">
+        <field name="name">LC Report</field>
+        <field name="res_model">droga.purchase.lc</field>
+        <field name="view_mode">tree,form,pivot</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+
+    </record>
+
+</odoo>

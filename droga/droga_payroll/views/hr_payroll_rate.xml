@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <!-- tree view -->
+    <record id="hr_payroll_rate_tree_view" model="ir.ui.view">
+        <field name="name">hr.payroll.rate</field>
+        <field name="model">hr.payroll.rate</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="code"/>
+                <field name="rate"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+
+            </tree>
+        </field>
+    </record>
+
+    <!-- action for the tree view -->
+    <record id="hr_payroll_rate_tree_action" model="ir.actions.act_window">
+        <field name="name">Payroll Rates</field>
+        <field name="res_model">hr.payroll.rate</field>
+        <field name="view_mode">tree</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+        (0, 0, {'view_mode': 'tree', 'view_id': ref('hr_payroll_rate_tree_view')})]"/>
+    </record>
+
+</odoo>

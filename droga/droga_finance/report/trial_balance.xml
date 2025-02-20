@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- tree view -->
+    <record id="view_move_line_trial_balance_tree" model="ir.ui.view">
+        <field name="name">Trial Balance Tree View</field>
+        <field name="model">account.move.line</field>
+        <field name="arch" type="xml">
+            <tree limit="1000">
+                <field name="account_id"/>
+                <field name="date"/>
+                <field name="move_name"/>
+                <field name="debit" optional="show"/>
+                <field name="credit" optional="show"/>
+                <field name="balance"/>
+                <!--
+                <field name="profit_cost_center"/>
+                -->
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_move_line_trial_balance_search" model="ir.ui.view">
+        <field name="name">Trial Balance Tree search</field>
+        <field name="model">account.move.line</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="account_id"/>
+                <field name="date"/>
+                <field name="move_name"/>
+                <field name="debit" />
+                <field name="credit" />
+                <field name="balance"/>
+                <!--
+                <field name="profit_cost_center"/>
+                -->
+
+                <filter name="group_account" string="Account" context="{'group_by':'account_id'}"/>
+
+            </search>
+        </field>
+    </record>
+
+    <!--action -->
+    <record id="view_move_line_trial_balance_action" model="ir.actions.act_window">
+        <field name="name">Ledger detail by cost center</field>
+        <field name="res_model">account.move.line</field>
+        <field name="view_mode">tree</field>
+        <field name="context">{}</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_move_line_trial_balance_tree')})]"/>
+        <field name="search_view_id" ref="view_move_line_trial_balance_search"></field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Trial Balance
+            </p>
+            <p>
+               Trial Balance By Cost Center
+            </p>
+        </field>
+    </record>
+
+
+    <!-- tree view by analytics -->
+    <record id="view_trial_balance_by_analytics_tree" model="ir.ui.view">
+        <field name="name">Trial Balance By Analytics Tree View</field>
+        <field name="model">droga.finance.trial.balance.by.analytics</field>
+        <field name="arch" type="xml">
+            <tree limit="1000">
+                <field name="account_id"/>
+                <field name="analytic_account_id"/>
+                <field name="plan_id"/>
+                <field name="company_id"/>
+                 <field name="date"/>
+                <field name="debit"/>
+                <field name="credit"/>
+
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_trial_balance_by_analytics_pivot" model="ir.ui.view">
+        <field name="name">droga.finance.trial.balance.by.analytics.pivot</field>
+        <field name="model">droga.finance.trial.balance.by.analytics</field>
+        <field name="arch" type="xml">
+            <pivot string="Payment Report">
+                <field name="analytic_account_id" type="row"/>
+                <field name="account_id" type="row"/>
+
+                <field name="debit" type="measure"/>
+                <field name="credit" type="measure"/>
+
+            </pivot>
+        </field>
+    </record>
+
+
+     <!--action -->
+    <record id="view_trial_balance_by_analytics_action" model="ir.actions.act_window">
+        <field name="name">Trial Balance By Analytics</field>
+        <field name="res_model">droga.finance.trial.balance.by.analytics</field>
+        <field name="view_mode">pivot,tree</field>
+        <field name="context">{}</field>
+
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Trial Balance
+            </p>
+            <p>
+               Trial Balance By Analytics
+            </p>
+        </field>
+    </record>
+
+
+
+
+
+</odoo>

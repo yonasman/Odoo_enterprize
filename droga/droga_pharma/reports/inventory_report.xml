@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="droga_pharma_inv_onhand_warehouse_tree" model="ir.ui.view">
+        <field name="name">stock.quant.tree.bywareh</field>
+        <field name="model">stock.quant</field>
+        <field name="arch" type="xml">
+            <tree string="Stock on hand" delete="false" create="false">
+                <field name="location_id"/>
+                <field name="warehouse_id" optional="hide"/>
+
+                <field name="product_id" widget="many2one"/>
+                <field name="product_uom_id" string="Unit" />
+                <field name="pharmacy_group_id" string="Group"></field>
+                <field name='company_id' optional="hidden"/>
+                <field name='branch_id' optional="hidden"/>
+                <field name="quantity" string="On Hand Quantity" sum="Total On Hand"/>
+                <field name="selling_price" string="Selling price"/>
+		        <field name="unit_cost" string="Unit cost" groups="droga_pharma.pharma_director,droga_pharma.pharma_supply_chain_manager"/>
+                <field name="total_amount" string="Amount" groups="droga_pharma.pharma_director" sum="Total amount"/>
+                <field name="lot_id"/>
+                
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_pharma_inv_onhand_warehouse_tree_no_batch" model="ir.ui.view">
+        <field name="name">stock.quant.tree.bywareh</field>
+        <field name="model">stock.quant</field>
+        <field name="arch" type="xml">
+            <tree string="Stock on hand" delete="false" create="false">
+                <field name="location_id"/>
+                <field name="warehouse_id" optional="hide"/>
+
+                <field name="product_id" widget="many2one"/>
+                <field name="pharmacy_group_id" string="Group"></field>
+                <field name="product_uom_id" string="Unit" />
+                <field name='company_id' optional="hidden"/>
+                <field name='branch_id' optional="hidden"/>
+                <field name="quantity" string="On Hand Quantity" sum="Total On Hand"/>
+                <field name="selling_price" string="Selling price"/>
+                <field name="unit_cost" string="Unit cost" groups="droga_pharma.pharma_director,droga_pharma.pharma_supply_chain_manager"/>
+                <field name="total_amount" string="Amount" groups="droga_pharma.pharma_director" sum="Total amount"/>
+
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_pharma_inv_onhand_warehouse_search" model="ir.ui.view">
+        <field name="name">stock.quant.pharma.by.warehouse.search</field>
+        <field name="model">stock.quant</field>
+        <field name="arch" type="xml">
+            <search string="Stock on hand">
+                <field name="product_id"></field>
+                <field name="lot_id"></field>
+                <field name="location_id"></field>
+                <field name="quantity"></field>
+                <field name="warehouse_id"></field>
+                <field name="branch_id"></field>
+                <filter name="group_warehouse_id" string="Group by warehouse" context="{'group_by':'warehouse_id'}"/>
+                <filter name="group_product" string="Group by product" context="{'group_by':'product_id'}"/>
+
+                <searchpanel>
+                    <field name="warehouse_id" string="Warehouses"/>
+                    <field name="branch_id" string="Branches"/>
+                </searchpanel>
+            </search>
+        </field>
+    </record>
+
+
+    <record model="ir.actions.act_window" id="droga_pharma_inv_onhand_warehouse_action">
+        <field name="domain">[('quantity', '!=', 0),('has_access','=',True)]</field>
+        <field name="name">Stock on hand by warehouse</field>
+        <field name="res_model">stock.quant</field>
+        <field name="search_view_id" ref="droga_pharma_inv_onhand_warehouse_search"></field>
+        <field name="view_id" ref="droga_pharma_inv_onhand_warehouse_tree"/>
+    </record>
+
+    <record model="ir.actions.act_window" id="droga_pharma_inv_onhand_no_batch__warehouse_action">
+        <field name="domain">[('quantity', '!=', 0),('has_access','=',True)]</field>
+        <field name="name">Stock on hand no batch by warehouse</field>
+        <field name="context">{'group_by_no_leaf':1,'group_by':['product_id','location_id']}</field>
+        <field name="res_model">stock.quant</field>
+        <field name="search_view_id" ref="droga_pharma_inv_onhand_warehouse_search"></field>
+        <field name="view_id" ref="droga_pharma_inv_onhand_warehouse_tree_no_batch"/>
+    </record>
+
+
+
+
+
+
+
+
+
+
+
+    <record id="stock_transactions_pharma_tree" model="ir.ui.view">
+        <field name="name">stock.move.tree.transaction.tree</field>
+        <field name="model">stock.move</field>
+        <field name="arch" type="xml">
+            <tree string="Stock transactions - All" delete="false" create="false">
+                <field name="date" />
+
+                <field name="origin"/>
+                <field name="partner_id" optional="show"/>
+                <field name='company_id' optional="hidden"/>
+                <field name='product_id'/>
+                <field name='trans_warehouse'/>
+                <field name="trans_type_detail"></field>
+                <field name='branch_id' optional="hidden"/>
+                <field name="quantity_done" string="Quantity" sum="Total Qty"/>
+                <field name="unit_price" string="Unit price"/>
+                <field name="tot_price" string="Amount" sum="Total amount"/>
+                <field name='state'/>
+                <field name="product_uom" string="UOM"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="stock_transactions_pharma_all_search" model="ir.ui.view">
+        <field name="name">stock.move.tree.transaction.search</field>
+        <field name="model">stock.move</field>
+        <field name="arch" type="xml">
+            <search string="Stock on hand">
+                <field name="origin"/>
+                <field name="partner_id" optional="show"/>
+                <field name='company_id' optional="hidden"/>
+                <field name='name'/>
+                <field name='product_id'/>
+                <field name='location_id'/>
+                <field name='location_dest_id'/>
+                <field name='trans_warehouse'/>
+                <field name="trans_type"></field>
+                <field name="trans_type_detail"></field>
+
+                <filter string="Today"
+                        domain="[('date', '&gt;=', context_today().strftime('%Y-%m-%d')), ('date', '&lt;', (context_today() + relativedelta(days=1)).strftime('%Y-%m-%d'))]"
+                        name="today_trans"></filter>
+
+                <filter string="Current week"
+                    domain="[
+                        ('date', '>=', (datetime.datetime.combine(context_today() + relativedelta(weeks=-1,days=1,weekday=0), datetime.time(0,0,0)).to_utc()).strftime('%Y-%m-%d %H:%M:%S')),
+                        ('date', '&lt;', (datetime.datetime.combine(context_today() + relativedelta(days=1,weekday=0), datetime.time(0,0,0)).to_utc()).strftime('%Y-%m-%d %H:%M:%S'))]"
+                    name="current_week_sales"></filter>
+
+                <filter string="Previous week"
+                       domain="[
+                    ('date', '&lt;', (context_today() + relativedelta(weeks=-1, weekday=6)).strftime('%Y-%m-%d 00:00:00')),
+                    ('date', '&gt;', (context_today() + relativedelta(weeks=-2, weekday=6)).strftime('%Y-%m-%d 00:00:00'))]"
+                        name="previous_week_sales"></filter>
+
+                <filter string="Current month"
+                        domain="[('date','&lt;',(context_today()+relativedelta(months=1)).strftime('%%Y-%%m-01')),
+                        ('date','&gt;=',time.strftime('%%Y-%%m-01'))]"
+                        name="current_month_trans"></filter>
+
+                <filter string="Previous month"
+                        domain="[('date','&gt;=',(context_today()-relativedelta(months=1)).strftime('%%Y-%%m-01')),
+                        ('date','&lt;',time.strftime('%%Y-%%m-01'))]"
+                name="previous_month_trans"></filter>
+
+                <searchpanel>
+                    <field name="branch_id" string="Branches"/>
+                    <field name="trans_type_detail"></field>
+                </searchpanel>
+            </search>
+        </field>
+    </record>
+
+    <!-->
+    <record model="ir.actions.act_window" id="droga_pharma_inv_transaction_issue_warehouse_action">
+        <field name="domain">[('quantity_done','!=',0),('branch','like','Phar%'),('trans_type', 'in', ('Sales issue',	'Adjustment shortage',	'Store issues',	'Goods return',	'Internal transfer - issue',	'Consignment issue',	'Internal consumption',	'Sales placement issue',	'Free sample issue',	'Sample to be returned issue')),('state','=','done'),('has_access','=',True)]</field>
+        <field name="name">Stock transactions - issue</field>
+        <field name="res_model">stock.move</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="stock_transactions_pharma_all_search"></field>
+        <field name="view_id" ref="stock_transactions_pharma_tree"/>
+    </record>
+
+    <record model="ir.actions.act_window" id="droga_pharma_inv_transaction_receipts_warehouse_action">
+        <field name="domain">[('quantity_done','!=',0),('branch','like','Phar%'),('Sales return',	'Internal transfer',	'Adjustment overage',	'Store issue returns',	'Goods receiving',	'Internal transfer - receive',	'Internal consumption return',	'Sales placement return',	'Free sample return',	'Sample to be returned return')),('state','=','done'),('has_access','=',True)]</field>
+        <field name="name">Stock transactions - receipts</field>
+        <field name="res_model">stock.move</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="stock_transactions_pharma_all_search"></field>
+        <field name="view_id" ref="stock_transactions_pharma_tree"/>
+    </record>
+    <-->
+    <record model="ir.actions.act_window" id="droga_pharma_inv_transaction_all_warehouse_action">
+        <field name="domain">[('quantity_done','!=',0),('branch','like','Phar%'),('state','=','done'),('has_read_access','=',True)]</field>
+        <field name="name">Stock transactions - All</field>
+        <field name="res_model">stock.move</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="stock_transactions_pharma_all_search"></field>
+        <field name="view_id" ref="stock_transactions_pharma_tree"/>
+    </record>
+
+</odoo>

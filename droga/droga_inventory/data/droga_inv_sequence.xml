@@ -1,0 +1,1318 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="seq_transfer_request_md" model="ir.sequence">
+            <field name="name">Transfer request MD store</field>
+            <field name="code">droga.inventory.transfer.custom.sequence.md</field>
+            <field name="prefix">MTIV/MD/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="implementation">no_gap</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_transfer_request_ms" model="ir.sequence">
+            <field name="name">Transfer request MS store</field>
+            <field name="code">droga.inventory.transfer.custom.sequence.ms</field>
+            <field name="prefix">MTIV/MS/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_transfer_request_li" model="ir.sequence">
+            <field name="name">Transfer request LI store</field>
+            <field name="code">droga.inventory.transfer.custom.sequence.li</field>
+            <field name="prefix">MTIV/LI/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_transfer_request_me" model="ir.sequence">
+            <field name="name">Transfer request ME store</field>
+            <field name="code">droga.inventory.transfer.custom.sequence.me</field>
+            <field name="prefix">MTIV/ME/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_transfer_request_os" model="ir.sequence">
+            <field name="name">Transfer request OS store</field>
+            <field name="code">droga.inventory.transfer.custom.sequence.os</field>
+            <field name="prefix">MTIV/OS/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_transfer_request_ws" model="ir.sequence">
+            <field name="name">Transfer request WS store</field>
+            <field name="code">droga.inventory.transfer.custom.sequence.ws</field>
+            <field name="prefix">MTIV/WS/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_transfer_request_wsos" model="ir.sequence">
+            <field name="name">Transfer request WSOS store</field>
+            <field name="code">droga.inventory.transfer.custom.sequence.wsos</field>
+            <field name="prefix">MTIV/WSOS/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="number_increment">1</field>
+            <field name="implementation">no_gap</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_transfer_request_pb" model="ir.sequence">
+            <field name="name">Transfer request PB store</field>
+            <field name="code">droga.inventory.transfer.custom.sequence.pb</field>
+            <field name="prefix">MTIV/PB/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="number_increment">1</field>
+            <field name="implementation">no_gap</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_transfer_request_p4" model="ir.sequence">
+            <field name="name">Transfer request P4 store</field>
+            <field name="code">droga.inventory.transfer.custom.sequence.p4</field>
+            <field name="prefix">MTIV/P4/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="number_increment">1</field>
+            <field name="implementation">no_gap</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_transfer_request_of" model="ir.sequence">
+            <field name="name">Transfer request OF store</field>
+            <field name="code">droga.inventory.transfer.custom.sequence.of</field>
+            <field name="prefix">MTIV/OF/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_transfer_request_ee" model="ir.sequence">
+            <field name="name">Transfer request EE store</field>
+            <field name="code">ema.inventory.transfer.custom.sequence.ee</field>
+            <field name="prefix">MTIV/EE/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_transfer_request_ec" model="ir.sequence">
+            <field name="name">Transfer request EC store</field>
+            <field name="code">droga.inventory.transfer.custom.sequence.ec</field>
+            <field name="prefix">MTIV/EC/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="number_increment">1</field>
+            <field name="implementation">no_gap</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_transfer_request_em" model="ir.sequence">
+            <field name="name">Transfer request EM store</field>
+            <field name="code">droga.inventory.transfer.custom.sequence.em</field>
+            <field name="prefix">MTIV/EM/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_transfer_request" model="ir.sequence">
+            <field name="name">Transfer request for all stores</field>
+            <field name="code">droga.inventory.transfer.custom.sequence.all</field>
+            <field name="prefix">MTR/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+
+        <record id="seq_transfer_issue_md" model="ir.sequence">
+            <field name="name">Transfer issue MD store</field>
+            <field name="code">droga.inventory.transfer.issue.sequence.md</field>
+            <field name="prefix">MTOV/MD/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_transfer_issue_ms" model="ir.sequence">
+            <field name="name">Transfer issue MS store</field>
+            <field name="code">droga.inventory.transfer.issue.sequence.ms</field>
+            <field name="prefix">MTOV/MS/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_transfer_issue_li" model="ir.sequence">
+            <field name="name">Transfer issue LI store</field>
+            <field name="code">droga.inventory.transfer.issue.sequence.li</field>
+            <field name="prefix">MTOV/LI/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_transfer_issue_me" model="ir.sequence">
+            <field name="name">Transfer issue ME store</field>
+            <field name="code">droga.inventory.transfer.issue.sequence.me</field>
+            <field name="prefix">MTOV/ME/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_transfer_issue_os" model="ir.sequence">
+            <field name="name">Transfer issue OS store</field>
+            <field name="code">droga.inventory.transfer.issue.sequence.os</field>
+            <field name="prefix">MTOV/OS/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_transfer_issue_ws" model="ir.sequence">
+            <field name="name">Transfer issue WS store</field>
+            <field name="code">droga.inventory.transfer.issue.sequence.ws</field>
+            <field name="prefix">MTOV/WS/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_transfer_issue_wsos" model="ir.sequence">
+            <field name="name">Transfer issue WSOS store</field>
+            <field name="code">droga.inventory.transfer.issue.sequence.wsos</field>
+            <field name="prefix">MTOV/WSOS/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_transfer_issue_of" model="ir.sequence">
+            <field name="name">Transfer issue OF store</field>
+            <field name="code">droga.inventory.transfer.issue.sequence.oF</field>
+            <field name="prefix">MTOV/OF/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_transfer_issue_em" model="ir.sequence">
+            <field name="name">Transfer issue EM store</field>
+            <field name="code">droga.inventory.transfer.issue.sequence.em</field>
+            <field name="prefix">MTOV/EM/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_transfer_issue_ec" model="ir.sequence">
+            <field name="name">Transfer issue EC store</field>
+            <field name="code">droga.inventory.transfer.issue.sequence.ec</field>
+            <field name="prefix">MTOV/EC/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_transfer_issue_ee" model="ir.sequence">
+            <field name="name">Transfer issue EE store</field>
+            <field name="code">droga.inventory.transfer.issue.sequence.ee</field>
+            <field name="prefix">MTOV/EE/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_transfer_issue_pb" model="ir.sequence">
+            <field name="name">Transfer issue PB store</field>
+            <field name="code">droga.inventory.transfer.issue.sequence.PB</field>
+            <field name="prefix">MTOV/PB/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_transfer_issue_p4" model="ir.sequence">
+            <field name="name">Transfer issue P4 store</field>
+            <field name="code">droga.inventory.transfer.issue.sequence.P4</field>
+            <field name="prefix">MTOV/P4/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_goods_return_md" model="ir.sequence">
+            <field name="name">Goods return MD store</field>
+            <field name="code">droga.inventory.goods.return.sequence.md</field>
+            <field name="prefix">WGR/MD/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_goods_return_ms" model="ir.sequence">
+            <field name="name">Goods return MS store</field>
+            <field name="code">droga.inventory.goods.return.sequence.ms</field>
+            <field name="prefix">WGR/MS/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_goods_return_li" model="ir.sequence">
+            <field name="name">Goods return LI store</field>
+            <field name="code">droga.inventory.goods.return.sequence.li</field>
+            <field name="prefix">WGR/LI/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_goods_return_me" model="ir.sequence">
+            <field name="name">Goods return ME store</field>
+            <field name="code">droga.inventory.goods.return.sequence.me</field>
+            <field name="prefix">WGR/ME/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_goods_return_os" model="ir.sequence">
+            <field name="name">Goods return OS store</field>
+            <field name="code">droga.inventory.goods.return.sequence.os</field>
+            <field name="prefix">WGR/OS/%(y)s/</field>
+            <field name="implementation">no_gap</field>
+            <field name="suffix"></field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_goods_return_ws" model="ir.sequence">
+            <field name="name">Goods return WS store</field>
+            <field name="code">droga.inventory.goods.return.sequence.ws</field>
+            <field name="prefix">WGR/WS/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_goods_return_wsos" model="ir.sequence">
+            <field name="name">Goods return WSOS store</field>
+            <field name="code">droga.inventory.goods.return.sequence.wsos</field>
+            <field name="prefix">WGR/WSOS/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_goods_return_of" model="ir.sequence">
+            <field name="name">Goods return OF store</field>
+            <field name="code">droga.inventory.goods.return.sequence.of</field>
+            <field name="prefix">WGR/OF/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_goods_return_pb" model="ir.sequence">
+            <field name="name">Goods return PB store</field>
+            <field name="code">droga.inventory.goods.return.sequence.pb</field>
+            <field name="prefix">WGR/PB/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_goods_return_p4" model="ir.sequence">
+            <field name="name">Goods return P4 store</field>
+            <field name="code">droga.inventory.goods.return.sequence.p4</field>
+            <field name="prefix">WGR/P4/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_goods_return_em" model="ir.sequence">
+            <field name="name">Goods return EM store</field>
+            <field name="code">droga.inventory.goods.return.sequence.em</field>
+            <field name="prefix">WGR/EM/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_goods_return_ec" model="ir.sequence">
+            <field name="name">Goods return EC store</field>
+            <field name="code">droga.inventory.goods.return.sequence.ec</field>
+            <field name="prefix">WGR/EC/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_goods_return_ee" model="ir.sequence">
+            <field name="name">Goods return EE store</field>
+            <field name="code">droga.inventory.goods.return.sequence.ee</field>
+            <field name="prefix">WGR/EE/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_stock_adjustement_md" model="ir.sequence">
+            <field name="name">Stock adjustement MD store</field>
+            <field name="code">droga.inventory.stock.adjustement.sequence.md</field>
+            <field name="prefix">ADJ/MD/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_stock_adjustement_ms" model="ir.sequence">
+            <field name="name">Stock adjustement MS store</field>
+            <field name="code">droga.inventory.stock.adjustement.sequence.ms</field>
+            <field name="prefix">ADJ/MS/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_stock_adjustement_li" model="ir.sequence">
+            <field name="name">Stock adjustement LI store</field>
+            <field name="code">droga.inventory.stock.adjustement.sequence.li</field>
+            <field name="prefix">ADJ/LI/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_stock_adjustement_me" model="ir.sequence">
+            <field name="name">Stock adjustement ME store</field>
+            <field name="code">droga.inventory.stock.adjustement.sequence.me</field>
+            <field name="prefix">ADJ/ME/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_stock_adjustement_os" model="ir.sequence">
+            <field name="name">Stock adjustement OS store</field>
+            <field name="code">droga.inventory.stock.adjustement.sequence.os</field>
+            <field name="prefix">ADJ/OS/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_stock_adjustement_ws" model="ir.sequence">
+            <field name="name">Stock adjustement WS store</field>
+            <field name="code">droga.inventory.stock.adjustement.sequence.ws</field>
+            <field name="prefix">ADJ/WS/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_stock_adjustement_wsos" model="ir.sequence">
+            <field name="name">Stock adjustement WSOS store</field>
+            <field name="code">droga.inventory.stock.adjustement.sequence.wsos</field>
+            <field name="prefix">ADJ/WSOS/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_stock_adjustement_of" model="ir.sequence">
+            <field name="name">Stock adjustement OF store</field>
+            <field name="code">droga.inventory.stock.adjustement.sequence.of</field>
+            <field name="prefix">ADJ/OF/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_stock_adjustement_pb" model="ir.sequence">
+            <field name="name">Stock adjustement PB store</field>
+            <field name="code">droga.inventory.stock.adjustement.sequence.pb</field>
+            <field name="prefix">ADJ/PB/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_stock_adjustement_p4" model="ir.sequence">
+            <field name="name">Stock adjustement P4 store</field>
+            <field name="code">droga.inventory.stock.adjustement.sequence.p4</field>
+            <field name="prefix">ADJ/P4/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_stock_adjustement_ec" model="ir.sequence">
+            <field name="name">Stock adjustement EC store</field>
+            <field name="code">droga.inventory.stock.adjustement.sequence.ec</field>
+            <field name="prefix">ADJ/EC/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_stock_adjustement_em" model="ir.sequence">
+            <field name="name">Stock adjustement EM store</field>
+            <field name="code">droga.inventory.stock.adjustement.sequence.em</field>
+            <field name="prefix">ADJ/EM/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_stock_adjustement_ee" model="ir.sequence">
+            <field name="name">Stock adjustement EE store</field>
+            <field name="code">droga.inventory.stock.adjustement.sequence.ee</field>
+            <field name="prefix">ADJ/EE/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_local_purchase_md" model="ir.sequence">
+            <field name="name">Local purchase MD store</field>
+            <field name="code">droga.inventory.local.purchase.sequence.md</field>
+            <field name="prefix">GRN/MD/LP/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_local_purchase_ms" model="ir.sequence">
+            <field name="name">Local purchase MS store</field>
+            <field name="code">droga.inventory.local.purchase.sequence.ms</field>
+            <field name="prefix">GRN/MS/LP/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_local_purchase_li" model="ir.sequence">
+            <field name="name">Local purchase LI store</field>
+            <field name="code">droga.inventory.local.purchase.sequence.li</field>
+            <field name="prefix">GRN/LI/LP/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_local_purchase_me" model="ir.sequence">
+            <field name="name">Local purchase ME store</field>
+            <field name="code">droga.inventory.local.purchase.sequence.me</field>
+            <field name="prefix">GRN/ME/LP/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_local_purchase_os" model="ir.sequence">
+            <field name="name">Local purchase OS store</field>
+            <field name="code">droga.inventory.local.purchase.sequence.os</field>
+            <field name="prefix">GRN/OS/LP/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_local_purchase_ws" model="ir.sequence">
+            <field name="name">Local purchase WS store</field>
+            <field name="code">droga.inventory.local.purchase.sequence.ws</field>
+            <field name="prefix">GRN/WS/LP/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_local_purchase_wsos" model="ir.sequence">
+            <field name="name">Local purchase WSOS store</field>
+            <field name="code">droga.inventory.local.purchase.sequence.wsos</field>
+            <field name="prefix">GRN/WSOS/LP/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_local_purchase_of" model="ir.sequence">
+            <field name="name">Local purchase OF store</field>
+            <field name="code">droga.inventory.local.purchase.sequence.of</field>
+            <field name="prefix">GRN/OF/LP/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_local_purchase_pb" model="ir.sequence">
+            <field name="name">Local purchase PB store</field>
+            <field name="code">droga.inventory.local.purchase.sequence.PB</field>
+            <field name="prefix">GRN/OF/PB/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_local_purchase_P4" model="ir.sequence">
+            <field name="name">Local purchase P4 store</field>
+            <field name="code">droga.inventory.local.purchase.sequence.p4</field>
+            <field name="prefix">GRN/P4/LP/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_local_purchase_ecs" model="ir.sequence">
+            <field name="name">Local purchase EC store</field>
+            <field name="code">droga.inventory.local.purchase.sequence.ec</field>
+            <field name="prefix">GRN/EC/LP/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_local_purchase_em" model="ir.sequence">
+            <field name="name">Local purchase EM store</field>
+            <field name="code">droga.inventory.local.purchase.sequence.em</field>
+            <field name="prefix">GRN/EM/LP/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_local_purchase_ee" model="ir.sequence">
+            <field name="name">Local purchase EE store</field>
+            <field name="code">droga.inventory.local.purchase.sequence.EE</field>
+            <field name="prefix">GRN/EE/LP/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_foreign_purchase_md" model="ir.sequence">
+            <field name="name">Foreign purchase MD store</field>
+            <field name="code">droga.inventory.foreign.purchase.sequence.md</field>
+            <field name="prefix">GRN/MD/FP/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_foreign_purchase_ms" model="ir.sequence">
+            <field name="name">Foreign purchase MS store</field>
+            <field name="code">droga.inventory.foreign.purchase.sequence.ms</field>
+            <field name="prefix">GRN/MS/FP/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_foreign_purchase_li" model="ir.sequence">
+            <field name="name">Foreign purchase LI store</field>
+            <field name="code">droga.inventory.foreign.purchase.sequence.li</field>
+            <field name="prefix">GRN/LI/FP/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_foreign_purchase_me" model="ir.sequence">
+            <field name="name">Foreign purchase ME store</field>
+            <field name="code">droga.inventory.foreign.purchase.sequence.me</field>
+            <field name="prefix">GRN/ME/FP/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_foreign_purchase_os" model="ir.sequence">
+            <field name="name">Foreign purchase OS store</field>
+            <field name="code">droga.inventory.foreign.purchase.sequence.os</field>
+            <field name="prefix">GRN/OS/FP/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_foreign_purchase_ws" model="ir.sequence">
+            <field name="name">Foreign purchase WS store</field>
+            <field name="code">droga.inventory.foreign.purchase.sequence.ws</field>
+            <field name="prefix">GRN/WS/FP/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_foreign_purchase_wsos" model="ir.sequence">
+            <field name="name">Foreign purchase WSOS store</field>
+            <field name="code">droga.inventory.foreign.purchase.sequence.wsos</field>
+            <field name="prefix">GRN/WSOS/FP/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_foreign_purchase_of" model="ir.sequence">
+            <field name="name">Foreign purchase OF store</field>
+            <field name="code">droga.inventory.foreign.purchase.sequence.of</field>
+            <field name="prefix">GRN/OF/FP/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_foreign_purchase_pb" model="ir.sequence">
+            <field name="name">Foreign purchase PB store</field>
+            <field name="code">droga.inventory.foreign.purchase.sequence.pb</field>
+            <field name="prefix">GRN/PB/FP/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_foreign_purchase_p4" model="ir.sequence">
+            <field name="name">Foreign purchase P4 store</field>
+            <field name="code">droga.inventory.foreign.purchase.sequence.p4</field>
+            <field name="prefix">GRN/P4/FP/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_foreign_purchase_ec" model="ir.sequence">
+            <field name="name">Foreign purchase EC store</field>
+            <field name="code">droga.inventory.foreign.purchase.sequence.ec</field>
+            <field name="prefix">GRN/EC/FP/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_foreign_purchase_em" model="ir.sequence">
+            <field name="name">Foreign purchase EM store</field>
+            <field name="code">droga.inventory.foreign.purchase.sequence.em</field>
+            <field name="prefix">GRN/EM/FP/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_foreign_purchase_ee" model="ir.sequence">
+            <field name="name">Foreign purchase EE store</field>
+            <field name="code">droga.inventory.foreign.purchase.sequence.ee</field>
+            <field name="prefix">GRN/EE/FP/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_consignment_receipt_order" model="ir.sequence">
+            <field name="name">Consignment receipt order</field>
+            <field name="code">droga.inventory.consignment.receipt.sequence</field>
+            <field name="prefix">CON/RECEIPT/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_consignment_issue_order" model="ir.sequence">
+            <field name="name">Consignment issue order</field>
+            <field name="code">droga.inventory.consignment.issue.sequence</field>
+            <field name="prefix">CON/ISSUE/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+
+        <record id="seq_consignment_receipt_md" model="ir.sequence">
+            <field name="name">Consignment receipt MD store</field>
+            <field name="code">droga.inventory.consignment.receipt.sequence.md</field>
+            <field name="prefix">COR/MD/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_consignment_receipt_ms" model="ir.sequence">
+            <field name="name">Consignment receipt MS store</field>
+            <field name="code">droga.inventory.consignment.receipt.sequence.ms</field>
+            <field name="prefix">COR/MS/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_consignment_receipt_li" model="ir.sequence">
+            <field name="name">Consignment receipt LI store</field>
+            <field name="code">droga.inventory.consignment.receipt.sequence.li</field>
+            <field name="prefix">COR/LI/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_consignment_receipt_me" model="ir.sequence">
+            <field name="name">Consignment receipt ME store</field>
+            <field name="code">droga.inventory.consignment.receipt.sequence.me</field>
+            <field name="prefix">COR/ME/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_consignment_receipt_os" model="ir.sequence">
+            <field name="name">Consignment receipt OS store</field>
+            <field name="code">droga.inventory.consignment.receipt.sequence.os</field>
+            <field name="prefix">COR/OS/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_consignment_receipt_ws" model="ir.sequence">
+            <field name="name">Consignment receipt WS store</field>
+            <field name="code">droga.inventory.consignment.receipt.sequence.ws</field>
+            <field name="prefix">COR/WS/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_consignment_receipt_wsos" model="ir.sequence">
+            <field name="name">Consignment receipt WSOS store</field>
+            <field name="code">droga.inventory.consignment.receipt.sequence.wsos</field>
+            <field name="prefix">COR/WSOS/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_consignment_receipt_of" model="ir.sequence">
+            <field name="name">Consignment receipt OF store</field>
+            <field name="code">droga.inventory.consignment.receipt.sequence.of</field>
+            <field name="prefix">COR/OF/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_consignment_receipt_PB" model="ir.sequence">
+            <field name="name">Consignment receipt PB store</field>
+            <field name="code">droga.inventory.consignment.receipt.sequence.pb</field>
+            <field name="prefix">COR/PB/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_consignment_receipt_p4" model="ir.sequence">
+            <field name="name">Consignment receipt P4 store</field>
+            <field name="code">droga.inventory.consignment.receipt.sequence.p4</field>
+            <field name="prefix">COR/P4/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_consignment_receipt_em" model="ir.sequence">
+            <field name="name">Consignment receipt EM store</field>
+            <field name="code">droga.inventory.consignment.receipt.sequence.em</field>
+            <field name="prefix">COR/EM/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_consignment_receipt_ec" model="ir.sequence">
+            <field name="name">Consignment receipt EC store</field>
+            <field name="code">droga.inventory.consignment.receipt.sequence.ec</field>
+            <field name="prefix">COR/EC/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_consignment_receipt_ee" model="ir.sequence">
+            <field name="name">Consignment receipt EE store</field>
+            <field name="code">droga.inventory.consignment.receipt.sequence.ee</field>
+            <field name="prefix">COR/EE/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_consignment_issue_md" model="ir.sequence">
+            <field name="name">Consignment issue MD store</field>
+            <field name="code">droga.inventory.consignment.issue.sequence.md</field>
+            <field name="prefix">COI/MD/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_consignment_issue_ms" model="ir.sequence">
+            <field name="name">Consignment issue MS store</field>
+            <field name="code">droga.inventory.consignment.issue.sequence.ms</field>
+            <field name="prefix">COI/MS/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_consignment_issue_li" model="ir.sequence">
+            <field name="name">Consignment issue LI store</field>
+            <field name="code">droga.inventory.consignment.issue.sequence.li</field>
+            <field name="prefix">COI/LI/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_consignment_issue_me" model="ir.sequence">
+            <field name="name">Consignment issue ME store</field>
+            <field name="code">droga.inventory.consignment.issue.sequence.me</field>
+            <field name="prefix">COI/ME/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_consignment_issue_os" model="ir.sequence">
+            <field name="name">Consignment issue OS store</field>
+            <field name="code">droga.inventory.consignment.issue.sequence.os</field>
+            <field name="prefix">COI/OS/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_consignment_issue_ws" model="ir.sequence">
+            <field name="name">Consignment issue WS store</field>
+            <field name="code">droga.inventory.consignment.issue.sequence.ws</field>
+            <field name="prefix">COI/WS/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_consignment_issue_wsos" model="ir.sequence">
+            <field name="name">Consignment issue WSOS store</field>
+            <field name="code">droga.inventory.consignment.issue.sequence.wsos</field>
+            <field name="prefix">COI/WSOS/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_consignment_issue_of" model="ir.sequence">
+            <field name="name">Consignment issue OF store</field>
+            <field name="code">droga.inventory.consignment.issue.sequence.of</field>
+            <field name="prefix">COI/OF/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_consignment_issue_pb" model="ir.sequence">
+            <field name="name">Consignment issue PB store</field>
+            <field name="code">droga.inventory.consignment.issue.sequence.pb</field>
+            <field name="prefix">COI/PB/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_consignment_issue_p4" model="ir.sequence">
+            <field name="name">Consignment issue P4 store</field>
+            <field name="code">droga.inventory.consignment.issue.sequence.p4</field>
+            <field name="prefix">COI/P4/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_consignment_issue_ec" model="ir.sequence">
+            <field name="name">Consignment issue EC store</field>
+            <field name="code">droga.inventory.consignment.issue.sequence.ec</field>
+            <field name="prefix">COI/EC/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_consignment_issue_em" model="ir.sequence">
+            <field name="name">Consignment issue EM store</field>
+            <field name="code">droga.inventory.consignment.issue.sequence.em</field>
+            <field name="prefix">COI/EM/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_consignment_issue_ee" model="ir.sequence">
+            <field name="name">Consignment issue EE store</field>
+            <field name="code">droga.inventory.consignment.issue.sequence.ee</field>
+            <field name="prefix">COI/EE/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_adjutement_request" model="ir.sequence">
+            <field name="name">Store adjustement request</field>
+            <field name="code">droga.inventory.adjustment.request.sequence.all</field>
+            <field name="prefix">REQ/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+
+        <record id="seq_promotional_padd" model="ir.sequence">
+            <field name="name">Promotional items issue PADD store</field>
+            <field name="code">droga.inventory.promotional.sequence.padd</field>
+            <field name="prefix">PRO/PADD/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_promotional_payd" model="ir.sequence">
+            <field name="name">Promotional items issue PAYD store</field>
+            <field name="code">droga.inventory.promotional.sequence.payd</field>
+            <field name="prefix">PRO/PAYD/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_promotional_pbed" model="ir.sequence">
+            <field name="name">Promotional items issue PBED store</field>
+            <field name="code">droga.inventory.promotional.sequence.pbed</field>
+            <field name="prefix">PRO/PBED/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_promotional_pddd" model="ir.sequence">
+            <field name="name">Promotional items issue PDDD store</field>
+            <field name="code">droga.inventory.promotional.sequence.pddd</field>
+            <field name="prefix">PRO/PDDD/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_promotional_pfgd" model="ir.sequence">
+            <field name="name">Promotional items issue PFGD store</field>
+            <field name="code">droga.inventory.promotional.sequence.pfgd</field>
+            <field name="prefix">PRO/PFGD/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_promotional_phad" model="ir.sequence">
+            <field name="name">Promotional items issue PHAD store</field>
+            <field name="code">droga.inventory.promotional.sequence.phad</field>
+            <field name="prefix">PRO/PHAD/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_promotional_plbd" model="ir.sequence">
+            <field name="name">Promotional items issue PLBD store</field>
+            <field name="code">droga.inventory.promotional.sequence.plbd</field>
+            <field name="prefix">PRO/PLBD/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_promotional_pmgd" model="ir.sequence">
+            <field name="name">Promotional items issue PMGD store</field>
+            <field name="code">droga.inventory.promotional.sequence.pmgd</field>
+            <field name="prefix">PRO/PMGD/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_promotional_psbd" model="ir.sequence">
+            <field name="name">Promotional items issue PSBD store</field>
+            <field name="code">droga.inventory.promotional.sequence.psbd</field>
+            <field name="prefix">PRO/PSBD/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_promotional_pshd" model="ir.sequence">
+            <field name="name">Promotional items issue PSHD store</field>
+            <field name="code">droga.inventory.promotional.sequence.pshd</field>
+            <field name="prefix">PRO/PSHD/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_promotional_psnd" model="ir.sequence">
+            <field name="name">Promotional items issue PSND store</field>
+            <field name="code">droga.inventory.promotional.sequence.psnd</field>
+            <field name="prefix">PRO/PSND/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_promotional_pspd" model="ir.sequence">
+            <field name="name">Promotional items issue PSPD store</field>
+            <field name="code">droga.inventory.promotional.sequence.pspd</field>
+            <field name="prefix">PRO/PSPD/%(y)s/</field>
+            <field name="suffix"></field>
+            <field name="implementation">no_gap</field>
+            <field name="number_increment">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</odoo>
+

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="droga_fleet_vehicle_request" model="ir.ui.view">
+        <field name="name">Vehicle request</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/div/button[@name='action_preview_sale_order']" position="before">
+                <field name="state" invisible="1"></field>
+                <button name="sale_order_fleet_request"
+                        type="object"
+                        class="oe_stat_button"
+                        string="Request Fleet"
+                        attrs="{'invisible': [('state', '!=', 'sale')]}"
+                        groups="droga_fleet.sales_request"
+                        icon="fa-car icon">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_text">Vehicle</span>
+                            <span class="o_stat_text">Request</span>
+                        </div>
+                    </button>
+            </xpath>
+        </field>
+    </record>
+</odoo>

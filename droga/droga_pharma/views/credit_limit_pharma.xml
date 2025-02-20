@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="droga_sales_credit_limit_pharma_tree" model="ir.ui.view">
+        <field name="name">res.partner.credit.limit.pharma.tree</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <tree create="0" editable="bottom" delete="0">
+                <field name="name" readonly="1"></field>
+                <field name="vat" string="Tin No"></field>
+                <field name="allowed_credit_terms" string="Credit terms" widget="many2many_tags"></field>
+                <field name="cust_credit_limit_pharma"></field>
+                <field name="unsettled_amount_pharma" readonly="1"></field>
+                <field name="available_amount_pharma"></field>
+                <field name="manual_sales_extension_date" groups="droga_pharma.pharma_director"></field>
+                <button string="Price list" groups="droga_pharma.pharma_director" type="object" name="open_price_hist"
+                        class="oe_stat_button"></button>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_sales_credit_limit_pharma_search" model="ir.ui.view">
+        <field name="name">res.partner.credit.limit.pharma.search</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"></field>
+                <field name="mobile"></field>
+                <field name="vat"></field>
+                <field name="cust_credit_limit_pharma"></field>
+                <field name="unsettled_amount_pharma"></field>
+                <field name="available_amount_pharma"></field>
+            </search>
+        </field>
+    </record>
+
+    <record id="droga_pharma_credit_limit_action" model="ir.actions.act_window">
+        <field name="name">Credit limit</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">tree</field>
+        <field name="view_ids"
+               eval="[(5, 0, 0),(0, 0, {'view_mode': 'tree', 'view_id': ref('droga_sales_credit_limit_pharma_tree')})]"/>
+    </record>
+
+    <record id="view_out_invoice_tree_phar_sales_add" model="ir.ui.view">
+        <field name="name">account.move.tree.phar.sales.add</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_out_invoice_tree"/>
+        <field name="arch" type="xml">
+            <field name="invoice_date_due" position="after">
+                <field name="customer_emp" string='Employee name' optional="show"/>
+                <field name="cust_id_linked" string='Employee id' optional="show"/>
+            </field>
+        </field>
+    </record>
+
+    <menuitem
+            id="droga_sales_pharma_credit_limit_menu"
+            name="Credit limit"
+            action="droga_pharma_credit_limit_action"
+            parent="droga_pharma.droga_pharma_customers_comp_list_menu"
+            groups="droga_pharma.pharma_director"
+            sequence="200"/>
+</odoo>

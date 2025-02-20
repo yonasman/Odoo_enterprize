@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="droga_crm_cust_type_action" model="ir.actions.act_window">
+        <field name="name">Customer type settings</field>
+        <field name="res_model">droga.cust.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="droga_crm_settings_cust_type_view_tree" model="ir.ui.view">
+        <field name="name">droga.cust.type.view.tree</field>
+        <field name="model">droga.cust.type</field>
+        <field name="arch" type="xml">
+            <tree string="" delete="0">
+                <field name="cust_type"></field>
+                <field name="cust_org_type"></field>
+                <field name="cust_type_descr"></field>
+                <field name="status"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_crm_settings_cust_type_view_form" model="ir.ui.view">
+        <field name="name">droga.cust.type.view.form</field>
+        <field name="model">droga.cust.type</field>
+        <field name="arch" type="xml">
+            <form string="" delete="0">
+                <sheet>
+                    <group>
+                        <field name="cust_type"></field>
+                        <field name="cust_org_type"></field>
+                        <field name="cust_type_descr"></field>
+                        <field name="status"></field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <menuitem
+            id="droga_crm_settings_cust_type"
+            name="Customer type registry"
+            action="droga_crm_cust_type_action"
+            parent="crm.crm_menu_config"
+            sequence="16"/>
+</odoo>

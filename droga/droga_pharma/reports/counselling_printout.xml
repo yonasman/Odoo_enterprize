@@ -1,0 +1,21 @@
+<odoo>
+    <record id="counselling_plan_printout_action" model="ir.actions.report">
+        <field name="name">Given Counselling(English)</field>
+        <field name="model">droga.pharma.counselling</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">droga_pharma.report_counselling_english</field>
+        <field name="report_file">droga_pharma.report_counselling_english</field>
+        <field name="binding_model_id" ref="model_droga_pharma_counselling"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="counselling_plan_amharic_printout_action" model="ir.actions.report">
+        <field name="name">Given Counselling(Amharic)</field>
+        <field name="model">droga.pharma.counselling</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">droga_pharma.report_counselling_amharic</field>
+        <field name="report_file">droga_pharma.report_counselling_amharic</field>
+        <field name="binding_model_id" ref="model_droga_pharma_counselling"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

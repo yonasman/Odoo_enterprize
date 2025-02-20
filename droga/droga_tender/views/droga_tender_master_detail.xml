@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="droga_tender_master_detail_action" model="ir.actions.act_window">
+            <field name="name">Tender master detail registry</field>
+            <field name="res_model">droga.tender.master.detail</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+    <record id="droga_tender_master_detail_view_tree" model="ir.ui.view">
+            <field name="name">droga.tender.master.detail.view.tree</field>
+            <field name="model">droga.tender.master.detail</field>
+            <field name="arch" type="xml">
+                <tree string="" default_order='create_date desc'>
+                    <field name="lot_number"></field>
+                    <field name="type_item" widget="many2many_tags" options="{'no_create':True,'no_open':True}"></field>
+                    <field name="remark"></field>
+                </tree>
+            </field>
+        </record>
+</odoo>

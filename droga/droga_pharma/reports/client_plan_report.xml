@@ -1,0 +1,20 @@
+<odoo>
+    <record id="droga_mtm_plan_printout_action" model="ir.actions.report">
+        <field name="name">Plan for next Follow up(English)</field>
+        <field name="model">droga.pharma.mtm.follow_up</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">droga_pharma.report_mtm_plan</field>
+        <field name="report_file">droga_pharma.report_mtm_plan</field>
+        <field name="binding_model_id" ref="model_droga_pharma_mtm_follow_up"/>
+        <field name="binding_type">report</field>
+    </record>
+    <record id="droga_mtm_plan_printout_action_amharic" model="ir.actions.report">
+        <field name="name">Plan for next Follow up(Amharic)</field>
+        <field name="model">droga.pharma.mtm.follow_up</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">droga_pharma.report_mtm_plan_amharic</field>
+        <field name="report_file">droga_pharma.report_mtm_plan_amharic</field>
+        <field name="binding_model_id" ref="model_droga_pharma_mtm_follow_up"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

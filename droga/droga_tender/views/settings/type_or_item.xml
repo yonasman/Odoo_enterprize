@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="droga_tender_settings_type_or_item_action" model="ir.actions.act_window">
+        <field name="name">Type/items registry</field>
+        <field name="res_model">droga.tender.settings.type.item</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="droga_tender_settings_type_or_item_view_tree" model="ir.ui.view">
+        <field name="name">droga.tender.settings.type_or_item.view.tree</field>
+        <field name="model">droga.tender.settings.type.item</field>
+        <field name="arch" type="xml">
+            <tree string="" delete="0">
+                <field name="type_or_item_name"></field>
+                <field name="type_or_item_descr"></field>
+                <field name="status"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_tender_settings_type_or_item_view_form" model="ir.ui.view">
+        <field name="name">droga.tender.settings.type_or_item.view.form</field>
+        <field name="model">droga.tender.settings.type.item</field>
+        <field name="arch" type="xml">
+            <form string="" delete="0">
+                <sheet>
+                    <group>
+                        <field name="type_or_item_name"></field>
+                        <field name="type_or_item_descr"></field>
+                        <field name="status"></field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <menuitem
+            id="droga_tender_settings_type_or_item"
+            name="Type/items Registry"
+            action="droga_tender_settings_type_or_item_action"
+            parent="tender_settings_menu"
+            groups="tender_manager"
+            sequence="19"/>
+
+
+
+
+
+
+
+
+
+
+    <record id="droga_tender_products_reg_action" model="ir.actions.act_window">
+        <field name="name">Products registry</field>
+        <field name="res_model">droga.tender.products</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <record id="droga_tender_products_reg_tree" model="ir.ui.view">
+        <field name="name">droga.tender.settings.type_or_item.view.tree</field>
+        <field name="model">droga.tender.products</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom" delete="0">
+                <field name="product"></field>
+            </tree>
+        </field>
+    </record>
+
+
+    <menuitem
+            id="droga_tender_prod_type_or_item"
+            name="Products registry"
+            action="droga_tender_products_reg_action"
+            parent="tender_settings_menu"
+            groups="tender_manager"
+            sequence="19"/>
+</odoo>

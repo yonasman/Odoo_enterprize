@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+          <record id="view_fleet_report" model="ir.ui.view">
+        <field name="name">market.fleet.wizard.form</field>
+        <field name="model">fleet.cost.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string=" Market Analysis Report">
+                <group>
+
+                    <field name="date_from"/>
+
+
+                </group>
+
+                <group>
+
+                    <field name="date_to"/>
+
+                </group>
+                <footer>
+                    <button name="action_wizard_print_excel_report" type="object" string="Create Report"
+                            class="btn-primary"/>
+                    <button name="action_cancel" string="Cancel" type="object" class="btn-secondary"/>
+                </footer>
+
+            </form>
+        </field>
+    </record>
+
+
+    </data>
+
+
+
+    <record model="ir.actions.act_window" id="action_fleet_report">
+        <field name="name">droga.fleet.report.wizard</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">fleet.cost.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_fleet_report"/>
+        <field name="target">new</field>
+
+    </record>
+</odoo>

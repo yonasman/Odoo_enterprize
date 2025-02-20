@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="stock_availability_pharma_tree" model="ir.ui.view">
+        <field name="name">product.availability.pharmacy.tree.transaction.tree</field>
+        <field name="model">product.availability.pharmacy</field>
+        <field name="arch" type="xml">
+            <tree string="Stock availability" delete="false" create="false" default_order='write_date'>
+                <field name="prod"/>
+                <field name="warehouse"/>
+                <field name='stock_quantity_total'/>
+                <field name='categ_id'/>
+                <field name="availability" invisible="1"></field>
+                <field name="availability" decoration-success="availability =='Available'" decoration-warning="availability =='Needs reordering'"
+                       decoration-danger="availability == 'Stock out'" widget="badge"></field>
+                <field name="batch_id"></field>
+                <field name="expiry_date"></field>
+                <field name="expiry_status" invisible="1"></field>
+                <field name="expiry_status" decoration-success="expiry_status =='Up-to-Date'" decoration-warning="expiry_status =='Near Expiry'"
+                       decoration-danger="expiry_status == 'Expired'" widget="badge"></field>
+                <field name="write_date" string="Last transaction date"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="stock_availability_pharma_all_search" model="ir.ui.view">
+        <field name="name">product.availability.pharmacy.tree.transaction.search</field>
+        <field name="model">product.availability.pharmacy</field>
+        <field name="arch" type="xml">
+            <search string="Stock availability">
+                <field name="prod"/>
+                <field name="warehouse"/>
+                <field name='stock_quantity_total'/>
+                <field name='availability'/>
+
+                <filter name="available" string="Available" domain="[('availability', '=', 'Available')]" />
+                <filter name="needs_reordering" string="Needs reordering" domain="[('availability', '=', 'Needs reordering')]" />
+                <filter name="stock_out" string="Stock out" domain="[('availability', '=', 'Stock out')]" />
+
+                <filter name="Up_to_Date" string="Up-to-Date" domain="[('expiry_status', '=', 'Up-to-Date')]" />
+                <filter name="near_expiry" string="Near Expiry" domain="[('expiry_status', '=', 'Near Expiry')]" />
+                <filter name="expired" string="Expired" domain="[('expiry_status', '=', 'Expired')]" />
+                <filter name="my_pharmacy" string="My Pharmacy" domain="[('has_access','=',True)]"/>
+
+                <filter name="prod" string="Product" context="{'group_by':'prod'}"/>
+                <filter name="group_categ" string="Category" context="{'group_by':'categ_id'}"/>
+                <filter name="group_wareh" string="Warehouse" context="{'group_by':'warehouse'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="droga_pharma_inv_availability_all_warehouse_action">
+        <field name="name">Stock availability</field>
+        <field name="res_model">product.availability.pharmacy</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="stock_availability_pharma_all_search"></field>
+        <field name="view_id" ref="stock_availability_pharma_tree"/>
+        <field name="domain">[('wh_type', '=', 'PH')]</field>
+        <field name="context">{'search_default_my_pharmacy':1}</field>
+    </record>
+</odoo>

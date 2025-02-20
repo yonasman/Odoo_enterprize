@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <!-- tree view payroll variable payment -->
+    <record id="hr_payroll_variable_payment_tree_view" model="ir.ui.view">
+        <field name="name">hr.payroll.variable.payment</field>
+        <field name="model">hr.payroll.variable.payment</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="employee_id" options="{'no_create':True,'no_open':True}"/>
+                <field name="division" options="{'no_create':True,'no_open':True}" />
+                <field name="input_types" options="{'no_create':True,'no_open':True}"/>
+                <field name="fiscal_year" options="{'no_create':True,'no_open':True}"/>
+                <field name="period" options="{'no_create':True,'no_open':True}"/>
+                <field name="rate" options="{'no_create':True,'no_open':True}"/>
+                <field name="status" readonly="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- search -->
+    <record id="hr_payroll_variable_payment_search_view" model="ir.ui.view">
+        <field name="name">hr.payroll.variable.payment.search</field>
+        <field name="model">hr.payroll.variable.payment</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="employee_id"/>
+                <field name="input_types"/>
+                <field name="fiscal_year"/>
+                <field name="period"/>
+                <field name="rate"/>
+                <field name="status"/>
+                <filter string="Not Paid" name="not_paid" domain="[('status', '=', 'Not Paid')]"/>
+                <filter string="Paid" name="paid" domain="[('status', '=', 'Paid')]"/>
+
+            </search>
+        </field>
+    </record>
+
+
+    <!-- action view payroll variable payment -->
+    <record id="hr_payroll_variable_payment_tree_action" model="ir.actions.act_window">
+        <field name="name">Payroll Variable Payments</field>
+        <field name="res_model">hr.payroll.variable.payment</field>
+        <field name="view_mode">tree</field>
+        <field name="context">{'search_default_not_paid': 1}</field>
+
+
+    </record>
+</odoo>

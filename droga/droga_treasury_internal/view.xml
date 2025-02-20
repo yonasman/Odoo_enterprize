@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+
+    <record id="account_loan_view_form_modi" model="ir.ui.view">
+        <field name="name">account.loan.view.form</field>
+        <field name="model">account.loan</field>
+        <field name="inherit_id" ref="droga_treasury.account_loan_view_form"/>
+        <field name="arch" type="xml">
+             <xpath expr="//field[@name='next_payment_date']" position="after">
+                <field name="future_payment"  />
+        </xpath>
+        <xpath expr="//field[@name='name']" position="before">
+                <field name="descrip"  />
+        </xpath>
+        <xpath expr="//button[@name='compute_daily_crons']" position="replace">
+            <button type="object" name="compute_daily_crons" string="Calculate Interest" class="oe_stat_button" icon="fa-file-text" 
+            attrs="{'invisible':[('state', '!=', 'draft')]}" context="{'default_acount_monthly_closing_id':active_id}"/>
+              
+        </xpath>
+        </field>
+    </record>
+
+
+    <record id="account_loan_view_tree_repo_modified" model="ir.ui.view">
+        <field name="name">account.loan.view.tree</field>
+        <field name="model">account.loan</field>
+        <field name="inherit_id" ref="droga_treasury.account_loan_view_tree_report"/>
+        <field name="arch" type="xml">
+            
+                <xpath expr="//field[@name='loan_amount']" position="after">
+                <field name="future_payment"  />
+               
+        </xpath>  <xpath expr="//field[@name='name']" position="replace">
+                <field name="descrip"  />
+        </xpath>
+            
+        </field>
+    </record>
+        <record id="account_loan_view_tree_repo_modified3" model="ir.ui.view">
+        <field name="name">account.loan.view.tree3</field>
+        <field name="model">account.loan</field>
+        <field name="inherit_id" ref="droga_treasury.account_loan_repayment_view_tree"/>
+        <field name="arch" type="xml">
+            
+               
+          <xpath expr="//field[@name='name']" position="before">
+                <field name="descrip"  />
+        </xpath>
+            
+        </field>
+    </record>
+    <record id="account_loan_view_tree_repo_modified_reciept" model="ir.ui.view">
+        <field name="name">account.loan.view.treerecipt</field>
+        <field name="model">account.loan</field>
+        <field name="inherit_id" ref="droga_treasury.account_loan_reciept_view_tree"/>
+        <field name="arch" type="xml">
+            
+               
+        <xpath expr="//field[@name='name']" position="before">
+                <field name="descrip"  />
+        </xpath>
+            
+        </field>
+    </record>
+       <record id="account_loan_view_tree_repo_modified_closing" model="ir.ui.view">
+        <field name="name">account.loan.view.tree.closing</field>
+        <field name="model">account.loan</field>
+        <field name="inherit_id" ref="droga_treasury.account_loan_closing_view_tree"/>
+        <field name="arch" type="xml">
+            
+               
+       <xpath expr="//field[@name='name']" position="before">
+                <field name="descrip"  />
+        </xpath>
+            
+        </field>
+    </record>
+
+      <record id="account_loan_view_tree_repo_modified2" model="ir.ui.view">
+        <field name="name">account.loan.view.tree2</field>
+        <field name="model">account.loan</field>
+        <field name="inherit_id" ref="droga_treasury.account_loan_view_tree"/>
+        <field name="arch" type="xml">
+            
+                <xpath expr="//field[@name='name']" position="replace">
+                <field name="descrip"  />
+        </xpath>
+            
+        </field>
+    </record>
+
+ 
+</odoo>

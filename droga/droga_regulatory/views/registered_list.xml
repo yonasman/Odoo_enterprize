@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- final_registered_renewal_views.xml -->
+<odoo>
+    <data noupdate="1">
+       <record id="ir_cron_scheduler_registered_list_notify" model="ir.cron">
+           <field name="name">Registered and renewal date notification</field>
+           <field name="model_id" ref="model_droga_reg_final_registered_renewal"/>
+           <field name="state">code</field>
+           <field name="code">model.send_insurance_reminder()</field>
+<!--           <field name="user_id" ref="base.user_root"/>-->
+           <field name="interval_number">1</field>
+           <field name="interval_type">days</field>
+           <field name="numbercall">-1</field>
+       </record>
+    </data>
+    <data>
+        <!-- Tree View -->
+        <record id="view_final_registered_renewal_tree" model="ir.ui.view">
+            <field name="name">final.registered.renewal.tree</field>
+            <field name="model">droga.reg.final.registered.renewal</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="company_name"/>
+                    <field name="approval_date"/>
+                    <field name="registered_under"/>
+                    <field name="remark"/>
+                    <field name="product_type"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form View -->
+        <record id="view_final_registered_renewal_form" model="ir.ui.view">
+            <field name="name">final.registered.renewal.form</field>
+            <field name="model">droga.reg.final.registered.renewal</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <h2>
+                            FINAL REGISTERED AND RENEWAL FOLLOW UP SHEET
+                        </h2>
+                        <group>
+                            <group>
+                                <field name="company_name"/>
+                                <field name="approval_date"/>
+                                <field name="registered_under"/>
+                               <field name="product_type"/>
+                                <field name="remark"/>
+                            </group>
+                            <group>
+                                <field name="product_name"/>
+                                <field name="validity_date"/>
+                                <field name="pack_size"/>
+                                <field name="applicant" attrs="{'invisible': [('registered_under', '!=', 'other')]}"/>
+
+                            </group>
+
+
+                        </group>
+
+                        <field name="details">
+                            <tree>
+
+                                <field name="follow_up"/>
+                                <field name="reminding_email"/>
+
+
+                            </tree>
+                        </field>
+                    </sheet>
+
+
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+
+                </form>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_final_registered_renewal" model="ir.actions.act_window">
+            <field name="name">Final Registered and Renewal Follow Up Sheet</field>
+            <field name="res_model">droga.reg.final.registered.renewal</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo>

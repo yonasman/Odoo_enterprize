@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem name="Fleet" id="fleet.menu_root" sequence="220" groups="fleet.fleet_group_user,droga_fleet.droga_driver" web_icon="fleet,static/description/icon.svg"/>
+    <menuitem parent="fleet.menu_root"
+              id="form_menu_fleet_requests"
+              name="Fleet Requests"
+              action="droga_fleet_request_tree_action"
+              groups="droga_fleet.droga_fleet_manager"
+              sequence="65"/>
+
+    <menuitem parent="fleet.menu_root"
+              id="form_menu_fleet_kanban"
+              name="Drivers menu"
+              action="action_droga_fleet_task"
+              groups="droga_fleet.droga_driver"
+              sequence="67"/>
+
+    <menuitem id="fleet_config_rejection_menu" name="Rejection Reasons"
+              parent="fleet.fleet_configuration" sequence="5"
+              action="action_fleet_request_rejection_tree_view"
+              groups="fleet.fleet_group_user"/>
+
+    <menuitem id="menu_fleet_request_reporting_costs"
+              name="Excel Report"
+              parent="fleet.menu_fleet_reporting"
+              action="action_fleet_report"
+              sequence="10"
+              />
+
+
+</odoo>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <!-- role for HR manager -->
+    <record id="human_resource_manager_group" model="res.groups">
+        <field name="name">Human Resource Manager</field>
+        <field name="category_id" ref="base.module_category_droga_hr"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">Human Resource Manager</field>
+    </record>
+
+</odoo>

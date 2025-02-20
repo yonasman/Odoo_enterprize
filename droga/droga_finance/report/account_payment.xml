@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- bank payment voucher -->
+    <record id="droga_account_purchase_voucher_action" model="ir.actions.report">
+        <field name="name">Purchase Voucher</field>
+        <field name="model">account.payment</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">droga_finance.droga_account_purchase_voucher_report</field>
+        <field name="report_file">droga_finance.droga_account_purchase_voucher_report</field>
+        <field name="print_report_name">'Purchase Voucher - %s' % (object.name)
+        </field>
+        <field name="binding_model_id" ref="account.model_account_payment"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="droga_account_purchase_voucher_report" name="Purchase Voucher">
+        <t t-call="web.html_container">
+            <div id="non-printable">
+                <button class="btn btn-primary btn-sm o_report_print" onclick="window.print();">Print Preview
+                </button>
+            </div>
+            <br></br>
+            <t t-call="web.basic_layout">
+
+
+                <style type="text/css">
+
+                    /* Default left, right, top, bottom margin is 2cm */
+                    @page {
+                    size: A4 portrait;
+                    margin-top: 5.5cm;
+                    margin-left:2cm;
+                    margin-right:2cm;
+                    margin-bottom:2cm;
+                    }
+
+                    @media print
+                    {
+                    #non-printable { visibility: hidden; }
+                    #wrapwrap { visibility: visible; }
+                    }
+
+                    .nopadding {
+                    padding: 0 !important;
+                    margin: 0 !important;
+                    }
+
+                </style>
+
+                <t t-foreach="docs" t-as="o">
+                    <div class="page">
+
+                        <div id="informations" class="row" style="font-size: 18px;">
+                            <div class="col-6 bm-2">
+                                <h6 class="nopadding">ከ:-
+                                    <strong t-esc="o.company_id.name"/>
+                                </h6>
+                                <h6 class="">From
+
+                                </h6>
+                                <h6 class="nopadding">አድራሻ/ክልል፦አ.አ
+                                    <span style="padding-left: 2px;">ክ.ከ፦አ/ከተማ</span>
+                                    <span style="padding-left: 2px;">ወ፦06</span>
+                                    <span style="padding-left: 2px;">ቤ.ቁ፦133</span>
+                                </h6>
+                                <h6 class="">Address Region
+                                    <span style="padding-left: 8px;">K/K</span>
+                                    <span style="padding-right: 15px;">W.</span>
+                                    <span style="padding-left: 15px;">H.No.</span>
+                                </h6>
+                                <h6 class="nopadding">የታክስ ከፋይ መ.ቁ፦&#160;&#160;<u>0045080232</u>
+                                </h6>
+                                <h6 class="nopadding">Supplier's TIN No.</h6>
+                            </div>
+
+
+                            <div class="col-6 bm-2">
+                                <h6 class="nopadding">ለ:-
+                                    <strong t-esc="o.vendor_supplier"/>
+                                </h6>
+                                <h6 class="">To
+
+                                </h6>
+                                <h6 class="nopadding">አድራሻ/ክልል፦___ክ.ከ፦___ወ፦___ቤ.ቁ፦____</h6>
+                                <h6 class="">Address Region&#160;K/K&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;W.&#160;&#160;&#160;&#160;&#160;&#160;&#160;H.No.</h6>
+
+                                <h6 class="nopadding">የተ.እ.ታ ቁጥር______________________________</h6>
+                                <h6 class="">VAT Reg. No</h6>
+
+                                <h6 class="nopadding">የታክስ ከፋይ መ.ቁ:-
+                                    <u>
+                                        <t t-esc="o.partner_id.vat"/>
+                                    </u>
+                                </h6>
+                                <h6 class="">Customer's TIN No.</h6>
+
+                                <h6 class="nopadding">የተመዘገበበት ቀን_______________________________</h6>
+                                <h6 class="">Date of Registration</h6>
+                            </div>
+                        </div>
+
+                        <div id="informations" class="row" style="font-size: 18px;">
+                            <div class="col-12 bm-2">
+                                <h6 class="small nopadding">የክፍያው ምክንያት</h6>
+                                <h6 class="small">Payment Description:-
+
+                                    <t t-esc="o.purpose"/>
+
+                                </h6>
+                                <h6 class="small nopadding">የገንዘብ ልክ በፊደል</h6>
+                                <h6 class="small">Amount in Words:-
+                                    <t t-esc="o.amount_total_word"/>
+
+                                </h6>
+
+
+                            </div>
+                        </div>
+                        <div id="informations" class="row justify-content-end" style="font-size: 18px;">
+                            <div class="col-4 bm-2">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h6 class="nopadding">ብር</h6>
+                                        <h6 class="">Birr:
+                                            <b>
+                                                <t t-esc="o.amount"
+                                                   t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                            </b>
+
+                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div id="informations" class="row" style="font-size: 18px;">
+                            <div class="col-12 bm-2">
+                                <h6 class="nopadding">
+                                    <span>የክፍያ ሁኔታ</span>
+                                    <span style="padding-left: 75px;">በጥሬ&#160;</span>
+                                    <input type="checkbox"></input>
+                                    <span style="padding-left: 15px;">በቼክ&#160;</span>
+                                    <input type="checkbox"></input>
+                                    <span style="padding-left: 25px;">የቼክ ቁጥር</span>
+                                </h6>
+                                <h6 class="">Mode of Payment
+                                    <span style="padding-left: 15px;">Cash</span>
+                                    <span style="padding-left: 15px;">Cheque</span>
+                                    <span style="padding-left: 15px;">Cheque No</span>_____________________
+                                </h6>
+                                <br></br>
+
+                                <h6 class="nopadding">ያዘጋጀው ስምና ፊርማ_____________________________________</h6>
+                                <h6 class="">Prepared By</h6>
+
+                                <h6 class="nopadding">የተቀባይ (የሻጭ) ስምና ፊርማ_______________________________</h6>
+                                <h6 class="">Cashier's Signature</h6>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

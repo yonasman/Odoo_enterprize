@@ -1,0 +1,31 @@
+<odoo>
+    <record id="droga_project_inventory_consignment_issue_view_form" model="ir.ui.view">
+        <field name="name">droga.project.inventory.consignment.issue.view.form</field>
+        <field name="model">droga.inventory.consignment.issue</field>
+        <field name="inherit_id" ref="droga_inventory.droga_inventory_consignment_issue_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/header" position="inside">
+
+                <!-- Project contractor part  -->
+                <button name="request_pr"
+                        attrs="{'invisible': ['|',('state', 'not in', ('draft')),('menu_from','!=','PR')]}"
+                        string="Request" type="object" class="oe_highlight" data-hotkey="v"/>
+                <button name="stmg_approve"
+                        attrs="{'invisible': ['|',('state', 'not in', ('pmg')),('menu_from','!=','PR')]}"
+                        groups="droga_project.proj_engineer"
+                        string="Approve" type="object" class="oe_highlight" data-hotkey="v"/>
+                <button name="amend"
+                        attrs="{'invisible': ['|',('state', 'not in', ('stmg','mtmg')),('menu_from','!=','PR')]}"
+                        groups="droga_project.proj_engineer"
+                        string="Amend" type="object" class="oe_highlight btn-warning" data-hotkey="v"/>
+                <button name="action_cancel"
+                        attrs="{'invisible': ['|',('state', 'not in', ('draft')),('menu_from','!=','PR')]}"
+                        string="Cancel" type="object" class="oe_highlight" data-hotkey="v"/>
+
+                <field name="state" widget="statusbar" attrs="{'invisible': [('menu_from','!=','PR')]}"
+                       statusbar_visible="draft,pmg,waiting,processed"/>
+
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <record id="committee_configuration_view_action" model="ir.actions.act_window">
+        <field name="name">Procurement Committee</field>
+        <field name="res_model">droga.purhcase.committee</field>
+        <field name="view_mode">tree</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Procurement Committee
+            </p>
+        </field>
+    </record>
+
+    <record id="droga_foregin_purchase_phases_view__action" model="ir.actions.act_window">
+        <field name="name">Procurement Phases</field>
+        <field name="res_model">droga.foregin.purchase.phases</field>
+        <field name="view_mode">tree</field>
+        <field name="domain">[]</field>
+        <field name="context">{'search_default_group_phase_name': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Procurement Phases
+            </p>
+        </field>
+    </record>
+
+    <record id="droga_purchase_reconciliation_docs_action" model="ir.actions.act_window">
+        <field name="name">Reconciliation Documents</field>
+        <field name="res_model">droga.purchase.reconciliation.docs</field>
+        <field name="view_mode">tree</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Reconciliation Documents
+            </p>
+        </field>
+    </record>
+
+    <record id="droga_purchase_port_of_loading_action" model="ir.actions.act_window">
+        <field name="name">Port of Loading</field>
+        <field name="res_model">droga.purchase.port.of.loading</field>
+        <field name="view_mode">tree</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Port of Loading
+            </p>
+        </field>
+    </record>
+
+    <!-- tree view  -->
+    <record id="committee_configuration_view_tree" model="ir.ui.view">
+        <field name="name">droga.purhcase.committee.tree</field>
+        <field name="model">droga.purhcase.committee</field>
+        <field name="arch" type="xml">
+            <tree string="Procurement Committee" editable="bottom">
+                <field name="date_from" />
+                <field name="date_to" />
+                <field name="names" widget="many2many_tags"/>
+                <field name="status" />
+
+            </tree>
+        </field>
+    </record>
+
+
+    <!-- tree view for foregin procuremnt steps -->
+    <record id="droga_foregin_purchase_phases_view_tree" model="ir.ui.view">
+        <field name="name">droga.foregin.purchase.phases.view.tree</field>
+        <field name="model">droga.foregin.purchase.phases</field>
+        <field name="arch" type="xml">
+            <tree string="Foregin Purchase Phase" editable="bottom">
+                <field name="phase_name" />
+                <field name="order" />
+                <field name="step" />
+                <field name="is_final_step" />
+
+            </tree>
+        </field>
+    </record>
+
+    <!-- document types tree view -->
+    <record id="droga_purchase_reconciliation_docs_view_tree" model="ir.ui.view">
+        <field name="name">droga.purchase.reconciliation.docs.view.tree</field>
+        <field name="model">droga.purchase.reconciliation.docs</field>
+        <field name="arch" type="xml">
+            <tree string="Reconciliation Document Types" editable="top">
+                <field name="doc_type" />
+                <field name="name" />
+                <field name="order" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_purchase_port_of_loading_view_tree" model="ir.ui.view">
+        <field name="name">droga.purchase.port.of.loading.view.tree</field>
+        <field name="model">droga.purchase.port.of.loading</field>
+        <field name="arch" type="xml">
+            <tree string="" editable="bottom">
+                <field name="name" />
+                <field name="country" />
+                <field name="port_type" />
+                <field name="shipment_type" />
+                <field name="state" />
+            </tree>
+        </field>
+    </record>
+
+</odoo>

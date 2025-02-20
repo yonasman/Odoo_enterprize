@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+
+    <record id="droga_report_tasks_list_form_problems" model="ir.ui.view">
+        <field name="name">droga.project.task.tree</field>
+        <field name="model">project.task</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <notebook>
+                        <page string="Problems">
+                            <field name="problems">
+                                <tree string="" create="false" delete="false" expand="1">
+                                    <field name="problem"/>
+                                    <field name="severity"/>
+                                    <field name="problem_date"/>
+                                    <field name="proposed_solution"/>
+                                    <field name="action_taken"/>
+                                    <field name="current_status"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="droga_report_tasks_list_tree" model="ir.ui.view">
+        <field name="name">droga.project.task.tree</field>
+        <field name="model">project.task</field>
+        <field name="arch" type="xml">
+            <tree string="" create="false" delete="false" expand="1">
+                <field name="project_name" string="Project"></field>
+                <field name="stage_name" string="Stage"></field>
+                <field name="parent_id" string="Parent"></field>
+                <field name="company_id" string="Company"></field>
+                <field name="name" string="Task"></field>
+                <field name="contractor" string="Contractor"></field>
+                <field name="task_progress" string="Progress"></field>
+                <field name="task_weight" string="Weight"></field>
+                <field name="planned_date_begin" string="Task start date" optional="hide"></field>
+                <field name="planned_date_end" string="Task end date"></field>
+                <button icon="fa-credit-card-alt" type="object" string="Problems" name="tasks_prob"
+                        class="oe_stat_button"></button>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_report_tasks_list_search" model="ir.ui.view">
+        <field name="name">droga.project.task.search</field>
+        <field name="model">project.task</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="project_name" string="Project"></field>
+                <field name="stage_name" string="Stage"></field>
+                <field name="company_id" string="Company"></field>
+                <field name="name" string="Task"></field>
+                <field name="contractor" string="Contractor"></field>
+                <field name="task_progress" string="Progress"></field>
+                <field name="task_weight" string="Weight"></field>
+                <field name="planned_date_end" string="Task end date"></field>
+                <field name="planned_date_begin" string="Task start date"></field>
+
+                <filter name="group_type_project" string="Project" context="{'group_by':'project_name'}"/>
+                <filter name="group_type_stage" string="Stage" context="{'group_by':'stage_name'}"/>
+                <filter name="group_type_company" string="Company" context="{'group_by':'company_id'}"/>
+
+                <separator/>
+                <filter string="Late tasks"
+                        domain="[('planned_date_end', '&lt;', context_today()),('task_progress', '&lt;',100)]"
+                        name="late_tasks"></filter>
+
+                <filter string="Current week tasks"
+                    domain="[
+                        ('planned_date_end', '>=', (datetime.datetime.combine(context_today() + relativedelta(weeks=-1,days=1,weekday=0), datetime.time(0,0,0)).to_utc()).strftime('%Y-%m-%d %H:%M:%S')),
+                        ('planned_date_end', '&lt;', (datetime.datetime.combine(context_today() + relativedelta(days=1,weekday=0), datetime.time(0,0,0)).to_utc()).strftime('%Y-%m-%d %H:%M:%S'))]"
+                    name="current_week_tasks"></filter>
+                <filter string="Current month tasks"
+                        domain="[('planned_date_end', '&lt;=', (context_today() + relativedelta(day=31)).strftime('%Y-%m-%d')),('planned_date_end', '&gt;=', (context_today() - relativedelta(day=1)).strftime('%Y-%m-%d'))]"
+                        name="current_month_tasks"></filter>
+                <filter string="Previous week tasks"
+                        domain="[('planned_date_end', '&lt;=', (context_today() - relativedelta(weeks=1,weekday=-1)).strftime('%Y-%m-%d')),('planned_date_end', '&gt;=', (context_today() - relativedelta(weeks=2,weekday=0)).strftime('%Y-%m-%d'))]"
+                        name="previous_week_tasks"></filter>
+                <filter string="Previous month tasks"
+                        domain="[('planned_date_end', '&lt;=', (context_today() + relativedelta(months=-1,day=31)).strftime('%Y-%m-%d')),('planned_date_end', '&gt;=', (context_today() - relativedelta(months=1,day=1)).strftime('%Y-%m-%d'))]"
+                        name="previous_month_tasks"></filter>
+                <filter string="Next month tasks"
+                        domain="[('planned_date_end', '&lt;=', (context_today() + relativedelta(months=1,day=31)).strftime('%Y-%m-%d')),('planned_date_end', '&gt;=', (context_today() + relativedelta(day=31)).strftime('%Y-%m-%d'))]"
+                        name="next_month_tasks"></filter>
+            </search>
+        </field>
+    </record>
+
+    <record id="droga_report_tasks_action" model="ir.actions.act_window">
+        <field name="name">Tasks</field>
+        <field name="res_model">project.task</field>
+        <field name="view_mode">tree,pivot</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('droga_report_tasks_list_tree')})]"/>
+        <field name="search_view_id" ref="droga_report_tasks_list_search"></field>
+        <field name="context">{'search_default_group_type_project': 1,'search_default_group_type_stage':1}</field>
+    </record>
+
+    <menuitem id="menu_project_report_task_list"
+              name="Tasks"
+              action="droga_project.droga_report_tasks_action"
+              parent="project.menu_project_report"
+              sequence="12"/>
+
+</odoo>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_droga_bond_requests_tree" model="ir.ui.view">
+        <field name="name">droga.bond.requests.tree</field>
+        <field name="model">droga.bond.requests</field>
+        <field name="arch" type="xml">
+            <tree delete="0">
+                <field name="letter_number" string="Request Number"/>
+                <field name="bank"/>
+                <field name="client"/>
+                <field name="security_type"/>
+                <field name="security_form"/>
+                <field name="purpose"/>
+                <field name="tender"/>
+                <field name="po_number" string="Customer tender no"/>
+                <field name="starting_date"/>
+                <field name="validity_period"/>
+                <field name="amount"/>
+                <field name="request_type"/>
+                <field name="on_behalf_of"/>
+                <button icon="fa-credit-card-alt" type="object" string="Get report" name="get_bond_letter"
+                        class="oe_stat_button"></button>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_droga_bond_requests_form" model="ir.ui.view">
+        <field name="name">droga.bond.requests.form</field>
+        <field name="model">droga.bond.requests</field>
+        <field name="arch" type="xml">
+            <form delete="0">
+                <header>
+                    <button name="request"
+                            attrs="{'invisible': [('state', 'not in', ('draft'))]}"
+                            string="Request" type="object" class="oe_highlight" data-hotkey="v"/>
+                    <button name="bond_approve"
+                            attrs="{'invisible': [('state', 'not in', ('req'))]}"
+                            groups="droga_tender.bond_recepient"
+                            string="Letter sent" type="object" class="oe_highlight" data-hotkey="v"/>
+                    <button name="amend"
+                            attrs="{'invisible': [('state', 'not in', ('req'))]}"
+                            groups="droga_tender.bond_recepient"
+                            string="Amend" type="object" class="oe_highlight btn-warning" data-hotkey="v"/>
+                    <button name="action_cancel"
+                            attrs="{'invisible': [('state', 'not in', ('draft'))]}"
+                            string="Cancel" type="object" class="oe_highlight" data-hotkey="v"/>
+
+                    <field name="state" widget="statusbar" statusbar_visible="draft,req,pro"/>
+                </header>
+                <sheet string="New Bond Request">
+                    <div class="oe_button_box" name="button_box">
+                        <button icon="fa-credit-card-alt" type="object" string="Get letter" name="get_bond_letter"
+                                class="oe_stat_button"></button>>
+                    </div>
+                    <notebook>
+                        <page string=" Bond Request Details">
+                            <group>
+                                <group>
+                                    <field name="bank" options="{'no_create':True,'no_open':True}"/>
+                                    <field name="client" readonly="1" required="1"/>
+                                    <field name="security_type"/>
+                                    <field name="security_form" options="{'no_create':True,'no_open':True}"/>
+                                    <field name="purpose"/>
+                                    <field name="tender" readonly="1"/>
+                                    <field name="po_number" string="Customer tender no" readonly="1"/>
+                                </group>
+
+                                <group>
+                                    <field name="starting_date"/>
+                                    <field name="validity_period"/>
+                                    <field name="amount"/>
+                                    <field name="letter_number" readonly="1"/>
+                                    <field name="request_type" readonly="1"/>
+                                    <field name="on_behalf_of"/>
+                                    <field name="is_extension"></field>
+                                    <field name="to_be_extended_bond" options="{'no_create':True,'no_open':True}" attrs="{'invisible': [('is_extension', '=', False)]}"></field>
+                                </group>
+                            </group>
+                        </page>
+
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_droga_bond_requests" model="ir.actions.act_window">
+        <field name="name">Droga Bond Requests</field>
+        <field name="res_model">droga.bond.requests</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

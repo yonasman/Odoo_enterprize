@@ -1,0 +1,1 @@
+from . import droga_project_inherit

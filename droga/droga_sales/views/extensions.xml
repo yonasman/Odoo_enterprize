@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="droga_sale_order_warehouse_line" model="ir.ui.view">
+        <field name="name">Sales order line warehouse extension</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='product_id']"
+                   position="attributes">
+                <attribute name="attrs">{'no_create': True}</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='product_uom_qty']"
+                   position="attributes">
+                <attribute name="digits">[2]</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='price_unit']"
+                   position="attributes">
+                <attribute name="digits">[2]</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='product_template_id']"
+                   position="replace">
+                <field name="order_type" invisible="1"></field>
+                <field name="product_template_id"
+                       string="Product"
+                       invisible="1"
+                       attrs="{
+                                        'readonly': [('product_updatable', '=', False)],
+                                        'required': [('display_type', '=', False)],
+                                    }"
+                       context="{
+                                        'partner_id': parent.partner_id,
+                                        'quantity': product_uom_qty,
+                                        'pricelist': parent.pricelist_id,
+                                        'uom':product_uom,
+                                        'company_id': parent.company_id,
+                                        'default_list_price': price_unit,
+                                        'default_description_sale': name
+                                    }"
+                       options="{
+                                        'no_open': True,'no_create':True
+                                    }"
+                       domain="['|',('order_type','in',('BT','ALL')),('order_type','=',order_type),('sale_ok', '=', True), '|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]"
+                       widget="sol_product_many2one"/>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='product_uom_readonly']"
+                   position="after">
+                <field name="is_prod_available" invisible="1"></field>
+                <field name="avail_char" decoration-warning="is_prod_available=='Kinda'"
+                       decoration-success="is_prod_available=='True'" decoration-danger="is_prod_available=='False'"
+                       widget="badge"
+                       groups="droga_sales.sales_price_change_admin,droga_sales.sales_wholesale_approve_admin,droga_sales.sales_import_approve_admin"></field>
+                <field name="store_placement"></field>
+                <field name="wareh" string="Warehouse" domain="[('wh_type','=',parent.order_type)]"
+                       options="{'no_create': True}"/>
+            </xpath>
+
+            <xpath expr="//form/sheet/div/button[@name='action_preview_sale_order']" position="before">
+                <field name="show_invoice_button" invisible="1"></field>
+            </xpath>
+
+            <xpath expr="//form/sheet/group/group/label[@for='pricelist_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//form/sheet/group/group/div[3]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//form/sheet/group/group/field[@name='payment_term_id']" position="replace">
+                <field name="company_id" invisible="1"></field>
+                <field name="payment_term_id" options="{'no_open':True,'no_create': True}" domain="[('used_under', 'in', ('BT','DR')),('company_id','=',company_id)]"/>
+                <field name="show_invoice_button" invisible="1"></field>
+                <field name="mature_amount" style="color:red"
+                       attrs="{'invisible': [('show_invoice_button', '=', False)]}"></field>
+                <field name="order_type" string="Order from"
+                       attrs="{'invisible': [('company_id', '!=', 1)],'required': [('company_id', '=', 1)]}"></field>
+                <field name="sales_order_type"></field>
+                <field name="company_id" invisible="1"></field>
+                <field name="manual_price"></field>
+            </xpath>
+
+            <xpath expr="//form/sheet/group/group/field[@name='partner_id']" position="replace">
+                <field name="partner_id"
+                       domain="[('is_cust_available','=',True),('company_id','=',allowed_company_ids[0])]"
+                       widget="res_partner_many2one"
+                       context="{'res_partner_search_mode': 'customer', 'show_address': 1, 'show_vat': False}"
+                       options='{"always_reload": True,"no_create":True,"no_open":True}'/>
+            </xpath>
+
+            <xpath expr="//form/sheet/notebook/page/group/group/field[@name='note']" position="replace">
+                <field name="core_sum" attrs="{'invisible': [('company_id', '!=', 1)]}" string="Core sum" readonly="1"/>
+                <field name="non_core_sum" attrs="{'invisible': [('company_id', '!=', 1)]}" string="Non-core sum"
+                       readonly="1"/>
+                <field name="total_discount"
+                       attrs="{'invisible': ['|',('total_discount', '&lt;', 0),('total_discount', '=', 0)]}"
+                       string="Total discount" invisible="" readonly="1"/>
+                <field name="total_added"
+                       attrs="{'invisible': ['|',('total_added', '&lt;', 0),('total_added', '=', 0)]}"
+                       string="Total increase" invisible="" readonly="1"/>
+            </xpath>
+
+            <xpath expr="//form/header/button[@id='create_invoice']" position="replace">
+                <button id="create_invoice" name="%(sale.action_view_sale_advance_payment_inv)d" string="Create Invoice"
+                        type="action" class="btn-primary" data-hotkey="q"
+                        groups="droga_sales.sales_import_invoicer,droga_sales.sales_wholesale_invoicer,droga_sales.ema_invoicer"
+                        attrs="{'invisible': [('invoice_status', '!=', 'to invoice')]}"/>
+            </xpath>
+
+            <xpath expr="//form/header/button[@name='action_cancel']" position="replace">
+                <button name="action_cancel" type="object" string="Cancel"
+                        attrs="{'invisible': [('state', 'in', ['cancel', 'done'])]}"
+                        groups="droga_sales.sales_price_change_admin,droga_sales.sales_wholesale_approve_admin,droga_sales.sales_import_approve_admin"
+                        data-hotkey="z"/>
+            </xpath>
+
+            <xpath expr="//form/header/button[@name='payment_action_capture']" position="after">
+                <button name="save_request_button" type="object" class="btn-primary"
+                        attrs="{'invisible': [('state', 'not in', ['draft'])]}"
+                        string="Request"/>
+                <button name="price_approval" type="object" class="btn-primary"
+                        attrs="{'invisible': [('state', 'not in', ['price_request'])]}"
+                        groups="droga_sales.sales_price_change_admin"
+                        string="Confirm"/>
+                <button name="operation_confirm" type="object" class="btn-primary"
+                        attrs="{'invisible': [('state', 'not in', ['req'])]}"
+                        groups="droga_sales.sales_import_approve_admin,droga_sales.sales_wholesale_approve_admin"
+                        string="Confirm"/>
+                <button name="final_approval" type="object" class="btn-primary"
+                        attrs="{'invisible': [('state', 'not in', ['fia'])]}"
+                        groups="droga_sales.sales_import_final_approve,droga_sales.sales_droga_export_approver"
+                        string="Confirm"/>
+                <button name="reject_order" type="object" class="oe_highlight btn-warning"
+                        attrs="{'invisible': [('state', 'not in', ['price_request','req','fia'])]}"
+                        groups="droga_sales.sales_import_final_approve,droga_sales.sales_price_change_admin,droga_sales.sales_import_approve_admin,droga_sales.sales_wholesale_approve_admin,droga_sales.sales_droga_export_approver"
+                        string="Reject"/>
+            </xpath>
+            <xpath expr="//form/header/button[@name='action_quotation_send']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//form/header/button[@name='action_quotation_send'][2]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//form/header/button[@name='action_confirm']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//form/header/button[@name='action_confirm'][2]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//form/header/field[@name='state']" position="replace">
+                <field name="state" widget="statusbar" statusbar_visible="draft,req,fia,sale"/>
+            </xpath>
+            <xpath expr="//form/sheet/group/group/field[@name='partner_id']" position="after">
+                <field name="Vat_no" readonly="1" string="Tin No"></field>
+                <field name="cust_type_ext" options='{"no_create":True,"no_open":True}' readonly="1"
+                       string="Customer Type"></field>
+                <field name="company_id" invisible="1"></field>
+                <field name="contract_num"
+                       attrs="{'invisible': [('company_id', '!=', 2)],'required': [('company_id', '=', 2)]}"></field>
+                <field name="currency_id" options='{"no_create":True,"no_open":True}' required="1"></field>
+                <field name="supporters" attrs="{'invisible': [('company_id', '!=', 1)]}" widget="many2many_tags"
+                       string="Supporters"></field>
+                <field name="cust_id" widget="char" string="Cust ID" readonly="1"
+                       attrs="{'readonly':[(1,'=',1)],'invisible': [('Vat_no', '!=', '0000000000')]}"></field>
+                <field name="pay_type" invisible="1"/>
+                <field name="cash_upfront"
+                       attrs="{'invisible': [('pay_type', '=', False)],'readonly': [('state','!=', 'draft')]}"/>
+                <field name="available_amount" attrs="{'invisible': [('pay_type', '=', False)]}" string="Credit balance"
+                       options="{'no_create': True}"/>
+            </xpath>
+
+            <xpath expr="//form/sheet/notebook/page/field/form/div[@name='invoice_lines']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//form/sheet/notebook/page/field/form/div[@name='invoice_lines']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//form/sheet/notebook/page/field/form/group/group[2]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//form/header" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+
+            <xpath expr="//form/sheet/notebook/page/field/form/group/group/field[@name='tax_id']" position="after">
+                <field name="store_placement"></field>
+                <field name="wareh" domain="[('wh_type','=',parent.order_type)]" string="Warehouse"></field>
+            </xpath>
+
+            <xpath expr="//form/sheet/notebook/page/field/form/group/group/field[@name='tax_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="droga_sale_order_warehouse_readonly_disable" model="ir.ui.view">
+        <field name="name">Sales order warehouse disable extension</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_stock.view_order_form_inherit_sale_stock"/>
+        <field name="priority" eval="100000000"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='warehouse_id'][@force_save='1']" position="attributes">
+                <attribute name="required">False</attribute>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="droga_sales_free_sample_consignment_issue_action" model="ir.actions.act_window">
+        <field name="name">Free sample request</field>
+        <field name="res_model">droga.inventory.consignment.issue</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'default_issue_type': 'SIF','default_menu_from':'SR'}</field>
+        <field name="domain">[('create_uid','=',uid),('issue_type','=','SIF')]</field>
+    </record>
+
+    <record id="droga_sales_cons_consignment_issue_action" model="ir.actions.act_window">
+        <field name="name">Consignment issue request</field>
+        <field name="res_model">droga.inventory.consignment.issue</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'default_issue_type': 'CONI','default_menu_from':'SR'}</field>
+        <field name="domain">[('create_uid','=',uid),('issue_type','=','CONI')]</field>
+    </record>
+
+    <record id="droga_sales_sir_consignment_issue_action" model="ir.actions.act_window">
+        <field name="name">Sample to be returned request</field>
+        <field name="res_model">droga.inventory.consignment.issue</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'default_issue_type': 'SIR','default_menu_from':'SR'}</field>
+        <field name="domain">[('create_uid','=',uid),('issue_type','=','SIR')]</field>
+    </record>
+
+
+    <record id="droga_sales_consignment_receipt_action" model="ir.actions.act_window">
+        <field name="name">Store consignment receipt order</field>
+        <field name="res_model">droga.inventory.consignment.receive</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'default_issue_type': 'CONR','default_menu_from':'SR'}</field>
+        <field name="domain">[('create_uid','=',uid),('issue_type','=','CONR')]</field>
+    </record>
+
+    <record id="droga_sales_sir_receipt_action" model="ir.actions.act_window">
+        <field name="name">Sample return order</field>
+        <field name="res_model">droga.inventory.consignment.receive</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'default_issue_type': 'SIR','default_menu_from':'SR'}</field>
+        <field name="domain">[('create_uid','=',uid),('issue_type','=','SIR')]</field>
+    </record>
+
+
+    <menuitem
+            id="droga_sales_requests_menu"
+            name="Requests"
+            parent="sale.sale_menu_root"
+            groups="droga_crm.crm_sr"
+            sequence="20">
+        <menuitem
+                id="droga_sales_con_issue_menu"
+                name="Stores Issue"
+                sequence="30">
+            <menuitem
+                    id="droga_sales_free_issue_menu"
+                    name="Free sample"
+                    action="droga_sales.droga_sales_free_sample_consignment_issue_action"
+                    sequence="1"/>
+            <menuitem
+                    id="droga_sales_sir_issue_menu"
+                    name="Sample to be returned"
+                    action="droga_sales.droga_sales_sir_consignment_issue_action"
+                    sequence="2"/>
+            <menuitem
+                    id="droga_sales_cons_issue_menu"
+                    name="Consignment"
+                    action="droga_sales.droga_sales_cons_consignment_issue_action"
+                    sequence="3"/>
+        </menuitem>
+
+        <menuitem
+                id="droga_sales_con_receive_menu"
+                name="Stores Receive"
+                sequence="40">
+            <menuitem
+                    id="droga_sales_free_return_menu"
+                    name="Sample return"
+                    action="droga_sales.droga_sales_sir_receipt_action"
+                    sequence="1"/>
+            <menuitem
+                    id="droga_sales_cons_return_menu"
+                    name="Consignment return"
+                    action="droga_sales.droga_sales_consignment_receipt_action"/>
+        </menuitem>
+    </menuitem>
+</odoo>

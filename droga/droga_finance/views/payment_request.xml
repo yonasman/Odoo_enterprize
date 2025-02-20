@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- tree view for payment request -->
+    <record id="droga_account_payment_request_view_tree" model="ir.ui.view">
+        <field name="name">droga.account.payment.request.view.tree</field>
+        <field name="model">droga.account.payment.request</field>
+        <field name="arch" type="xml">
+            <tree string="Payment Request" delete="0">
+                <field name="name"/>
+                <field name="payment_type"/>
+                <field name="request_by"/>
+                <field name="department"/>
+                <field name="request_date"/>
+                <field name="purpose"/>
+                <field name="company_id"/>
+                <field name="currency_id"/>
+                <field name="total_amount_etb" string="Amount"/>
+                <field name="state" widget="badge" decoration-success="state == 'Authorized'"
+                       decoration-danger="state == 'Cancelled'"
+                       decoration-warning="state in('Draft','Submitted','Budget Approved','Approved')"/>
+                <field name="paid_status" widget="badge" decoration-success="paid_status == 'Paid'"
+                       decoration-danger="paid_status == 'Not Paid'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- form view for payment request -->
+    <record id="droga_account_payment_request_view_form" model="ir.ui.view">
+        <field name="name">droga.account.payment.request.view.form</field>
+        <field name="model">droga.account.payment.request</field>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <form string="Payment Request" create="0" delete="0">
+                <header>
+                    <button name="submit_request" type="object" string="Submit" class="oe_highlight"
+                            id="submit_request1" data-hotkey="v"
+                            attrs="{'invisible':[('state','not in',('Draft'))]}"/>
+                    <button name="approve_request" type="object" states="Submitted" string="Approve"
+                            class="oe_highlight" id="approve_request1" data-hotkey="v"/>
+                    <button name="budget_approve_request" type="object" states="Approved" string="Budget Approval"
+                            class="oe_highlight" id="budget_approve3" data-hotkey="v"/>
+                    <button name="authorize_request" type="object" states="Budget Approved" string="Authorize"
+                            class="oe_highlight" id="authorize_request3" data-hotkey="v"/>
+                    <button name="cancel_request" type="object" string="Cancel"
+                            id="cancel_request1" data-hotkey="v"
+                            confirm="Are you sure you want to cancel the request? once it cancelled you can't modify the form"
+                            class="oe_highlight btn-danger"
+                            attrs="{'invisible':[('state','not in',('Draft','Authorized'))]}"/>
+
+                    <button name="reject_box" type="object"
+                            string="Reject" id="reject_request1"
+                            data-hotkey="v" class="oe_highlight btn-warning"
+                            attrs="{'invisible':['|',('requester','=',True),('state','in',('Draft','Authorized'))]}"
+                    />
+
+                    <button name="set_paid_status" type="object"
+                            confirm="Are you sure you?"
+                            string="Paid" id="paid_status"
+                            data-hotkey="v" class="oe_highlight"
+                            attrs="{'invisible':['|',('paid_status','=','Paid'),('state','not in',('Authorized'))]}"
+                    />
+
+                    <button name="set_paid_status" type="object"
+                            confirm="Are you sure you?"
+                            string="Unpaid" id="not_paid_status"
+                            data-hotkey="v" class="oe_highlight"
+                            attrs="{'invisible':['|',('paid_status','=','Not Paid'),('state','not in',('Authorized'))]}"
+                    />
+
+                    <field name="state" widget="statusbar"/>
+                    <field name="paid_status" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="%(droga_account_payment_action)d" string="Payment" type="action"
+                                class="oe_stat_button" icon="fa-arrows-v"
+                                attrs="{'invisible': [('state', '!=', 'Authorized')]}"
+                                context="{'default_partner_id':pay_to,'default_amount':total_amount_etb}"/>
+                    </div>
+                    <div class="oe_title">
+                        <span class="o_form_label">Payment Request</span>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="paid_status" invisible="1"/>
+                            <field name="purchase_order_id" readonly="1"/>
+                            <field name="payment_type" readonly="0" required="1"/>
+                            <field name="request_by" options="{'no_create':True,'no_open':True}"
+                                   attrs="{'readonly': [('state', 'in', ('Authorized', 'Cancelled','Approved'))]}"/>
+                            <field name="department" options="{'no_create':True,'no_open':True}"
+                                   attrs="{'readonly': [('state', 'in', ('Authorized', 'Cancelled','Approved'))]}"/>
+                            <field name="costc" options="{'no_create':True,'no_open':True}"
+                                   attrs="{'readonly': [('state', 'in', ('Authorized', 'Cancelled','Approved'))]}"/>
+
+                            <field name="request_date"
+                                   attrs="{'readonly': [('state', 'in', ('Authorized', 'Cancelled','Approved'))]}"/>
+                            <field name="requester" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="approve_dept_manger"
+                                   attrs="{'readonly': [('state', 'in', ('Approved', 'Cancelled'))]}"/>
+                            <field name="purpose"
+                                   attrs="{'readonly': [('state', 'in', ('Approved', 'Cancelled','Approved'))]}"/>
+                            <field name="company_id" options="{'no_create':True,'no_open':True}"
+                                   attrs="{'readonly': [('state', 'in', ('Approved', 'Cancelled','Approved'))]}"
+                                   invisible="0"/>
+                            <field name="currency_id" options="{'no_create':True,'no_open':True}"
+                                   attrs="{'readonly': [('state', 'in', ('Approved', 'Cancelled','Approved'))]}"/>
+                        </group>
+                        <group string="Pay To">
+                            <field name="pay_to" options="{'no_create':True,'no_open':True}"
+                                   attrs="{'readonly': [('state', 'in', ('Authorized', 'Cancelled','Approved'))]}"/>
+                            <field name="payment_due_date"
+                                   attrs="{'readonly': [('state', 'in', ('Authorized', 'Cancelled','Approved'))]}"/>
+                        </group>
+                        <group string="Amount">
+                            <field name="total_amount"
+                                   attrs="{'readonly': [('state', 'in', ('Authorized', 'Cancelled','Approved'))]}"/>
+                            <field name="exchange_rate"
+                                   attrs="{'readonly': [('state', 'in', ('Authorized', 'Cancelled','Approved'))]}"/>
+                            <field name="total_amount_etb" readonly="1"/>
+                            <field name="amount_in_word" readonly="1"/>
+                        </group>
+                        <group string="Budget Category">
+                            <field name="budgetary_position" options="{'no_create':True,'no_open':True}"
+                                   attrs="{'readonly': [('state', 'in', ('Authorized', 'Cancelled'))]}"/>
+                            <field name="budget_account" options="{'no_create':True,'no_open':True}"
+                                   attrs="{'readonly': [('state', 'in', ('Authorized', 'Cancelled'))]}"/>
+                            <field name="budget_rem_balance"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+
+            </form>
+        </field>
+    </record>
+
+
+    <record id="droga_account_payment_request_reject_view_form" model="ir.ui.view">
+        <field name="name">droga.account.payment.request.reject.view.form</field>
+        <field name="model">droga.account.payment.request</field>
+        <field name="priority" eval="10"/>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+
+                    <field name="reject_message" required="1"/>
+
+                </group>
+                <footer>
+                    <button name="reject_request" type="object"
+                            string="Reject" id="reject_request1"
+                            data-hotkey="v" class="oe_highlight btn-warning"
+                            confirm="Are you sure you want to reject the request?"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+
+    <!-- search view -->
+    <record id="droga_payment_request_view_search" model="ir.ui.view">
+        <field name="name">droga.account.payment.request.view.search</field>
+        <field name="model">droga.account.payment.request</field>
+        <field name="arch" type="xml">
+            <search string="">
+                <field name="name"/>
+                <field name="request_by"/>
+                <field name="request_date"/>
+                <field name="department"/>
+                <field name="purpose"/>
+                <field name="company_id"/>
+                <field name="state"/>
+
+                <separator/>
+                <filter name="Not Paid" string="Not Paid" domain="[('paid_status', '=', 'Not Paid')]"/>
+                <filter name="Paid" string="Paid" domain="[('paid_status', '=', 'Paid')]"/>
+                <separator/>
+                <filter name="draft" string="Draft" domain="[('state', '=', 'Draft')]"/>
+                <filter name="submitted" string="Submitted" domain="[('state', '=', 'Submitted')]"/>
+                <filter name="approved" string="Approved" domain="[('state', '=', 'Approved')]"/>
+                <filter name="budget_approved" string="Budget Approved" domain="[('state', '=', 'Budget Approved')]"/>
+                <filter name="authorized" string="Authorized" domain="[('state', '=', 'Authorized')]"/>
+                <filter name="cancelled" string="Cancelled" domain="[('state', '=', 'Cancelled')]"/>
+                <separator/>
+                <filter name="request_date" string="Request Date" date="request_date"/>
+
+                <group expand="0" string="Group By">
+                    <filter string="Department" name="department" domain="[]" context="{'group_by': 'department'}"/>
+                    <filter string="Request Date" name="request_date" domain="[]"
+                            context="{'group_by': 'request_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- action for payment request Normal -->
+    <record id="droga_account_payment_request_action" model="ir.actions.act_window">
+        <field name="name">Payment Request</field>
+        <field name="res_model">droga.account.payment.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+        (0, 0, {'view_mode': 'tree', 'view_id': ref('droga_account_payment_request_view_tree')}),
+         (0, 0, {'view_mode': 'form', 'view_id': ref('droga_account_payment_request_view_form')})]"/>
+        <field name="domain">[]</field>
+        <field name="context">{'default_payment_type': 'Normal'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Payment Request
+            </p>
+        </field>
+    </record>
+
+    <record id="droga_account_payment_request1_action" model="ir.actions.act_window">
+        <field name="name">Payment Request</field>
+        <field name="res_model">droga.account.payment.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+        (0, 0, {'view_mode': 'tree', 'view_id': ref('droga_account_payment_request_view_tree')}),
+         (0, 0, {'view_mode': 'form', 'view_id': ref('droga_account_payment_request_view_form')})]"/>
+        <field name="domain">[('payment_type','=','Normal'),('purchase_order_id','=',active_id)]</field>
+        <field name="context">{'default_purchase_order_id': active_id,'default_payment_type': 'Normal'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Payment Request
+            </p>
+        </field>
+    </record>
+
+    <!-- action for payment request Urgent -->
+    <record id="droga_account_payment_request_urgent_action" model="ir.actions.act_window">
+        <field name="name">Payment Request</field>
+        <field name="res_model">droga.account.payment.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('payment_type','=','Urgent')]</field>
+        <field name="context">{'default_payment_type': 'Urgent'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Payment Request Urgent
+            </p>
+        </field>
+    </record>
+
+    <record id="droga_account_payment_request_urgent1_action" model="ir.actions.act_window">
+        <field name="name">Payment Request</field>
+        <field name="res_model">droga.account.payment.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('payment_type','=','Urgent'),('purchase_order_id','=',active_id)]</field>
+        <field name="context">{'default_purchase_order_id': active_id,'default_payment_type': 'Urgent'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Payment Request Urgent
+            </p>
+        </field>
+    </record>
+
+    <!-- action for payment request Urgent -->
+    <record id="droga_account_payment_request_withoutpo_action" model="ir.actions.act_window">
+        <field name="name">Payment Request Without PO</field>
+        <field name="res_model">droga.account.payment.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('payment_type','=','Withoutpo')]</field>
+        <field name="context">{'default_payment_type': 'Withoutpo'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Payment Request Without Purchase Order
+            </p>
+        </field>
+    </record>
+
+
+    <!-- rule for filtering data specific data -->
+    <record model="ir.rule" id="droga_payment_request_rule">
+        <field name="name">Payment Request multi-company</field>
+        <field name="model_id" ref="model_droga_account_payment_request"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+</odoo>

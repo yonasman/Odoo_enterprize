@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="droga_pharma_update_stock_action" model="ir.actions.act_window">
+        <field name="name">Update stock</field>
+        <field name="res_model">droga.pharma.update.stock</field>
+        <field name="view_mode">form</field>
+    </record>
+
+    <record id="droga_pharma_update_stock_form" model="ir.ui.view">
+        <field name="name">droga.pharma.update.stock.form</field>
+        <field name="model">droga.pharma.update.stock</field>
+        <field name="arch" type="xml">
+            <form string="Stock card" delete="0">
+                <sheet>
+                   <group string="Stock card">
+                        <group>
+                            <field name="product_id" options="{'no_create':True,'no_open':True}"></field>
+                            <field name="current_uom" options="{'no_create':True,'no_open':True}"></field>
+                            <field name="new_uom" options="{'no_create':True,'no_open':True}"></field>
+                            <field name="date"></field>
+                            <field name="date_to"></field>
+                            <field name="qty_from"></field>
+                        </group>
+                        <group>
+                            <field name="code"></field>
+                            <field name="warehouse" widget="many2many_tags" options="{'no_create':True,'no_open':True}"></field>
+                            <field name="rate" digits="[2, 20]"></field>
+                            <field name="ref"></field>
+                            <field name="prod_id" invisible="1"></field>
+                            <field name="batch"></field>
+                            <field name="qty_to"></field>
+                        </group>
+                       <div colspan="3">
+                        <button name="load" type="object" string="Load" class="oe_highlight"/>
+                       <button name="update_trans" type="object" string="Update Transactions"/>
+                       <button name="update_uom" type="object" string="Update UOM"/>
+                           <button name="round_whole_no" type="object" string="Round numbers"/>
+                           <button name="update_batch" type="object" string="Update batch"/>
+                       </div>
+                    </group>
+
+                    <notebook>
+                        <page string="Stock move">
+                            <field name="results_move">
+                                <tree>
+                                    <field name="reference"/>
+                                    <field name="product_uom_qty"/>
+                                    <field name="quantity_done"/>
+                                    <field name="product_uom"/>
+                                    <field name="trans_date"/>
+                                    <field name="from_loc"/>
+                                    <field name="to_loc"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                    </notebook>
+                    <notebook>
+                        <page string="Stock move line">
+                            <field name="results_move_line">
+                                <tree>
+                                    <field name="reference"/>
+                                    <field name="reserved_uom_qty"/>
+                                    <field name="qty_done"/>
+                                    <field name="product_uom"/>
+                                    <field name="lot_Name"/>
+                                    <field name="trans_date"/>
+                                    <field name="from_loc"/>
+                                    <field name="to_loc"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                    </notebook>
+
+                    <notebook>
+                        <page string="POs">
+                            <field name="results_move_po">
+                                <tree>
+                                    <field name="reference"/>
+                                    <field name="product_qty"/>
+                                    <field name="product_uom"/>
+                                    <field name="price_unit"/>
+                                    <field name="qty_received"/>
+                                    <field name="qty_to_invoice"/>
+                                    <field name="qty_invoiced"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+</odoo>

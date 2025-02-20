@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- inherit  landed cost -->
+    <record id="stock_landed_cost_inherited_form_view" model="ir.ui.view">
+        <field name="name">stock.landed.cost.inherited</field>
+        <field name="model">stock.landed.cost</field>
+        <field name="inherit_id" ref="stock_landed_costs.view_stock_landed_cost_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='picking_ids']" position="after">
+                <field name="lc" options="{'no_create':True,'no_open':True}" required="1"
+                       attrs="{'readonly': [('state', '=', 'done')]}"/>
+            </xpath>
+            <xpath expr="//button[@name='button_validate']" position="after">
+                <button name="button_update_analytics" string="Update Analytics" states="done" class="oe_highlight"
+                        type="object"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

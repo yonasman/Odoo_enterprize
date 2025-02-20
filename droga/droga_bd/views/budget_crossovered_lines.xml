@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- budget category tree view -->
+    <record id="droag_budget_crossovered_budget_lines_view_tree" model="ir.ui.view">
+        <field name="name">droga.budget.crossovered.budget.lines.view.tree</field>
+        <field name="model">crossovered.budget.lines</field>
+        <field name="arch" type="xml">
+            <tree string="Budget Category" editable="bottom">
+                <field name="general_budget_id" string="Budget Category" options="{'no_create':True,'no_open':True}"/>
+                <field name="analytic_account_id" string="Analytic" options="{'no_create':True,'no_open':True}"/>
+                <field name="fiscal_year" invisible="1"/>
+                <field name="period" options="{'no_create':True,'no_open':True}"/>
+                <field name="date_from" invisible="0"/>
+                <field name="date_to" invisible="0"/>
+                <field name="planned_amount" sum="Planned Amount" readonly="0"/>
+                <field name="reallaocation_addition" readonly="1"/>
+                <field name="addition" readonly="1" sum="Addition"/>
+                <field name="revised_budget" readonly="1" sum="Revised"/>
+                <field name="commitment_budget" readonly="1" sum="Commitement"/>
+                <field name="practical_amount" sum="Practical Amount"/>
+                <field name="remaining_balance" readonly="1" sum="Remaining Balance"/>
+                <button name="open_detail_budget" type="object" icon="fa-align-justify"/>
+                <button type="object" name="action_open_budget_entries" string="Entries..." icon="fa-arrow-circle-o-right"/>
+
+                <field name="crossovered_budget_id" invisible="1"/>
+                <field name="paid_date" groups="base.group_no_one" invisible="1"/>
+                <field name="currency_id" invisible="1"/>
+
+
+                <field name="theoritical_amount" sum="Theoretical Amount" invisible="1"/>
+                <field name="percentage" widget="percentage" invisible="1"/>
+
+                <field name="is_above_budget" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_import_budget_details" model="ir.actions.client">
+        <field name="name">Budget Import</field>
+        <field name="tag">import</field>
+        <field name="params">{ 'model': 'crossovered.budget.lines'}</field>
+    </record>
+
+    <record id="droga_budget_category_detail_action" model="ir.actions.act_window">
+        <field name="name">Budget Category</field>
+        <field name="res_model">crossovered.budget.lines</field>
+        <field name="view_mode">tree</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+        (0, 0, {'view_mode': 'tree', 'view_id': ref('droag_budget_crossovered_budget_lines_view_tree')})]"/>
+        <field name="domain">[('crossovered_budget_id','=',active_id)]</field>
+        <field name="context">{'default_crossovered_budget_id':active_id}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Budget Category
+            </p>
+        </field>
+    </record>
+
+    <!-- form view -->
+    <record id="inherit_for_crossovered_budget_form" model="ir.ui.view">
+        <field name="name">Cross Overed Budget</field>
+        <field name="model">crossovered.budget</field>
+        <field name="inherit_id" ref="account_budget.crossovered_budget_view_form" />
+        <field name="arch" type="xml">
+
+
+            <xpath expr="//div[@class='oe_title']" position="before">
+                <div class="oe_button_box" name="button_box">
+                    <button name="%(action_import_budget_details)d" type="action" string="Import" class="oe_stat_button" icon="fa-list" data-hotkey="v" />
+                    <button name="%(droga_budget_category_detail_action)d" type="action" string="Budget" id="budget_category" class="oe_stat_button" icon="fa-list" data-hotkey="v" context="{'default_date_from': date_from,'default_date_to': date_to}"/>
+                </div>
+            </xpath>
+
+            <xpath expr="//field[@name='user_id']" position="before">
+                <field name="fiscal_year" options="{'no_create':True,'no_open':True}" required="1"/>
+            </xpath>
+
+            <xpath expr="//field[@name='date_from']" position="attributes">
+                <attribute name="readonly">0</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='date_to']" position="attributes">
+                <attribute name="readonly">0</attribute>
+            </xpath>
+
+            <xpath expr="//notebook/page/field[@name='crossovered_budget_line']/tree/field[@name='general_budget_id']" position="attributes">
+
+                <attribute name="width">25</attribute>
+                <attribute name="string">Category</attribute>
+
+            </xpath>
+
+            <xpath expr="//notebook/page/field[@name='crossovered_budget_line']/tree/field[@name='analytic_account_id']" position="attributes">
+
+                <attribute name="string">Analytic</attribute>
+                <attribute name="width">25</attribute>
+
+            </xpath>
+
+            <xpath expr="//notebook/page/field[@name='crossovered_budget_line']/tree/field[@name='date_from']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//notebook/page/field[@name='crossovered_budget_line']/tree/field[@name='date_to']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//notebook/page/field[@name='crossovered_budget_line']/tree/field[@name='analytic_account_id']" position="after">
+                <field name="fiscal_year" invisible="1"/>
+                <field name="period" required="1" width="20" options="{'no_create':True,'no_open':True}"/>
+            </xpath>
+
+            <xpath expr="//notebook/page/field[@name='crossovered_budget_line']/tree/field[@name='practical_amount']" position="before">
+
+                <field name="reallaocation_addition"  readonly="1" width="20" string="Reallocation" invisible="0"/>
+                <field name="addition" readonly="1" width="20" invisible="0"/>
+                <field name="revised_budget" sum="Total" readonly="1" width="20"/>
+
+
+            </xpath>
+
+            <xpath expr="//notebook/page/field[@name='crossovered_budget_line']/tree/field[@name='practical_amount']" position="before">
+
+                <field name="commitment_budget" sum="Total" readonly="1" width="20"/>
+
+            </xpath>
+
+            <xpath expr="//notebook/page/field[@name='crossovered_budget_line']/tree/field[@name='practical_amount']" position="after">
+
+
+                <field name="remaining_balance" sum="Total" readonly="1" width="20"/>
+                <button name="open_detail_budget" type="object" class="oe_highlight" id="budget_detail" data-hotkey="v" icon="fa-align-justify"/>
+
+            </xpath>
+
+            <xpath expr="//notebook/page/field[@name='crossovered_budget_line']/tree/field[@name='theoritical_amount']" position="attributes">
+
+                <attribute name="invisible">True</attribute>
+
+            </xpath>
+
+            <xpath expr="//notebook/page/field[@name='crossovered_budget_line']/tree/field[@name='paid_date']" position="attributes">
+
+                <attribute name="invisible">True</attribute>
+
+            </xpath>
+
+            <xpath expr="//notebook/page/field[@name='crossovered_budget_line']/tree/field[@name='percentage']" position="attributes">
+
+                <attribute name="invisible">True</attribute>
+
+            </xpath>
+
+            <!-- rename columns -->
+            <xpath expr="//notebook/page/field[@name='crossovered_budget_line']/tree/field[@name='planned_amount']" position="attributes">
+
+                <attribute name="width">20</attribute>
+                <attribute name="string">Budget</attribute>
+                <attribute name="readonly">0</attribute>
+
+            </xpath>
+
+            <xpath expr="//notebook/page/field[@name='crossovered_budget_line']/tree/field[@name='practical_amount']" position="attributes">
+
+                <attribute name="string">Actual</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- tree view -->
+    <record id="inherit_for_crossovered_budget_tree" model="ir.ui.view">
+        <field name="name">Cross Overed Budget</field>
+        <field name="model">crossovered.budget</field>
+        <field name="inherit_id" ref="account_budget.crossovered_budget_view_tree" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="after">
+                <!-- <button name="%(droga_budget_category_detail_action)d" type="action" string="Budget" id="budget_category" class="oe_stat_button" icon="fa-list" data-hotkey="v" context="{'default_date_from': date_from,'default_date_to': date_to}"/>-->
+            </xpath>
+        </field>
+    </record>
+
+    <!-- form view for for budget detail -->
+    <record id="crossovered_budget_lines_view_form" model="ir.ui.view">
+        <field name="name">crossovered.budget.lines.view.form</field>
+        <field name="model">crossovered.budget.lines</field>
+        <field name="arch" type="xml">
+            <form string="Budget Detail">
+                <sheet>
+                    <group>
+                        <field name="general_budget_id" options="{'no_create':True,'no_open':True}" readonly="1"/>
+                    </group>
+                    <notebook>
+                        <page name="name" string="Detail Budget">
+                            <field name="budget_line_details" mode="tree">
+                                <tree editable="bottom">
+                                    <field name="account" width="20" options="{'no_create':True,'no_open':True}"/>
+                                    <field name="budget_amount" width="15" sum="Total"/>
+                                    <field name="commitment_budget" width="15" sum="Total" readonly="1"/>
+                                    <field name="reallaocation" width="15" sum="Total" readonly="1"/>
+                                    <field name="addition" width="15" sum="Total" readonly="1"/>
+                                    <field name="revised_budget" width="15" sum="Total" readonly="1"/>
+                                    <field name="actual" width="15" sum="Total" readonly="1"/>
+                                    <field name="remaining_balance" width="15" sum="Total" readonly="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>

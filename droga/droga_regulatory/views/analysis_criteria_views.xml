@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <record id="droga_product_analysis_tree_action" model="ir.actions.act_window">
+            <field name="name">Product analysis criterias</field>
+            <field name="res_model">droga.bdr.analysis.criteria.header</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="droga_product_analysis_tree_view" model="ir.ui.view">
+            <field name="name">droga.product.analysis.tree</field>
+            <field name="model">droga.bdr.analysis.criteria.header</field>
+            <field name="arch" type="xml">
+
+                <tree string="Product analysis criterias">
+                    <field name="header"/>
+                    <button type="object" string="delete" name="delete_record"/>
+                </tree>
+
+            </field>
+        </record>
+
+        <record id="droga_product_analysis_form_view" model="ir.ui.view">
+            <field name="name">droga.product.analysis.form</field>
+            <field name="model">droga.bdr.analysis.criteria.header</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="header" string='Configration name'/>
+
+                            </group>
+                            <group>
+                                <field name="type"/>
+                            </group>
+
+                        </group>
+
+
+                        <field name="criteria_detail">
+                            <tree string="Product Analysis Criteria" editable="top">
+
+                                <field name="criteria"/>
+                                <field name="minimum_score"/>
+                                <field name="maximum_score"/>
+                                <field name="weight"/>
+
+                            </tree>
+                        </field>
+                    </sheet>
+
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

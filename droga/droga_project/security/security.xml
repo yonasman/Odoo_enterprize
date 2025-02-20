@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.module.category" id="project_management">
+        <field name="name">Project</field>
+        <field name="description">User access level for Project module</field>
+        <field name="sequence">20</field>
+    </record>
+    <record id="proj_admin" model="res.groups">
+        <field name="name">Project administrator</field>
+        <field name="category_id" ref="project_management"/>
+    </record>
+    <record id="proj_stkeeper" model="res.groups">
+        <field name="name">Project storekeeper</field>
+        <field name="category_id" ref="project_management"/>
+    </record>
+
+    <record id="proj_engineer" model="res.groups">
+        <field name="name">Project engineer</field>
+        <field name="category_id" ref="project_management"/>
+    </record>
+
+</odoo>
+
+
+        <!--
+            This is where you will create your groups.
+                ir.module.category is the module category
+                res.groups are the module user groups, they will refer to the master module category
+
+                For menu access, simply add groups="", in the menu definition
+                The csv file is a set of access rules for models
+                    The format it takes is
+                        id,                                 name,                 model_id:id,                     group_id:id,perm_read,perm_write,perm_create,perm_unlink
+                        "id of the access" can be anything, model.model models id,model_name replace name . with _,1,1,1,1
+        -->

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- tree view for foregin payment request -->
+    <record id="foreign_currency_request_view_tree" model="ir.ui.view">
+        <field name="name">foreign_currency_request.view.tree</field>
+        <field name="model">droga.account.foreign.currency.request</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="request_by"/>
+                <field name="department"/>
+                <field name="request_date"/>
+                <field name="currency_id"/>
+                <field name="total_amount" string="Total Amount USD"/>
+                <field name="total_amount_etb" string="Total Amount ETB"/>
+                <field name="state" widget="badge" decoration-success="state == 'Approved'"
+                       decoration-danger="state == 'Cancelled'"
+                       decoration-warning="state in('Draft','Queued','On Progress')"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- pivot table -->
+    <record id="foreign_currency_request_view_pivot" model="ir.ui.view">
+        <field name="name">foreign_currency_request.view.pivot</field>
+        <field name="model">droga.account.foreign.currency.request</field>
+        <field name="arch" type="xml">
+            <pivot string="Foreign Currency Request" display_quantity="1" sample="1">
+                <field name="state" type="column"/>
+                <field name="bank" type="row"/>
+
+                <field name="total_amount" type="measure"/>
+                <field name="total_amount_etb" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- graph -->
+    <record id="foreign_currency_request_view_graph" model="ir.ui.view">
+        <field name="name">foreign_currency_request.view.graph</field>
+        <field name="model">droga.account.foreign.currency.request</field>
+        <field name="arch" type="xml">
+            <graph string="Foreign Currency Request">
+                <field name="bank"/>
+                <field name="state"/>
+                <field name="total_amount" type="measure"/>
+                <field name="total_amount_etb" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- form view for foregin payment request -->
+    <record id="foreign_currency_request_view_form" model="ir.ui.view">
+        <field name="name">foreign_currency_request.view.form</field>
+        <field name="model">droga.account.foreign.currency.request</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="queued_request" type="object" states="Draft" string="Submit" class="oe_highlight"
+                            id="queued_request" data-hotkey="v"/>
+                    <button name="on_progress_request" type="object" states="Queued" string="On Progress"
+                            class="oe_highlight" id="on_progress_request" data-hotkey="v"/>
+
+
+                    <button name="approve_request" type="object" states="On Progress" string="Approve"
+                            class="oe_highlight" id="approve_request" data-hotkey="v"/>
+
+                    <button name="cancel_request" type="object" states="Draft" string="Cancel" id="cancel_request"
+                            data-hotkey="v"
+                            confirm="Are you sure you want to cancel the request? once it cancelled you can't modify the form"
+                            class="btn-danger"/>
+                    <button name="reject_request" type="object" states="Queued,On Progress" string="Reject"
+                            id="reject_request" data-hotkey="v" class="btn-warning"
+                            confirm="Are you sure you want to reject the request?"/>
+
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <span class="o_form_label">Request #</span>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="rfq_id" readonly="1" options="{'no_create':True}"/>
+                            <field name="request_type" readonly="1" invisible="1"/>
+                            <field name="request_by" options="{'no_create':True,'no_open':True}"
+                                   attrs="{'readonly': [('state', 'in', ('Approved', 'Cancelled'))]}"/>
+                            <field name="department" options="{'no_create':True,'no_open':True}"
+                                   attrs="{'readonly': [('state', 'in', ('Approved', 'Cancelled'))]}"/>
+                            <field name="request_date"
+                                   attrs="{'readonly': [('state', 'in', ('Approved', 'Cancelled'))]}"/>
+                        </group>
+                        <group>
+                            <field name="proforma_invoice_no"/>
+                            <field name="company_id" options="{'no_create':True,'no_open':True}" readonly="1"/>
+                            <field name="currency_id" options="{'no_create':True,'no_open':True}" readonly="1"/>
+                            <field name="purpose" attrs="{'readonly': [('state', 'in', ('Approved', 'Cancelled'))]}"/>
+                            <field name="nbe_number"
+                                   attrs="{'readonly': [('state', 'in', ('Approved', 'Cancelled'))]}"/>
+
+                        </group>
+                        <group string="Supplier">
+                            <field name="supplier_id" options="{'no_create':True,'no_open':True}" readonly="1"/>
+                            <field name="payment_due_date"
+                                   attrs="{'readonly': [('state', 'in', ('Approved', 'Cancelled'))]}"/>
+                        </group>
+                        <group string="Amount">
+                            <field name="total_amount"
+                                   attrs="{'readonly': [('state', 'in', ('Approved', 'Cancelled'))]}"/>
+                            <field name="exchange_rate"
+                                   attrs="{'readonly': [('state', 'in', ('Approved', 'Cancelled'))]}"/>
+                            <field name="total_amount_etb" readonly="1"/>
+                            <field name="amount_in_word" readonly="1"/>
+                        </group>
+                        <group string="Bank">
+                            <field name="request_approved_date"
+                                   attrs="{'required': [('state', 'in', ('On Progress'))]}"/>
+                            <field name="bank" options="{'no_create':True,'no_open':True}"
+                                   attrs="{'required': [('state', 'in', ('On Progress'))]}"/>
+                            <field name="bank_branch" attrs="{'required': [('state', 'in', ('On Progress'))]}"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+
+            </form>
+        </field>
+    </record>
+
+    <!--search view for foreign currency request -->
+    <record id="foreign_currency_request_view_search" model="ir.ui.view">
+        <field name="name">foreign_currency_request.view.search</field>
+        <field name="model">droga.account.foreign.currency.request</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="request_by"/>
+                <field name="department"/>
+                <field name="request_date"/>
+                <field name="currency_id"/>
+                <field name="total_amount"/>
+                <field name="state"/>
+                <field name="rfq_id"
+                       filter_domain="[('rfq_id.rfq_lines.product_id', 'ilike', self)]" string="Product"/>
+                <field name="rfq_id"
+                       filter_domain="[('rfq_id.supplier_id', 'ilike', self)]" string="Supplier"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- rule for filtering data specific data -->
+    <record model="ir.rule" id="droga_account_foreign_currency_request_rule">
+        <field name="name">Foreign Currency Request multi-company</field>
+        <field name="model_id" ref="model_droga_account_foreign_currency_request"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+</odoo>

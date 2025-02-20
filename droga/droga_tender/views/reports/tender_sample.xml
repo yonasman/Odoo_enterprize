@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="droga_sample_tender_tree" model="ir.ui.view">
+        <field name="name">droga.tender.sample.search.tree</field>
+        <field name="model">droga.inventory.consignment.report</field>
+        <field name="arch" type="xml">
+            <tree string="" create="false" delete="false" expand="1">
+                <field name="customer_name" ></field>
+                <field name="name"></field>
+                <field name="type"></field>
+                <field name="store_reference"></field>
+                <field name="tender_origin"></field>
+                <field name="trans_date"></field>
+                <field name="state" decoration-success="state == 'Processed'" decoration-info="state in ('Draft','Requested','Store manager')" decoration-danger="state == 'Cancelled'" widget="badge"></field>
+                <button name="open_cons" type="object" class="oe_stat_button"
+                        string="Open"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="droga_sample_tender_search" model="ir.ui.view">
+        <field name="name">droga.tender.sample.search</field>
+        <field name="model">droga.inventory.consignment.report</field>
+        <field name="arch" type="xml">
+            <search string="Sample report" >
+                <field name="customer_name" ></field>
+                <field name="name"></field>
+                <field name="state"></field>
+                <field name="type"></field>
+                <field name="store_reference"></field>
+                <field name="tender_origin"></field>
+                <field name="trans_date"></field>
+
+                <separator/>
+
+                <filter string="Current week given"
+                    domain="[
+                        ('trans_date', '>=', (datetime.datetime.combine(context_today() + relativedelta(weeks=-1,days=1,weekday=0), datetime.time(0,0,0)).to_utc()).strftime('%Y-%m-%d %H:%M:%S')),
+                        ('trans_date', '&lt;', (datetime.datetime.combine(context_today() + relativedelta(days=1,weekday=0), datetime.time(0,0,0)).to_utc()).strftime('%Y-%m-%d %H:%M:%S'))]"
+                    name="current_week_given"></filter>
+                <filter string="Current month given"
+                        domain="[('trans_date', '&lt;=', (context_today() + relativedelta(day=31)).strftime('%Y-%m-%d')),('trans_date', '&gt;=', (context_today() - relativedelta(day=1)).strftime('%Y-%m-%d'))]"
+                        name="current_month_given"></filter>
+                <filter string="Previous week given"
+                        domain="[('trans_date', '&lt;=', (context_today() - relativedelta(weeks=1,weekday=-1)).strftime('%Y-%m-%d')),('trans_date', '&gt;=', (context_today() - relativedelta(weeks=2,weekday=0)).strftime('%Y-%m-%d'))]"
+                        name="previous_week_given"></filter>
+                <filter string="Previous month given"
+                        domain="[('trans_date', '&lt;=', (context_today() + relativedelta(months=-1,day=31)).strftime('%Y-%m-%d')),('trans_date', '&gt;=', (context_today() - relativedelta(months=1,day=1)).strftime('%Y-%m-%d'))]"
+                        name="previous_month_given"></filter>
+            </search>
+        </field>
+    </record>
+
+    <record id="droga_sample_tender_action" model="ir.actions.act_window">
+        <field name="name">Sample given report</field>
+        <field name="res_model">droga.inventory.consignment.report</field>
+        <field name="view_mode">tree</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('droga_sample_tender_tree')})]"/>
+        <field name="search_view_id" ref="droga_sample_tender_search"></field>
+        <field name="domain">[('company_id','=',1),('tender_origin','=like','TEN%')]</field>
+    </record>
+
+    <menuitem
+            id="droga_tender_sample_reports"
+            name="Sample given report"
+            action="droga_sample_tender_action"
+            parent="tender_reports"
+            groups="tender_user"
+            sequence="13"/>
+</odoo>

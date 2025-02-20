@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_target_model_tree_view" model="ir.actions.act_window">
+        <field name="name">MTM detail report</field>
+        <field name="res_model">droga.pharma.mtm.detail</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <record id="droga_pharma_mtm_detail_tree" model="ir.ui.view">
+        <field name="name">droga.pharma.mtm.detail.tree</field>
+        <field name="model">droga.pharma.mtm.detail</field>
+        <field name="arch" type="xml">
+            <tree string="" delete="0" create="0">
+                <field name="parent_mtm" invisible="1"/>
+                <field name="date"></field>
+                <field name="indication"></field>
+                <field name="drug"></field>
+                <field name="frequency"></field>
+                <field name="frequency_type"></field>
+                <field name="start_date"></field>
+                <field name="stop_date"></field>
+                <field name="remark"></field>
+            </tree>
+        </field>
+    </record>
+
+<!--    <record id="server_action_open_model_mtm_detail" model="ir.actions.server">-->
+<!--        <field name="name">Open MTM detail report</field>-->
+<!--        <field name="model_id" ref="droga_pharma.model_droga_pharma_mtm_detail"/>-->
+<!--        <field name="state">code</field>-->
+<!--        <field name="code">-->
+<!--            mtm_header_records = self.env['droga.pharma.mtm.header'].browse(self._context.get('active_ids', []))-->
+<!--            # Get the corresponding records from Model B based on the relationship field -->
+<!--            mtm_detail_records = mtm_header_records.mapped('parent_mtm')-->
+<!--            action = self.env.ref('droga_pharma.action_model_mtm_detail').read()[0]-->
+<!--            action['domain'] = [('id', 'in', mtm_detail_records.ids)]-->
+<!--            return {'type': 'ir.actions.act_window', 'res_model': 'droga.pharma.mtm.detail', 'view_mode': 'tree', 'domain': [('id', 'in', mtm_detail_records.ids)], 'target': 'current'}-->
+<!--        </field>-->
+<!--    </record>-->
+</odoo>

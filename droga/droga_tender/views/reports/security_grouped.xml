@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="droga_report_security_grouped_tree" model="ir.ui.view">
+        <field name="name">droga.tender.security.detail.grouped.tree</field>
+        <field name="model">droga.tender.security.detail</field>
+        <field name="arch" type="xml">
+            <tree string="" create="false" delete="false" expand="1">
+                <field name="tender_id"></field>
+                <field name="cus_type"></field>
+                <field name="security_type"></field>
+                <field name="security_for"></field>
+                <field name="security_amount"></field>
+                <field name="bank"></field>
+                <field name="bank_number"></field>
+                <field name="issue_date"></field>
+                <field name="starting_date"></field>
+                <field name="security_period_in_days"></field>
+                <field name="dead_line_date"></field>
+                <field name="status"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_report_security_grouped_search" model="ir.ui.view">
+        <field name="name">droga.tender.security.detail.grouped.search</field>
+        <field name="model">droga.tender.security.detail</field>
+        <field name="arch" type="xml">
+            <search string="Upcoming Tenders">
+                <field name="tender_id"></field>
+                <field name="cus_type"></field>
+                <field name="security_type"></field>
+                <field name="security_for"></field>
+                <field name="security_amount"></field>
+                <field name="bank"></field>
+                <field name="bank_number"></field>
+                <field name="issue_date"></field>
+                <field name="starting_date"></field>
+                <field name="security_period_in_days"></field>
+                <field name="dead_line_date"></field>
+                <field name="status"></field>
+
+                <filter string="Bid security" domain="[('security_for', '=','Bid security')]"
+                        name="bid_security"></filter>
+                <filter string="Advance security" domain="[('security_for', '=','Advance security')]"
+                        name="advance_security"></filter>
+                <filter string="Performance security" domain="[('security_for', '=','Performance Security')]"
+                        name="performance_security"></filter>
+
+                <separator/>
+                
+                <filter string="Current week deadlines"
+                    domain="[
+                        ('dead_line_date', '>=', (datetime.datetime.combine(context_today() + relativedelta(weeks=-1,days=1,weekday=0), datetime.time(0,0,0)).to_utc()).strftime('%Y-%m-%d %H:%M:%S')),
+                        ('dead_line_date', '&lt;', (datetime.datetime.combine(context_today() + relativedelta(days=1,weekday=0), datetime.time(0,0,0)).to_utc()).strftime('%Y-%m-%d %H:%M:%S'))]"
+                    name="current_week_tenders"></filter>
+                <filter string="Next week deadlines"
+                    domain="[
+                    ('dead_line_date', '&lt;', (context_today() + relativedelta(weeks=1, weekday=6)).strftime('%Y-%m-%d 00:00:00')),
+                    ('dead_line_date', '&gt;', (context_today() + relativedelta(weeks=0, weekday=6)).strftime('%Y-%m-%d 00:00:00')),]"
+                    name="next_week_tenders"></filter>
+                <filter string="Current month deadlines"
+                        domain="[('dead_line_date', '&lt;=', (context_today() + relativedelta(day=31)).strftime('%Y-%m-%d')),('dead_line_date', '&gt;=', (context_today() - relativedelta(day=1)).strftime('%Y-%m-%d'))]"
+                        name="current_month_tenders"></filter>
+                <filter string="Previous week deadlines"
+                        domain="[('dead_line_date', '&lt;=', (context_today() - relativedelta(weeks=1,weekday=-1)).strftime('%Y-%m-%d')),('dead_line_date', '&gt;=', (context_today() - relativedelta(weeks=2,weekday=0)).strftime('%Y-%m-%d'))]"
+                        name="previous_week_tenders"></filter>
+                <filter string="Previous month deadlines"
+                        domain="[('dead_line_date', '&lt;=', (context_today() + relativedelta(months=-1,day=31)).strftime('%Y-%m-%d')),('dead_line_date', '&gt;=', (context_today() - relativedelta(months=1,day=1)).strftime('%Y-%m-%d'))]"
+                        name="previous_month_tenders"></filter>
+                <filter string="Next month deadlines"
+                        domain="[('dead_line_date', '&lt;=', (context_today() + relativedelta(months=1,day=31)).strftime('%Y-%m-%d')),('dead_line_date', '&gt;=', (context_today() + relativedelta(day=31)).strftime('%Y-%m-%d'))]"
+                        name="next_month_tenders"></filter>
+                
+                <filter name="group_type" string="Security type" context="{'group_by':'security_type'}"/>
+                <filter name="group_status" string="Status" context="{'group_by':'status'}"/>
+                <filter name="group_bank" string="Bank" context="{'group_by':'bank'}"/>
+                <filter name="group_custype" string="Customer type" context="{'group_by':'cus_type'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="droga_report_security_grouped_action" model="ir.actions.act_window">
+        <field name="name">Securities summary</field>
+        <field name="res_model">droga.tender.security.detail</field>
+        <field name="view_mode">tree</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('droga_report_security_grouped_tree')})]"/>
+        <field name="search_view_id" ref="droga_report_security_grouped_search"></field>
+        <field name="context">{'search_default_group_type': 1}</field>
+    </record>
+
+    <menuitem
+            id="droga_report_security_grouped_menu"
+            name="Securities summary"
+            action="droga_report_security_grouped_action"
+            parent="tender_reports"
+            groups="tender_user"
+            sequence="11"/>
+</odoo>

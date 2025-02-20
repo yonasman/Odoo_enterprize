@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="droga_subtask_local_purchase_inherited_form" model="ir.ui.view">
+        <field name="name">droga.subtask.local.purchase.inherited.name</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/div/button[2]" position="before">
+                <button name="local_purchase" string="Purchase Request" type="object" class="oe_stat_button"
+                        icon="fa-list"/>
+                <button name="stockRequestcont" string="Contractor stock req." type="object" class="oe_stat_button"
+                        icon="fa-list"/>
+                <button name="stockRequestint" string="Internal stock req." type="object" class="oe_stat_button"
+                        icon="fa-list"/>
+                <button name="taskPaymentRequest" string="Payment Request" type="object" class="oe_stat_button"
+                        icon="fa-list"/>
+            </xpath>
+            <xpath expr="//form/sheet/group/group/field[@name='tag_ids']" position="after">
+                <!--                <field name="task_weight"/>-->
+                <field name="task_progress" attrs="{'readonly': [('task_editable', '=', False)]}"/>
+                <field name="task_editable" invisible="1"/>
+                <field name="task_weight" readonly="1"/>
+                <field name="parent_id" invisible="1"/>
+                <field name="task_description" attrs="{'invisible': [('parent_id', '!=', False)]}"/>
+            </xpath>
+
+            <xpath expr="//field[@name='project_id']" position="replace">
+                <field name="project_id" readonly="1" options="{'no_create':True,'no_open':True}"/>
+            </xpath>
+
+            <xpath expr="//field[@name='date_deadline']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='tag_ids']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page[@name='sub_tasks_page']/field/tree/field[@name='milestone_id']"
+                   position="after">
+                <field name="task_weight"/>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page[@name='sub_tasks_page']/field/tree/field[@name='date_deadline']"
+                   position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+
+            <xpath expr="//form/sheet/notebook/page[@name='sub_tasks_page']/field/tree/field[@name='kanban_state']"
+                   position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+
+            <xpath expr="//form/sheet/notebook/page[@name='sub_tasks_page']/field/tree/field[@name='user_ids']"
+                   position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+
+            <xpath expr="//form/sheet/notebook/page[@name='sub_tasks_page']/field/tree/field[@name='stage_id']"
+                   position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+
+            <xpath expr="//form/sheet/group/group/field[@name='user_ids']" position="after">
+                <field name="display_project_id" invisible="1"></field>
+                <field name="cost_center" domain="([('project','=',display_project_id)])"
+                       options="{'no_create':True,'no_open':True}"/>
+                <field name="task_duration" string="Task duration in days"></field>
+
+                <label for="consultants" string="Consultants"/>
+                <div class="o_row">
+                    <field name="project_id" invisible="1"></field>
+                    <field name="consultants" domain="([('project_consulting','in',[project_id])])" class="oe_inline" widget="many2many_tags" options="{'no_create':True,'no_open':True}"/>
+                    <label for="contractors" string="Contractors"/>
+                    <field name="contractors" domain="([('project_contracting','in',[project_id])])" class="oe_inline" widget="many2many_tags" options="{'no_create':True,'no_open':True}"/>
+                </div>
+            </xpath>
+
+            <xpath expr="//field[@name='kanban_state']"
+                   position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+
+            <xpath expr="//form/sheet/group/group/field[@name='user_ids']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+
+            <xpath expr="//form/sheet/notebook/page[@name='sub_tasks_page']/field[@name='child_ids']"
+                   position="attributes">
+                <attribute name="widget"></attribute>
+            </xpath>
+
+            <xpath expr="//form/sheet/notebook/page[@name='sub_tasks_page']/field/tree/field[@name='priority']"
+                   position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+
+            <xpath expr="//form/sheet/notebook/page[@name='sub_tasks_page']/field/tree/field[@name='sequence']"
+                   position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+
+            <xpath expr="//form/sheet/notebook/page[@name='extra_info']"
+                   position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page[@name='description_page']"
+                   position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='task_properties']"
+                   position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+
+            <xpath expr="//form/sheet/notebook/page[@name='task_dependencies']"
+                   position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page[@name='task_dependencies']"
+                   position="after">
+                <page name="description_page" string="Description">
+                    <field name="description" type="html" options="{'collaborative': true, 'resizable': false}"
+                           placeholder="Task description..."/>
+                </page>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page[@name='task_dependencies']"
+                   position="before">
+                <page string="Predecessors">
+                    <field name="predecessors">
+                        <tree editable="bottom">
+                            <field name="pid" invisible="1"></field>
+                            <field name="task" invisible="1"></field>
+                            <field name="predecessor_task" options="{'no_create':True,'no_open':True}"/>
+                            <field name="predecessor_type"/>
+                        </tree>
+                    </field>
+                </page>
+                <page string="Problems">
+                    <field name="problems">
+                        <tree editable="bottom">
+                            <field name="problem"/>
+                            <field name="severity"/>
+                            <field name="problem_date"/>
+                            <field name="proposed_solution"/>
+                            <field name="action_taken"/>
+                            <field name="current_status"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="droga_task_weight_kanban_view" model="ir.ui.view">
+        <field name="name">droga.task.weight.kanba.inherited.name</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//kanban/templates/t/div/div/div/div/strong"
+                   position="after">
+                <br/>
+                Task Progress:
+                <field name="task_progress" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="droga_project_subtask_purchase_order_inherited_form" model="ir.ui.view">
+        <field name="name">droga.project.subtask.purchase.order.inherited</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/group/group/field[1]" position="after">
+                <field name="subtask_reference"
+                       attrs="{'invisible': [('subtask_reference', '=', False)]}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="droga_project_subtask_stock_request_id_inherited_form" model="ir.ui.view">
+        <field name="name">droga.project.subtask.stock.request.inherited</field>
+        <field name="model">droga.inventory.office.supplies.request</field>
+        <field name="inherit_id" ref="droga_inventory.droga_inventory_office_supplies_request_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/group/group/field[1]" position="after">
+                <field name="stock_request_reference"
+                       attrs="{'invisible': [('stock_request_reference', '=', False)]}"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="droga_project_task_payment_request_inherited_form" model="ir.ui.view">
+        <field name="name">droga.account.payment.request.inherited</field>
+        <field name="model">droga.account.payment.request</field>
+        <field name="inherit_id" ref="droga_finance.droga_account_payment_request_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/group/group/field[1]" position="after">
+                <field name="task_payment_request_reference"
+                       attrs="{'invisible': [('task_payment_request_reference', '=', False)]}"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="droga_project_task_sum_inherited_form" model="ir.ui.view">
+        <field name="name">droga.project.task.sum.inherited</field>
+        <field name="model">project.task.type</field>
+        <field name="inherit_id" ref="project.task_type_edit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='project_ids']" position="after">
+                <field name="task_sum"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="droga_project_stage_tasks_popup" model="ir.ui.view">
+        <field name="name">droga.project.task.stages.tree</field>
+        <field name="model">project.task.type</field>
+        <field name="arch" type="xml">
+            <form delete="0">
+                <notebook>
+                    <page string="Tasks">
+                        <field name="tasks" mode="tree">
+                            <tree editable="true" delete="0" create="0">
+                                <field name="name"/>
+                                <field name="task_weight" options="{'no_create':True,'no_open':True}"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+            </form>
+        </field>
+    </record>
+</odoo>
+
+

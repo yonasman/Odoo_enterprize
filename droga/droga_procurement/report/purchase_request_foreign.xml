@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- action for sales report -->
+    <record id="droga_purhcase_request_foreign_report_action" model="ir.actions.report">
+        <field name="name">Purhcase Request Foreign</field>
+        <field name="model">droga.purhcase.request</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">droga_procurement.droga_purhcase_request_foreign_report</field>
+        <field name="report_file">droga_procurement.droga_purhcase_request_foreign_report</field>
+        <field name="print_report_name">'Purhcase Request Foreign - %s' % (object.name)
+        </field>
+        <field name="paperformat_id" ref="droga_procurement.paperformat_droga_landscape_a4"/>
+        <field name="binding_model_id" ref="model_droga_purhcase_request"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="droga_purhcase_request_foreign_report" name="Purhcase Request">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-foreach="docs" t-as="o">
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <h2>Purhcase Request #
+                            <span t-field="o.name"/>
+                        </h2>
+
+                        <div id="informations" class="row mt32 mb32">
+                            <div class="col-3 bm-2">
+                                <strong>Requested By:</strong>
+                                <p t-field="o.request_by" class="m-0"/>
+                            </div>
+                            <div class="col-3 bm-2">
+                                <strong>Department:</strong>
+                                <p t-field="o.department" class="m-0"/>
+                            </div>
+                            <div class="col-3 bm-2">
+                                <strong>Branch:</strong>
+                                <p t-field="o.branch" class="m-0"/>
+                            </div>
+                            <div class="col-3 bm-2">
+                                <strong>Order Date:</strong>
+                                <p t-field="o.request_date" class="m-0"/>
+                            </div>
+
+                        </div>
+                        <br/>
+                        <div id="informations" class="row mt32 mb32">
+
+                            <div class="col-6 bm-2">
+                                <strong>Purpose:</strong>
+                                <p t-field="o.purpose" class="m-0"/>
+                            </div>
+                        </div>
+                        <br/>
+                        <table class="table table-sm o_main_table">
+                            <thead>
+                                <tr>
+                                    <th name="th_no" class="small">
+                                        <strong>No</strong>
+                                    </th>
+                                    <th name="th_description" class="small">
+                                        <strong>Name of Product</strong>
+                                    </th>
+                                    <th name="th_uom" class="small">
+                                        <strong>UoM</strong>
+                                    </th>
+                                    <th name="th_quantity" class="small">
+                                        <strong>Qty</strong>
+                                    </th>
+
+                                    <th name="th_quantity" class="small">
+                                        <strong>Budget product</strong>
+                                    </th>
+                                    <th name="th_quantity" class="small">
+                                        <strong>Expected average monthly consumption</strong>
+                                    </th>
+                                    <th name="current_stock_balance" class="small">
+                                        <strong>Current Stock Balance</strong>
+                                    </th>
+
+                                    <th name="selling_price_after_arrival" class="small">
+                                        <strong>Arrival selling price</strong>
+                                    </th>
+
+                                    <th name="expected_margin" class="small">
+                                        <strong>Expected Margin</strong>
+                                    </th>
+
+                                    <th name="arrival_time" class="small">
+                                        <strong>Arrival Time</strong>
+                                    </th>
+
+
+                                    <th name="th_remark" class="small">
+                                        <strong>Remark</strong>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <t t-foreach="o.purhcase_request_lines" t-as="line">
+                                    <tr>
+                                        <td id="no" class="small">
+                                            <span t-esc="line_index + 1"/>
+                                        </td>
+                                        <td id="product" class="small">
+                                            <span t-field="line.product_id"/>
+                                        </td>
+
+                                        <td id="uom" class="small">
+                                            <span t-field="line.product_uom"/>
+                                        </td>
+
+                                        <td id="qty" class="small">
+                                            <span t-field="line.product_qty"/>
+                                        </td>
+
+                                        <td id="budget_product" class="small">
+                                            <span t-field="line.budget_product"/>
+                                        </td>
+                                        <td id="expected_average_mon_cons" class="small">
+                                            <span t-field="line.expected_average_mon_cons"/>
+                                        </td>
+                                        <td id="current_stock_balance" class="small">
+                                            <span t-field="line.current_stock_balance"/>
+                                        </td>
+                                        <td id="selling_price_after_arrival" class="small">
+                                            <span t-field="line.selling_price_after_arrival"/>
+                                        </td>
+
+                                        <td id="expected_margin" class="small">
+                                            <span t-field="line.expected_margin"/>
+                                        </td>
+
+                                        <td id="arrival_time" class="small">
+                                            <span t-field="line.arrival_time"/>
+                                        </td>
+
+
+                                        <td id="remark">
+                                            <span t-field="line.remark"/>
+                                        </td>
+                                    </tr>
+                                </t>
+
+                            </tbody>
+                        </table>
+
+
+                        <div class="oe_structure"/>
+                        <h5>Current Market Analysis</h5>
+
+                        <table class="table table-sm o_main_table">
+                            <thead>
+                                <tr>
+                                    <th name="th_no" class="small">
+                                        <strong>No</strong>
+                                    </th>
+                                    <th name="th_description" class="small">
+                                        <strong>Name of Product</strong>
+                                    </th>
+                                    <th name="th_uom" class="small">
+                                        <strong>Name of Importer</strong>
+                                    </th>
+                                    <th name="manufacturer" class="small">
+                                        <strong>Manufacturer</strong>
+                                    </th>
+
+                                    <th name="unit" class="small">
+                                        <strong>Unit</strong>
+                                    </th>
+                                    <th name="th_quantity" class="small">
+                                        <strong>Available stock</strong>
+                                    </th>
+                                    <th name="current_stock_balance" class="small">
+                                        <strong>Seling Unit Price</strong>
+                                    </th>
+
+                                    <th name="selling_price_after_arrival" class="small">
+                                        <strong>EPSS Stock volume</strong>
+                                    </th>
+
+
+                                    <th name="th_remark" class="small">
+                                        <strong>Remark</strong>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="request.env['droga.purhcase.request.market.analysis'].search([('purhcase_request_id', '=', o.name)])"
+                                   t-as="obj">
+                                    <tr>
+                                        <td class="small">
+                                            <span t-esc="obj_index + 1"/>
+                                        </td>
+                                        <td class="small">
+                                            <span t-field="obj.pr_line.product_id"/>
+                                        </td>
+                                        <td class="small">
+                                            <span t-field="obj.importer_name"/>
+                                        </td>
+                                        <td class="small">
+                                            <span t-field="obj.manufacturer"/>
+                                        </td>
+                                        <td class="small">
+                                            <span t-field="obj.unit"/>
+                                        </td>
+                                        <td class="small">
+                                            <span t-field="obj.avail_stock"/>
+                                        </td>
+                                        <td class="small">
+                                            <span t-field="obj.sell_up"/>
+                                        </td>
+                                        <td class="small">
+                                            <span t-field="obj.epss_volume"/>
+                                        </td>
+                                        <td class="small">
+                                            <span t-field="obj.local_man_status"/>
+                                        </td>
+                                        <td class="small">
+                                            <span t-field="obj.remark"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+
+                        <hr/>
+                        <div id="informations" class="row mt32 mb32">
+
+                            <t t-foreach="o.approvals" t-as="approval">
+                                <t t-if="approval.method == 'verify_request'">
+                                    <div class="col-6 bm-2">
+                                        <strong>Checked By:</strong>
+                                        <span t-field="approval.user_id.name" class="m-0"/>
+                                        <br/>
+                                        <br/>
+                                        <strong>Date:</strong>
+                                        <span t-field="approval.create_date" class="m-0"/>
+
+                                    </div>
+                                </t>
+                                <t t-if="approval.method == 'approve_request'">
+                                    <div class="col-6 bm-2">
+
+                                        <strong>Approved By:</strong>
+                                        <span t-field="approval.user_id.name" class="m-0"/>
+                                        <br/>
+                                        <br/>
+                                        <strong>Date:</strong>
+                                        <span t-field="approval.create_date" class="m-0"/>
+
+
+                                    </div>
+                                </t>
+                            </t>
+
+                        </div>
+
+
+                    </div>
+                </t>
+            </t>
+        </t>
+
+    </template>
+
+
+    <!-- pivot report purchase request detail top 10 items -->
+    <record id="droga_purchase_request_top_ten_detail_pivot" model="ir.ui.view">
+        <field name="name">Foreign Purchase Request Detail</field>
+        <field name="model">droga.purhcase.request.line</field>
+        <field name="arch" type="xml">
+            <pivot string="Purchase Detail">
+                <field name="total_price" type="measure" string="Total Price ETB"/>
+                <field name="product_qty" type="measure" string="Quantity"/>
+
+                <field name="total_price" type="column"/>
+                <field name="product_id" type="row"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="droga_purchase_request_detail_top_ten_items_action" model="ir.actions.act_window">
+        <field name="name">Top 10 Requested Items</field>
+        <field name="res_model">droga.purhcase.request.line</field>
+        <field name="view_mode">pivot</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+        (0, 0, {'view_mode': 'pivot', 'view_id': ref('droga_purchase_request_top_ten_detail_pivot')})]"/>
+
+    </record>
+
+
+    <!-- tree view report for top 10 items by amount -->
+    <record id="droga_purchase_request_foreign_by_amount_report_tree" model="ir.ui.view">
+        <field name="name">Top 10 Items by Amount Tree View</field>
+        <field name="model">droga.purchase.request.foreign.by.amount.report</field>
+        <field name="arch" type="xml">
+            <tree string="Top 10 Items by Amount">
+                <field name="product_id"/>
+                <field name="quantity"/>
+                <field name="total_price_etb"/>
+                <field name="rank" string="Top"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- pivot view report for top 10 items by amount -->
+    <record id="droga_purchase_request_foreign_by_amount_report_pivot" model="ir.ui.view">
+        <field name="name">Top 10 Items by Amount Pivot View</field>
+        <field name="model">droga.purchase.request.foreign.by.amount.report</field>
+        <field name="arch" type="xml">
+            <pivot string="Top 10 Items by Amount">
+                <field name="product_id" type="row"/>
+                <field name="quantity"/>
+                <field name="total_price_etb" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- graph view report for top 10 items by amount -->
+    <record id="droga_purchase_request_foreign_by_amount_report_graph" model="ir.ui.view">
+        <field name="name">Top 10 Items by Amount Graph View</field>
+        <field name="model">droga.purchase.request.foreign.by.amount.report</field>
+        <field name="arch" type="xml">
+            <graph string="Top 10 Items by Amount">
+                <field name="product_id"/>
+                <field name="quantity" type="measure"/>
+                <field name="total_price_etb" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- search view -->
+    <record id="droga_purchase_request_foreign_by_amount_report_search" model="ir.ui.view">
+        <field name="name">Top 10 Items by Amount Graph View</field>
+        <field name="model">droga.purchase.request.foreign.by.amount.report</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="product_id"/>
+                <field name="total_price_etb"/>
+                <field name="rank"/>
+                <separator/>
+                <filter string="Top 10" name="top_10" domain="[('rank', '&lt;=', 10)]"/>
+                <filter string="Top 20" name="top_20" domain="[('rank', '&lt;=', 20)]"/>
+                <filter string="Top 50" name="top_50" domain="[('rank', '&lt;=', 50)]"/>
+                <filter string="Top 100" name="top_100" domain="[('rank', '&lt;=', 100)]"/>
+                <filter string="Top 1000" name="top_1000" domain="[('rank', '&lt;=', 1000)]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- action for top 10 items by amount-->
+    <record id="droga_purchase_request_foreign_by_amount_report_action" model="ir.actions.act_window">
+        <field name="name">Top 10 Items by Amount</field>
+        <field name="res_model">droga.purchase.request.foreign.by.amount.report</field>
+        <field name="view_mode">tree,pivot,graph</field>
+        <field name="domain">[]</field>
+        <field name="context">{"search_default_top_10":1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Top 10 Items by Amount
+            </p>
+        </field>
+    </record>
+
+
+    <!-- tree view report for top 10 items by quantity -->
+    <record id="droga_purchase_request_foreign_by_quantity_report_tree" model="ir.ui.view">
+        <field name="name">Top 10 Items by quantity Tree View</field>
+        <field name="model">droga.purchase.request.foreign.by.quantity.report</field>
+        <field name="arch" type="xml">
+            <tree string="Top 10 Items by quantity">
+                <field name="product_id"/>
+                <field name="quantity"/>
+                <field name="total_price_etb"/>
+                <field name="rank" string="Top"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- pivot view report for top 10 items by quantity -->
+    <record id="droga_purchase_request_foreign_by_quantity_report_pivot" model="ir.ui.view">
+        <field name="name">Top 10 Items by quantity Pivot View</field>
+        <field name="model">droga.purchase.request.foreign.by.quantity.report</field>
+        <field name="arch" type="xml">
+            <pivot string="Top 10 Items by Quantity">
+                <field name="product_id" type="row"/>
+                <field name="quantity" type="measure"/>
+                <field name="total_price_etb" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- graph view report for top 10 items by quantity -->
+    <record id="droga_purchase_request_foreign_by_quantity_report_graph" model="ir.ui.view">
+        <field name="name">Top 10 Items by quantity Graph View</field>
+        <field name="model">droga.purchase.request.foreign.by.quantity.report</field>
+        <field name="arch" type="xml">
+            <graph string="Top 10 Items by Quantity">
+                <field name="product_id"/>
+                <field name="quantity" type="measure"/>
+                <field name="total_price_etb" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- search view -->
+    <record id="droga_purchase_request_foreign_by_quantity_report_search" model="ir.ui.view">
+        <field name="name">Top 10 Items by quantity Graph View</field>
+        <field name="model">droga.purchase.request.foreign.by.quantity.report</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="product_id"/>
+                <field name="quantity"/>
+                <field name="rank"/>
+                <separator/>
+                <filter string="Top 10" name="top_10" domain="[('rank', '&lt;=', 10)]"/>
+                <filter string="Top 20" name="top_20" domain="[('rank', '&lt;=', 20)]"/>
+                <filter string="Top 50" name="top_50" domain="[('rank', '&lt;=', 50)]"/>
+                <filter string="Top 100" name="top_100" domain="[('rank', '&lt;=', 100)]"/>
+                <filter string="Top 1000" name="top_1000" domain="[('rank', '&lt;=', 1000)]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- action for top 10 items by quantity-->
+    <record id="droga_purchase_request_foreign_by_quantity_report_action" model="ir.actions.act_window">
+        <field name="name">Top 10 Items by Quantity</field>
+        <field name="res_model">droga.purchase.request.foreign.by.quantity.report</field>
+        <field name="view_mode">tree,pivot,graph</field>
+        <field name="domain">[]</field>
+        <field name="context">{"search_default_top_10":1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Top 10 Items by quantity
+            </p>
+        </field>
+    </record>
+
+
+    <!--Budget,Core and others in Value and Percentage -->
+    <record id="droga_purchase_request_line_by_budget_core_report_pivot" model="ir.ui.view">
+        <field name="name">Budget,Core and others in Value and Percentage</field>
+        <field name="model">droga.purhcase.request.line</field>
+        <field name="arch" type="xml">
+            <pivot string="Budget,Core and others in Value and Percentage">
+                <field name="product_id" type="row"/>
+                <field name="budget_product" type="row"/>
+                <field name="is_core_product" type="row"/>
+                <field name="total_price" type="measure" string="Total Price ETB"/>
+                <field name="total_price_foregin" type="measure" string="Total Price USD"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- action for top 10 items by quantity-->
+    <record id="droga_purchase_request_line_by_budget_core_report_action" model="ir.actions.act_window">
+        <field name="name">Budget,Core and others in Value and Percentage</field>
+        <field name="res_model">droga.purhcase.request.line</field>
+        <field name="view_mode">pivot</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Budget,Core and others in Value and Percentage
+            </p>
+        </field>
+    </record>
+
+    <!-- PR Vs created RFQ in percentage and no -->
+    <record id="droga_purchase_request_foreign_pr_vs_rfq_view_pivot" model="ir.ui.view">
+        <field name="name">Purchase Request</field>
+        <field name="model">droga.purhcase.request</field>
+        <field name="arch" type="xml">
+            <pivot string="Purchase Request" display_quantity="1" sample="1">
+
+                <field name="request_date" type="row"/>
+
+                <field name="pr_count1" type="measure"/>
+                <field name="rfq_count1" type="measure"/>
+                <field name="po_count1" type="measure"/>
+                <field name="grn_count1" type="measure"/>
+
+            </pivot>
+        </field>
+    </record>
+
+    <!-- action for PR Vs created RFQ in percentage and no -->
+    <record id="droga_purchase_request_foreign_pr_vs_rfq_view_action" model="ir.actions.act_window">
+        <field name="name">PR Vs Created RFQ</field>
+        <field name="res_model">droga.purhcase.request</field>
+        <field name="view_mode">pivot</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                PR Vs created RFQ
+            </p>
+        </field>
+    </record>
+
+
+
+</odoo>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+
+    <menuitem id="regulatory_main_menu" name="Regulatory"
+              web_icon="droga_ra,static/description/icon.png"
+              sequence="10">
+
+        <menuitem
+                id="droga_reg_requests"
+                name="Requests"
+                action="action_droga_bdr_requests_header"
+                sequence="20"
+        />
+
+        <menuitem
+                id="droga_reg_exhibition"
+                name="Suppliers Information Entry"
+                action="action_company_info"
+                sequence="23"
+        />
+
+
+        <menuitem id="droga_regulatory_analysis" name="Analysis" sequence="25">
+
+            <menuitem
+                    id="product_analysis"
+                    name="Product Analysis"
+                    action="droga_product_analysis_action"
+                    sequence="35"/>
+            <menuitem
+                    id="market_analysis"
+                    name="Market Analysis"
+                    action="action_droga_bdr_market_analysis"
+                    sequence="40"/>
+
+
+        </menuitem>
+
+
+        <menuitem id="droga_regulatory_reg" name="Regulatory" sequence="30">
+
+            <menuitem id="droga_regulatory_pre_import" name="Pre Import" sequence="15">
+                <menuitem id="droga_reg_pre_import" name="Pre-Import Permit" action="action_pre_import_permit"/>
+                <menuitem id="droga_reg_pre_import_release_permit" name="Release Permit"
+                          action="action_pre_import_permit_generated"/>
+            </menuitem>
+            <menuitem id="droga_regulatory_gmp" name="GMP" sequence="20">
+                <menuitem id="droga_reg_gmp_follow_up" name="GMP Follow Up" action="action_gmp_inspection"/>
+            </menuitem>
+
+            <menuitem id="droga_regulatory_agency_agreement" name="Agreement" sequence="22">
+                <menuitem id="droga_reg_agency_agreement" name="Agency Agreement" action="action_agency_agreement"/>
+            </menuitem>
+
+            <menuitem id="droga_regulatory_registered_list_follow_up" name="Follow UP List" sequence="30">
+                <menuitem id="droga_reg_registered_follow" name="Company Follow Up"
+                          action="action_registration_follow_up" sequence="10"/>
+                <menuitem id="droga_reg_registered_list" name="Registered List"
+                          action="action_final_registered_renewal" sequence="20"/>
+            </menuitem>
+
+
+        </menuitem>
+
+        <menuitem id="droga_regulatory_reports" name="Reports" sequence="35">
+            <menuitem id="droga_regulatory_reports_header" name="Market Analysis" sequence="10"/>
+
+            <menuitem id="droga_reg_market_analysis" name="General Report"
+                      action="action_market_analysis_report" sequence="15"/>
+
+            <menuitem id="droga_reg_market_analysis" name="Category Based Report"
+                      action="action_market_analysis_category_report" sequence="20"/>
+
+        </menuitem>
+
+
+        <menuitem id="droga_regulatory_settings" name="Settings" sequence="40">
+            <menuitem
+                    id="droga_product_analysis"
+                    name="Criteria Configuration"
+                    action="droga_product_analysis_tree_action"
+                    sequence="10"/>
+
+            <menuitem
+                    id="droga_product_competitors"
+                    name="Competitors"
+                    action="action_market_competitors"
+                    sequence="20"/>
+            <menuitem
+                    id="droga_grading"
+                    name="Grading Model"
+                    action="droga_grading_model_action"/>
+            <menuitem
+                    id="droga_bdr_agents"
+                    name="Agents"
+                    action="action_droga_bdr_agents"/>
+            <menuitem
+                    id="droga_bdr_suppliers"
+                    name="Suppliers"
+                    action="action_supplier_analysis"/>
+
+
+        </menuitem>
+
+    </menuitem>
+
+</odoo>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="stock_purchase_order_by_item_tree" model="ir.ui.view">
+        <field name="name">purchase.order.tree.transaction.tree</field>
+        <field name="model">purchase.order.line</field>
+        <field name="arch" type="xml">
+            <tree string="Purchase order by item" delete="false" create="false">
+                <field name="id"/>
+                <field name="order_id"/>
+                <field name="partner_id"/>
+                <field name="product_id"/>
+                <field name="product_uom"/>
+                <field name="product_uom_qty" sum="Total"/>
+                <field name='price_unit' sum="Total"/>
+                <field name='price_tax' sum="Total"/>
+                <field name='price_subtotal' sum="Total"/>
+                <field name='price_total' sum="Total"/>
+                <field name='date_order'/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="stock_purchase_order_by_item_search" model="ir.ui.view">
+        <field name="name">purchase.order.tree.transaction.search</field>
+        <field name="model">purchase.order.line</field>
+        <field name="arch" type="xml">
+            <search string="Stock on hand">
+                <field name="id"/>
+                <field name="order_id"/>
+                <field name="partner_id"/>
+                <field name="product_id"/>
+                <field name="product_uom"/>
+                <field name="product_uom_qty" sum="Total"/>
+                <field name='price_unit' sum="Total"/>
+                <field name='price_tax' sum="Total"/>
+                <field name='price_subtotal' sum="Total"/>
+                <field name='price_total' sum="Total"/>
+                <field name='date_order'/>
+                <filter string="Today"
+                        domain="[('date_order', '&gt;=', context_today().strftime('%Y-%m-%d')), ('date_order', '&lt;', (context_today() + relativedelta(days=1)).strftime('%Y-%m-%d'))]"
+                        name="today_trans"></filter>
+
+                <filter string="Current week"
+                        domain="[('date_order', '&lt;=', ((context_today()+relativedelta(weeks=0, weekday=-1)).strftime('%Y-%m-%d'))),
+                    ('date_order', '&gt;=', ((context_today()-relativedelta(weeks=1, weekday=0)).strftime('%Y-%m-%d')))]"
+                        name="current_week_trans"></filter>
+
+                <filter string="Previous week"
+                        domain="[('date_order', '&gt;=', ((context_today()+relativedelta(weeks=-2, days=1, weekday=0)).strftime('%%Y-%%m-%%d'))),
+                       ('date_order', '&lt;=', ((context_today()+relativedelta(weeks=-1, weekday=6)).strftime('%%Y-%%m-%%d')))]"
+                        name="previous_week_trans"></filter>
+
+                <filter string="Current month"
+                        domain="[('date_order','&lt;',(context_today()+relativedelta(months=1)).strftime('%%Y-%%m-01')),
+                        ('date_order','&gt;=',time.strftime('%%Y-%%m-01'))]"
+                        name="current_month_trans"></filter>
+
+                <filter string="Previous month"
+                        domain="[('date_order','&gt;=',(context_today()-relativedelta(months=1)).strftime('%%Y-%%m-01')),
+                        ('date_order','&lt;',time.strftime('%%Y-%%m-01'))]"
+                        name="previous_month_trans"></filter>
+
+            </search>
+        </field>
+    </record>
+
+
+    <record model="ir.actions.act_window" id="stock_purchase_order_by_item_action">
+        <field name="name">Purchase order by item</field>
+        <field name="res_model">purchase.order.line</field>
+        <field name="view_mode">tree</field>
+        <field name="search_view_id" ref="stock_purchase_order_by_item_search"></field>
+        <field name="view_id" ref="stock_purchase_order_by_item_tree"/>
+    </record>
+
+    <menuitem
+            id="droga_po_by_item"
+            name="Purchase order by item"
+            action="stock_purchase_order_by_item_action"
+            parent="droga_finance.droga_reciveables_report"
+            groups="droga_finance.business_control_specialist_group"
+            sequence="25"/>
+</odoo>

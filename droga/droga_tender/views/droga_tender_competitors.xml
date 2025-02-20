@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="droga_tender_competitors_view_tree" model="ir.ui.view">
+            <field name="name">droga.tender.competitors.view.tree</field>
+            <field name="model">droga.tender.submission.detail</field>
+        <field name="arch" type="xml">
+            <form delete="0">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="parent_tender_submission" string="Tender Description" readonly="True" options="{'no_create':True,'no_open':True}" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Competitors">
+                            <field name="competi_id" mode="tree">
+                                <tree editable="bottom">
+                                    <!--
+                                    <field name="lot_number"></field>
+                                    <field name="item_des"></field>
+                                    <field name="type_item"></field>
+                                    -->
+                                    <field name="competitor" options="{'no_create':True,'no_open':True}"></field>
+                                    <field name="unit_of_measure" options="{'no_create':True,'no_open':True}"></field>
+                                    <field name="quantity"></field>
+                                    <field name="unit_price" widget='monetary'></field>
+                                    <field name="amount" widget='monetary'></field>
+                                    <field name="currency" options="{'no_create':True,'no_open':True}"></field>
+                                    <field name="tech_result"></field>
+                                    <field name="status"></field>
+                                    <field name="remark"></field>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+</odoo>

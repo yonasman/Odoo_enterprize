@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <!--actions -->
+    <record id="account_asset_sub_category_action" model="ir.actions.act_window">
+        <field name="name">Asset Sub Category</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">account.asset.subcat</field>
+        <field name="view_mode">tree</field>
+
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Asset Sub Category
+            </p>
+        </field>
+    </record>
+
+
+    <menuitem id="droag_account_assets" name="Asset" sequence="31"
+              parent="account_accountant.menu_accounting" groups="account.group_account_manager">
+        <menuitem id="droag_account_assets_menu" name="Assets" sequence="1"
+                  groups="account.group_account_manager" action="account_asset.action_account_asset_form"/>
+        <menuitem id="droag_account_asset_category_menu" name="Asset Category" sequence="2"
+                  groups="account.group_account_manager" action="account_asset.action_account_asset_model_form"/>
+        <menuitem id="droag_account_asset_sub_category_menu" name="Asset Sub Category" sequence="3"
+                  groups="account.group_account_manager" action="account_asset_sub_category_action"/>
+    </menuitem>
+
+
+</odoo>

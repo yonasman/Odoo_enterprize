@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+
+    <!-- report form -->
+    <record id="droga_payroll_sheet_report_form" model="ir.ui.view">
+        <field name="name">hr.payslip.run.report.form</field>
+        <field name="model">hr.payslip.run.report</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <group>
+                    <group>
+                        <field name="batch" options="{'no_create':True,'no_open':True}" invisible="1"/>
+                        <field name="cost_center_analytic" widget="many2many_tags" options="{'no_create':True,'no_open':True}"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_generate_payroll_master_report" string="Print" type="object"
+                            class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- inherit -->
+    <record id="droga_payroll_sheet_report_inherit_form" model="ir.ui.view">
+        <field name="name">hr.payslip.run.form</field>
+        <field name="model">hr.payslip.run</field>
+        <field name="inherit_id" ref="hr_payroll.hr_payslip_run_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='company_id']" position="before">
+                <field name="fiscal_year" options="{'no_create':True,'no_open':True}"/>
+                <field name="period" options="{'no_create':True,'no_open':True}"/>
+            </xpath>
+            <xpath expr="//field[@name='date_start']" position="attributes">
+                <attribute name="readonly">0</attribute>
+            </xpath>
+            <xpath expr="//field[@name='date_end']" position="attributes">
+                <attribute name="readonly">0</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- action for witholding report-->
+    <record id="droga_payroll_sheet_report_action" model="ir.actions.act_window">
+        <field name="name">Payroll Master Report - Excel</field>
+        <field name="res_model">hr.payslip.run.report</field>
+        <field name="view_mode">form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+        (0, 0, {'view_mode': 'form', 'view_id': ref('droga_payroll_sheet_report_form')})]"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

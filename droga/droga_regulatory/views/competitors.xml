@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_market_competitors_tree" model="ir.ui.view">
+    <field name="name">market.competitors.tree</field>
+    <field name="model">market.competitors</field>
+    <field name="arch" type="xml">
+        <tree create="true" editable='top' string="Registered Competitors">
+            <field name="name"/>
+            <field name="phone"/>
+            <field name="products_offered" widget="many2many_tags"/>
+            <field name="website"/>
+        </tree>
+    </field>
+</record>
+
+
+
+<!-- Action -->
+<record id="action_market_competitors" model="ir.actions.act_window">
+    <field name="name">Market Competitors</field>
+    <field name="res_model">market.competitors</field>
+    <field name="view_mode">tree</field>
+</record>
+</odoo>

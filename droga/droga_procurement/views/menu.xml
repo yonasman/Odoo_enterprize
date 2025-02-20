@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--  Menu Structure for Procurement -->
+    <!-- rename purchase to procurement -->
+    <record model="ir.ui.menu" id="purchase.menu_purchase_root">
+        <field name="name">Procurement</field>
+    </record>
+
+    <!-- Local Procurement -->
+    <menuitem id="droag_procurement_local" name="Local Procurement" sequence="0" parent="purchase.menu_purchase_root"
+              groups="purchase.group_purchase_manager,purchase.group_purchase_user">
+        <menuitem id="droga_purhcase_request_menu" name="Purchase Request" sequence="1"
+                  action="droga_purchase_request_local_action"
+                  groups="purchase.group_purchase_manager,purchase.group_purchase_user"/>
+        <menuitem id="droga_purhcase_rfq_menu" name="Request for Quotation" sequence="2"
+                  action="droga_purchase_request_rfq_local_action"
+                  groups="purchase.group_purchase_manager,purchase.group_purchase_user"/>
+        <menuitem id="droga_purchase_order_local_menu" name="Purchase Order" sequence="3"
+                  action="purchase_form_local_action"
+                  groups="purchase.group_purchase_manager,purchase.group_purchase_user"/>
+        <menuitem id="droga_purhcase_payment_request_withoutpo_menu" name="Payment Request Without PO" sequence="4"
+                  action="droga_finance.droga_account_payment_request_withoutpo_action"
+                  groups="purchase.group_purchase_manager,purchase.group_purchase_user"/>
+
+    </menuitem>
+
+    <!-- Foreign Procurement -->
+    <menuitem id="droag_procurement_foregin" name="Foreign Procurement" sequence="0"
+              parent="purchase.menu_purchase_root"
+              groups="purchase.group_purchase_manager,purchase.group_purchase_user">
+        <menuitem id="droga_purhcase_request_foregin_menu" name="Purchase Request" sequence="1"
+                  action="droga_purhcase_request_foregin_action"
+                  groups="purchase.group_purchase_manager,purchase.group_purchase_user"/>
+        <menuitem id="droga_purhcase_rfq_foregin_menu" name="Request for Quotation" sequence="2"
+                  action="droga_purchase_request_rfq_foregin_main_action"
+                  groups="purchase.group_purchase_manager,purchase.group_purchase_user"/>
+        <menuitem id="droga_purchase_order_foreign_menu" name="Purchase Order" sequence="3"
+                  action="purchase_form_foreign_action"
+                  groups="purchase.group_purchase_manager,purchase.group_purchase_user"/>
+
+        <menuitem id="droga_account_foreign_currency_request_procurement_menu" name="Foreign Currency Request"
+                  action="droga_procurement.droga_foreign_currency_request_action1"
+                  groups="account.group_account_manager"
+                  sequence="4"/>
+
+    </menuitem>
+
+    <!--Pharmacy Procurement -->
+    <menuitem id="droag_procurement_pharmacy" name="Pharmacy Procurement" sequence="0"
+              parent="purchase.menu_purchase_root"
+              groups="purchase.group_purchase_manager,purchase.group_purchase_user">
+        <menuitem id="droga_store_request_pharmacy_menu" name="Store Requisition" sequence="1"
+                  action="droga_inventory.droga_inventory_office_supplies_request_pharmacy_warehouse_action"
+                  groups="purchase.group_purchase_manager,purchase.group_purchase_user"/>
+        <menuitem id="droga_purhcase_request_pharmacy_menu" name="Purchase Request" sequence="2"
+                  action="droga_purchase_request_pharmacy_action"
+                  groups="purchase.group_purchase_manager,purchase.group_purchase_user"/>
+        <menuitem id="droga_purhcase_rfq_pharmacy_menu" name="Request for Quotation" sequence="3"
+                  action="droga_purchase_request_rfq_pharmacy_action"
+                  groups="purchase.group_purchase_manager,purchase.group_purchase_user"/>
+        <menuitem id="droga_purchase_order_pharmacy_menu" name="Purchase Order" sequence="4"
+                  action="purchase_form_pharmacy_action"
+                  groups="purchase.group_purchase_manager,purchase.group_purchase_user"/>
+    </menuitem>
+
+    <!-- reporting -->
+    <menuitem id="droga_purcahse_request_report_parent" name="Purchase Request" sequence="1"
+              parent="purchase.purchase_report_main"
+              groups="purchase.group_purchase_manager,purchase.group_purchase_user">
+        <menuitem id="droga_purcahse_request_report" name="Purchase Request Report" sequence="1"
+                  action="droga_purhcase_request_report_view_action"
+                  groups="purchase.group_purchase_manager,purchase.group_purchase_user"/>
+        <menuitem id="droga_purchase_request_foreign_by_amount_report_menu" name="Top 10 Items by Amount" sequence="2"
+                  action="droga_purchase_request_foreign_by_amount_report_action"
+                  groups="purchase.group_purchase_manager,purchase.group_purchase_user"/>
+
+        <menuitem id="droga_purchase_request_foreign_by_quantity_report_menu" name="Top 10 Items by Quantity"
+                  sequence="3"
+                  action="droga_purchase_request_foreign_by_quantity_report_action"
+                  groups="purchase.group_purchase_manager,purchase.group_purchase_user"/>
+
+        <menuitem id="droga_purchase_request_line_by_budget_core_report_menu" name="Budget,Core and others in Value and Percentage"
+                  sequence="4"
+                  action="droga_purchase_request_line_by_budget_core_report_action"
+                  groups="purchase.group_purchase_manager,purchase.group_purchase_user"/>
+
+        <menuitem id="droga_purchase_request_foreign_pr_vs_rfq_view_menu" name="PR Vs Created RFQ"
+                  sequence="5"
+                  action="droga_purchase_request_foreign_pr_vs_rfq_view_action"
+                  groups="purchase.group_purchase_manager,purchase.group_purchase_user"/>
+        <menuitem id="droga_procurement_foreign_lead_time_report_menu" name="Procurement Lead Time"
+                  sequence="6"
+                  action="droga_procurement_foreign_lead_time_report_action"
+                  groups="purchase.group_purchase_manager,purchase.group_purchase_user"/>
+    </menuitem>
+
+    <menuitem id="droga_request_for_quotation_report_parent" name="Request for Quotation" sequence="2"
+              parent="purchase.purchase_report_main"
+              groups="purchase.group_purchase_manager,purchase.group_purchase_user">
+
+        <menuitem id="droga_purchase_request_rfq_foregin_report_menu" name="Request for Quotation Report" sequence="1"
+                  action="droga_purchase_request_rfq_foregin_report_action"
+                  groups="purchase.group_purchase_manager,purchase.group_purchase_user"/>
+
+
+        <menuitem id="droga_purchase_rfq_mod_of_shipment_report_menu" name="Air Vs Sea by Amount and Count" sequence="2"
+                  action="droga_purchase_rfq_mod_of_shipment_report_action"
+                  groups="purchase.group_purchase_manager,purchase.group_purchase_user"/>
+
+        <menuitem id="droga_purchase_rfq_lc_vs_tt_report_menu" name="LCs Vs TT by Amount and Count" sequence="3"
+                  action="droga_purchase_rfq_lc_vs_tt_action"
+                  groups="purchase.group_purchase_manager,purchase.group_purchase_user"/>
+
+        <menuitem id="droga_purchase_request_rfq_landed_cost_main_report_menu" name="Expected Costs" sequence="4"
+                  action="droga_purchase_request_rfq_landed_cost_main_action"
+                  groups="purchase.group_purchase_manager,purchase.group_purchase_user"/>
+
+        <menuitem id="droga_purchase_rfq__line_product_by_unit_and_total_menu" name="RFQ Products by Unit and Total Cost" sequence="5"
+                  action="droga_purchase_rfq__line_product_by_unit_and_total_action"
+                  groups="purchase.group_purchase_manager,purchase.group_purchase_user"/>
+
+    </menuitem>
+
+    <menuitem id="droag_foreign_request_report_parent" name="Foreign Currency Request" sequence="3"
+              parent="purchase.purchase_report_main"
+              groups="purchase.group_purchase_manager,purchase.group_purchase_user">
+
+        <menuitem id="droga_foreign_currency_request_report_menu" name="Currency Requests" sequence="4"
+                  action="droga_foreign_currency_request_action2"
+                  groups="purchase.group_purchase_manager,purchase.group_purchase_user"/>
+
+    </menuitem>
+
+    <menuitem id="droga_purcahse_report_lc_parent" name="Letter of Credit" sequence="4"
+              parent="purchase.purchase_report_main"
+              groups="purchase.group_purchase_manager,purchase.group_purchase_user">
+        <menuitem id="droga_purcahse_report_lc" name="LC Report" sequence="1" action="droga_purchase_lc_report_action"
+                  groups="purchase.group_purchase_manager,purchase.group_purchase_user"/>
+    </menuitem>
+
+    <menuitem id="droga_purchase_order_parent" name="Purchase Order" sequence="10"
+              parent="purchase.purchase_report_main"
+              groups="purchase.group_purchase_manager,purchase.group_purchase_user">
+        <menuitem id="droga_purchase_order_cost_report_report_menu" name="Cost Report" sequence="1"
+                  action="droga_purchase_order_cost_report_action"
+                  groups="purchase.group_purchase_manager,purchase.group_purchase_user"/>
+
+        <menuitem id="droga_purchase_order_by_product_report_menu" name="Purchase Order by Product" sequence="2"
+                  action="droga_purchase_order_by_product_report_action"
+                  groups="purchase.group_purchase_manager,purchase.group_purchase_user"/>
+
+        <menuitem id="droga_purchase_order_by_product_price_variance_rfq_po_report_menu" name="Price Variance on RFQ and PO" sequence="2"
+                  action="droga_purchase_order_by_product_price_variance_rfq_po_report_action"
+                  groups="purchase.group_purchase_manager,purchase.group_purchase_user"/>
+    </menuitem>
+
+
+    <!-- Configurations -->
+    <menuitem id="droga_purhcase_supplier_registration" name="Vendors" sequence="100"
+              parent="purchase.menu_purchase_config" action="account.res_partner_action_supplier"
+              groups="purchase.group_purchase_manager,purchase.group_purchase_user"/>
+    <menuitem id="droga_purhcase_committee_menu" name="Procurement Committee" sequence="101"
+              parent="purchase.menu_purchase_config" action="committee_configuration_view_action"
+              groups="purchase.group_purchase_manager,purchase.group_purchase_user"/>
+    <menuitem id="droga_purhcase_procurement_phase_menu" name="Foregin Procurement Phase" sequence="102"
+              parent="purchase.menu_purchase_config" action="droga_foregin_purchase_phases_view__action"
+              groups="purchase.group_purchase_manager,purchase.group_purchase_user"/>
+    <menuitem id="droga_purhcase_procurement_reconciliation_documents_menu" name="Reconciliation Documents"
+              sequence="102" parent="purchase.menu_purchase_config" action="droga_purchase_reconciliation_docs_action"
+              groups="purchase.group_purchase_manager,purchase.group_purchase_user"/>
+    <menuitem id="droga_purchase_port_of_loading" name="Port of Loading" sequence="104"
+              parent="purchase.menu_purchase_config" action="droga_purchase_port_of_loading_action"
+              groups="purchase.group_purchase_manager,purchase.group_purchase_user"/>
+    <menuitem id="droga_purchase_competitors_menu" name="Competitors" sequence="105"
+              parent="purchase.menu_purchase_config" action="droga_purchase_competitor_action"
+              groups="purchase.group_purchase_manager,purchase.group_purchase_user"/>
+
+
+    <!-- Purchase request menus for finance -->
+    <menuitem id="droga_account_purchase_requests_local_approval_menu" name="Purchase Request - Local"
+              action="droga_purhcase_request_for_approval_action" groups="account.group_account_manager" sequence="4"
+              parent="droga_finance.droag_account_payment_request_froms"/>
+    <menuitem id="droga_account_purchase_requests_foregin_approval_menu" name="Purchase Request - Foregin"
+              action="droga_purhcase_request_foregin_for_approval_action" groups="account.group_account_manager"
+              sequence="5" parent="droga_finance.droag_account_payment_request_froms"/>
+    <menuitem id="droga_account_foreign_currency_request_menu" name="Foreign Currency Request"
+              action="droga_procurement.droga_foreign_currency_request_action1" groups="account.group_account_manager"
+              sequence="6" parent="droga_finance.droag_account_payment_request_froms"/>
+
+
+</odoo>

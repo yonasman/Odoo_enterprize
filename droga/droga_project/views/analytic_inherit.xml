@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="droga_project_analytic_extension" model="ir.ui.view">
+        <field name="name">account.analytic.account.inherit</field>
+        <field name="model">account.analytic.account</field>
+        <field name="inherit_id" ref="analytic.view_account_analytic_account_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='code']" position="after">
+                <field name="project" options="{'no_create':True,'no_open':True}"/>
+                <field name="profit_center" string="cost_center" options="{'no_create':True,'no_open':True}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

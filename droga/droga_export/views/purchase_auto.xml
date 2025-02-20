@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="purchase_order_form_auto_fill" model="ir.ui.view">
+        <field name="name">Purchase Order Auto Fill</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_rfq_send'][3]" position="after">
+                <button name="fill_po" string="Auto fill PO" type="object"/>
+            </xpath>
+
+            <xpath expr="//button[@name='action_view_invoice']" position="after">
+                <field name="sub_cont_sent" invisible="1"></field>
+                <field name="show_sub_contractor_price" invisible="1"></field>
+                <button name="open_deliveries" type="object" attrs="{'invisible': [('sub_cont_sent', '=', False)]}"
+                        string="Sub-cont. issues" states="purchase" class="oe_stat_button" icon="fa-file-text"/>
+            </xpath>
+
+            <xpath expr="/form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='price_unit']" position="before">
+                <field name="sub_cont_price" string="Sub-cont. price"
+                       attrs="{'column_invisible': [('parent.show_sub_contractor_price', '==', False)]}"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
+
+

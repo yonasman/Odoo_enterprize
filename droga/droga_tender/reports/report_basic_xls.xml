@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_droga_tender_master_excel" model="ir.actions.report">
+        <field name="name">Tender master report excel</field>
+        <field name="model">droga.tender.master</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">droga_tender.tender_master_xls_rep</field>
+        <field name="report_file">droga_tender.tender_master_xls_rep</field>
+        <field name="binding_model_id" ref="model_droga_tender_master"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

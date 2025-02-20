@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+
+
+    <record model="ir.ui.view" id="view_droga_pharma_mtm_schedule_detail_tree">
+        <field name="name">droga.pharma.mtm.follow_up.detail.tree</field>
+        <field name="model">droga.pharma.mtm.follow_up.detail</field>
+        <field name="arch" type="xml">
+            <tree create="0" delete="0">
+                <field name="indication"/>
+                <field name="drug"/>
+                <field name="drug_therapy_problem"/>
+                <field name="drug_therapy_cause"/>
+                <field name="intervention"/>
+                <field name="intervention_implemented"/>
+                <field name="outcome"/>
+
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_droga_pharma_mtm_schedule_detail_form">
+            <field name="name">droga.pharma.mtm.schedule.detail.form</field>
+            <field name="model">droga.pharma.mtm.follow_up.detail</field>
+            <field name="arch" type="xml">
+                <form string="MTM Detail">
+                    <group>
+                        <field name="indication"/>
+                        <field name="drug"/>
+                        <field name="drug_therapy_problem"/>
+                        <field name="drug_therapy_cause"/>
+                        <field name="intervention"/>
+                        <field name="intervention_implemented"/>
+                        <field name="outcome"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+
+    <record model="ir.actions.act_window" id="action_droga_pharma_mtm_schedule_detail_tree">
+        <field name="name">Follow up Detail</field>
+        <field name="res_model">droga.pharma.mtm.follow_up.detail</field>
+        <field name="view_mode">tree,form</field>
+        <field name="target">current</field>
+    </record>
+
+
+</odoo>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record model="ir.ui.view" id="view_droga_pharma_points_earned_tree">
+        <field name="name">droga.pharma.points.earned.tree</field>
+        <field name="model">droga.pharma.points.earned</field>
+        <field name="arch" type="xml">
+            <tree create="0" delete="0">
+                <field name="customer"/>
+                <field name="type"/>
+                <field name="sales_ref"/>
+                <field name="earned_date"/>
+                <field name="points_earned" sum="Total"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_droga_pharma_points_earned_search">
+        <field name="name">droga.pharma.points.earned.search</field>
+        <field name="model">droga.pharma.points.earned</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="customer"/>
+                <field name="type"/>
+                <field name="sales_ref"/>
+                <field name="earned_date"/>
+                <field name="points_earned"/>
+
+                <searchpanel>
+                    <field name="type" string="Type"/>
+                </searchpanel>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_droga_pharma_points_earned_action">
+        <field name="name">Points earned report</field>
+        <field name="res_model">droga.pharma.points.earned</field>
+        <field name="view_mode">tree</field>
+        <field name="target">current</field>
+    </record>
+
+
+</odoo>

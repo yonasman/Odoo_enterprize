@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+self_service_purhcase_request,droga.purhcase.request,droga_procurement.model_droga_purhcase_request,self_service_group,1,1,1,1
+self_service_purhcase_request_line,droga.purhcase.request.line,droga_procurement.model_droga_purhcase_request_line,self_service_group,1,1,1,1
+self_service_account_budget_post,account.budget.post,account_budget.model_account_budget_post,self_service_group,1,1,1,1
+self_service_payment_request,droga.account.payment.request,droga_finance.model_droga_account_payment_request,self_service_group,1,1,1,1
+self_service_office_supplies_request,droga.inventory.office.supplies.request,droga_inventory.model_droga_inventory_office_supplies_request,self_service_group,1,1,1,1
+self_service_office_supplies_request_detail,droga.inventory.office.supplies.request.detail,droga_inventory.model_droga_inventory_office_supplies_request_detail,self_service_group,1,1,1,1
+self_service_head_count_request,hr.head.count.request,droga_hr.model_hr_head_count_request,self_service_group,1,1,1,1

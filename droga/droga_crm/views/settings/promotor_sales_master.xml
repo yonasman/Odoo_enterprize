@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="droga_pro_sales_master_tree_action" model="ir.actions.act_window">
+        <field name="name">Employees settings</field>
+        <field name="res_model">droga.pro.sales.master</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="droga_pro_sales_master_tree" model="ir.ui.view">
+        <field name="name">droga_pro_sales_master.tree</field>
+        <field name="model">droga.pro.sales.master</field>
+        <field name="arch" type="xml">
+            <tree string="" editable="top" delete="0">
+                <field name="p_name"></field>
+                <field name="employee_access_users" domain="(['|',('name','like','Tender%'),'|',('name','like','CRM%'),('name','like','Driver%')])" options="{'no_create':True,'no_open':True}"></field>
+                <field name="p_regions" widget="many2many_tags" string="City/sub-city" options="{'no_create':True,'no_open':True}"></field>
+                <field name="p_groups" domain="([('status','=','Active')])" widget="many2many_tags" string="Product groups" options="{'no_create':True,'no_open':True}"></field>
+                <field name="status"></field>
+                <field name="is_pm"></field>
+                <button type="object" string="Change ID to 12345" name="change_id" confirm="Are you sure you want to change ID?"
+                                    class="oe_highlight"></button>
+            </tree>
+        </field>
+    </record>
+
+    <record id="crm_emp_per_company" model="ir.rule">
+        <field name="name">CRM employees per company</field>
+        <field name="model_id" ref="model_droga_pro_sales_master"/>
+        <field eval="True" name="global"/>
+        <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <menuitem
+        id="droga_pro_sales_master_menu"
+        name="Employee settings"
+        action="droga_pro_sales_master_tree_action"
+        parent="crm.crm_menu_config"
+        groups="crm_emp_administrator"
+        sequence="16"/>
+
+</odoo>

@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="droga_pharma_free_sample_consignment_issue_action" model="ir.actions.act_window">
+        <field name="name">Promotional issue request</field>
+        <field name="res_model">droga.inventory.consignment.issue</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'default_issue_type': 'SIF','default_menu_from':'PH'}</field>
+        <field name="domain">[('create_uid','=',uid),('issue_type','=','SIF')]</field>
+    </record>
+
+
+    <menuitem id="pharma_main_menu" name="Pharmacy chain"
+              web_icon="droga_pharma,static/description/icon.png"
+              groups="pharma_settings_admin,pharma_br_admin,pharma_dp_admin,pharma_ip_admin,pharma_supply_chain_manager,pharma_di_admin,pharma_director,droga_pharma.pharma_fin"
+              sequence="10">
+
+        <menuitem
+                id="droga_sales_pharmacy_menu"
+                name="Sales order"
+                action="droga_sales_order_pharmacy_action"
+                groups="pharma_dp_admin,pharma_br_admin"
+                sequence="20"/>
+
+        <menuitem
+                id="droga_sales_pharmacy_menu_invoice"
+                name="To invoice"
+                action="droga_sales_pharmacy_action_to_invoice"
+                groups="pharma_br_admin,pharma_ip_admin"
+                sequence="23"/>
+        <menuitem
+                id="droga_pharma_mtm_and_counselling"
+                name="PCM"
+                groups="pharma_settings_admin,pharma_br_admin,pharma_dp_admin,pharma_ip_admin"
+                sequence="30">
+            <menuitem
+                    id="droga_pharma_mtm_menu"
+                    name="MTM"
+                    action="droga_pharma_mtm_action"
+                    groups="pharma_settings_admin,pharma_br_admin,pharma_dp_admin,pharma_ip_admin"
+                    sequence="1"/>
+            <menuitem
+                    id="droga_pharma_counselling_menu"
+                    name="Counselling"
+                    action="droga_pharma_counselling_view_action_nocreate"
+                    groups="pharma_settings_admin,pharma_br_admin,pharma_dp_admin,pharma_ip_admin"
+                    sequence="5"/>
+            <menuitem
+                    id="droga_minor_alignment_menu"
+                    name="Minor Aliments"
+                    action="droga_minor_aliment_view_action"
+                    sequence="11"/>
+            <menuitem
+                id="droga_prescription_menu"
+                name="Prescription"
+                action="droga_pharma_prescription_action"
+                sequence="30"/>
+            <menuitem
+                id="droga_pharma_free_issue_menu"
+                name="Promotional issue request"
+                action="droga_pharma_free_sample_consignment_issue_action"
+                sequence="32"/>
+        </menuitem>
+
+
+        <menuitem
+                id="droga_pharma_reports"
+                name="Reports"
+                groups="pharma_settings_admin,pharma_br_admin,pharma_dp_admin,pharma_ip_admin,pharma_supply_chain_manager"
+                sequence="30">
+
+            <menuitem
+                    id="droga_pharma_system_reports"
+                    name="Enquiries"
+                    sequence="1">
+                <menuitem
+                        id="droga_pharma_report_sales"
+                        name="Sales"
+                        sequence="1">
+                    <menuitem
+                            id="droga_pharma_sales_pharmacy"
+                            name="Sales per pharmacy - summary"
+                            action="droga_pharma_sales_pharmacy_action"
+                            sequence="3"/>
+
+                    <menuitem
+                            id="droga_pharma_sales_detail_pharmacy"
+                            name="Sales per pharmacy - detail"
+                            action="droga_pharma_sales_detail_pharmacy_action"
+                            sequence="3"/>
+
+                </menuitem>
+
+                <menuitem
+                        id="droga_pharma_report_purchase"
+                        name="Purchasing"
+                        sequence="2">
+                    <menuitem
+                            id="droga_pharma_purchase_pharmacy"
+                            name="Purchase per supplier"
+                            action="droga_pharma_purchases_detail_pharmacy_action"
+                            sequence="3"/>
+                    <menuitem
+                            id="top_droga_pharma_purchase_pharmacy"
+                            name="Top 20 suppliers"
+                            action="drop_top_supp_pharmas_detail_pharmacy_action"
+                            sequence="4"/>
+
+                </menuitem>
+
+                <menuitem
+                        id="droga_pharma_report_inventory"
+                        name="Inventory"
+                        sequence="3">
+
+                    <menuitem
+                            id="droga_pharma_stock_on_hand_reports_menu"
+                            name="Stock on hand"
+                            action="droga_pharma_inv_onhand_warehouse_action"
+                            groups="droga_pharma.pharma_dp_admin,droga_pharma.pharma_br_admin,droga_pharma.pharma_di_admin,droga_pharma.pharma_supply_chain_manager"
+                            sequence="1"/>
+                    <menuitem
+                            id="droga_pharma_stock_on_hand_no_batch_reports_menu"
+                            name="Stock on hand - no batch"
+                            action="droga_pharma_inv_onhand_no_batch__warehouse_action"
+                            groups="droga_pharma.pharma_dp_admin,droga_pharma.pharma_br_admin,droga_pharma.pharma_di_admin,droga_pharma.pharma_supply_chain_manager"
+                            sequence="2"/>
+
+                    <menuitem
+                            id="droga_pharma_stock_card"
+                            name="Stock card"
+                            action="droga_pharma_stock_card_inq_action"
+                            groups="droga_pharma.pharma_dp_admin,droga_pharma.pharma_br_admin,droga_pharma.pharma_di_admin,droga_pharma.pharma_supply_chain_manager"
+                            sequence="4"/>
+
+                    <menuitem
+                            id="droga_pharma_stock_all_transactions_menu"
+                            name="Stock transactions - All"
+                            action="droga_pharma_inv_transaction_all_warehouse_action"
+                            groups="droga_pharma.pharma_dp_admin,droga_pharma.pharma_br_admin,droga_pharma.pharma_di_admin,droga_pharma.pharma_supply_chain_manager"
+                            sequence="5"/>
+
+                    <menuitem
+                            id="droga_pharma_stock_availability_menu"
+                            name="Stock availability"
+                            action="droga_pharma_inv_availability_all_warehouse_action"
+                            groups="droga_pharma.pharma_dp_admin,droga_pharma.pharma_br_admin,droga_pharma.pharma_di_admin,droga_pharma.pharma_supply_chain_manager"
+                            sequence="6"/>
+                </menuitem>
+                <menuitem
+                        id="droga_pharma_report_mtm"
+                        name="PCM reports"
+                        sequence="4">
+                    <menuitem
+                            id="droga_pharma_points_earned_report_menu"
+                            name="Customer points"
+                            action="action_droga_pharma_points_earned_action"
+                            sequence="9"/>
+
+                    <menuitem
+                            id="droga_pharma_follow_up_report_menu"
+                            name="MTM"
+                            action="action_droga_pharma_mtm_schedule_detail_tree"
+                            sequence="3"/>
+                    <menuitem
+                            id="droga_pharma_counselling_report_menu"
+                            name="Counselling"
+                            action="droga_pharma_counselling_action"
+                            sequence="5"/>
+                    <menuitem
+                            id="droga_pharma_minor_alignments_report_menu"
+                            name="Minor Aliments"
+                            action="droga_pharma_aliment_action"
+                            sequence="7"/>
+                </menuitem>
+
+
+            </menuitem>
+            <menuitem
+                    id="droga_pharma_excel_repots"
+                    name="Excel reports"
+                    sequence="2">
+
+                <menuitem
+                        id="droga_pharma_follo_up_excel_report"
+                        name="Follow up Excel Report"
+                        action="action_mtm_excel_report"
+                        sequence="12"/>
+                <menuitem
+                        id="droga_inventory_reports_pharma_excel"
+                        name="Stock card - Excel"
+                        action="droga_pharma.droga_pharma_reports_excel_action"
+                        sequence="10000"/>
+
+            </menuitem>
+        </menuitem>
+
+        <menuitem
+                id="droga_pharma_reports_spc"
+                name="Supply Chain Reports"
+                groups="pharma_settings_admin,pharma_br_admin,pharma_dp_admin,pharma_ip_admin,pharma_supply_chain_manager"
+                sequence="31">
+             <menuitem
+                id="droga_pharma_reports_sta"
+                name="Stock analysis"
+                sequence="8">
+
+                <menuitem
+                id="droga_pharma_reports_sta_itr"
+                name="ITR"
+                action="droga_pharma_action_itr"
+                sequence="8">
+                </menuitem>
+            </menuitem>
+
+            <menuitem
+                id="droga_pharma_reports_spc_proc"
+                name="Procurement reports"
+                sequence="8">
+
+                <menuitem
+                id="droga_pharma_reports_spc_proc_na"
+                name="Newly arrived items"
+                action="droga_pharma_action_spc_proc_na"
+                sequence="8">
+
+                </menuitem>
+
+            </menuitem>
+        </menuitem>
+        <menuitem id="menu_drug_information_query"
+                  name="DIS"
+                  action="action_drug_information_query"
+                  sequence="32"/>
+        <menuitem
+                id="droga_pharma_settings"
+                name="Settings"
+                groups="pharma_settings_admin"
+                sequence="35">
+
+            <menuitem
+                    id="droga_pharma_discount_settings"
+                    name="Discount settings"
+                    sequence="28">
+
+                <menuitem
+                        id="droga_pharma_breast_cont_type_menu"
+                        name="Discount for profession and mothers"
+                        action="droga_pharma_breast_cont_type_action"
+                        sequence="12"/>
+                <menuitem
+                        id="droga_pharma_discount_high_value_menu"
+                        name="Discount settings per high value"
+                        action="droga_pharma_discount_high_value_action"
+                        sequence="12"/>
+            </menuitem>
+
+            <menuitem
+                    id="droga_pharma_reward_settings"
+                    name="Reward settings"
+                    sequence="29">
+
+                <menuitem
+                        id="droga_pharma_gain_settings"
+                        name="Gain settings"
+                        sequence="29">
+                    <menuitem
+                            id="droga_pharma_referral_rewards_menu"
+                            name="Rewards gain settings per referral"
+                            action="droga_pharma_referral_rewards_action"
+                            sequence="12"/>
+                    <menuitem
+                            id="droga_pharma_rewards_gain_menu"
+                            name="Rewards gain settings per purchase"
+                            action="droga_pharma_rewards_gain_action"
+                            sequence="13"/>
+                </menuitem>
+
+                <menuitem
+                        id="droga_pharma_rewards"
+                        name="Reward settings"
+                        sequence="29">
+
+                    <menuitem
+                            id="droga_pharma_rewards_issue_menu"
+                            name="Rewards per accumulated points"
+                            action="droga_pharma_rewards_issue_action"
+                            sequence="12"/>
+                    <menuitem
+                            id="droga_pharma_discount_high_value_menu"
+                            name="Rewards per high value purchase"
+                            action="droga_pharma_discount_high_value_action"
+                            sequence="14"/>
+                    <menuitem
+                            id="droga_pharma_breast_cont_type_menu"
+                            name="Rewards for breast feeders"
+                            action="droga_pharma_breast_cont_type_action"
+                            sequence="15"/>
+                    <menuitem
+                            id="droga_pharma_discount_branch_group"
+                            name="Discount per branch and product group"
+                            action="droga_sales_discount_per_branch_group_action"
+                            sequence="16"/>
+                </menuitem>
+            </menuitem>
+
+            <menuitem
+                    id="droga_pharma_selection_settings"
+                    name="Selection settings"
+                    sequence="30">
+                <menuitem
+                        id="droga_pharma_current_status_menu"
+                        name="Current status list"
+                        action="droga_pharma_current_status_action"
+                        sequence="12"/>
+                <menuitem
+                        id="droga_pharma_drug_therapy_problem_menu"
+                        name="Drug therapy problems"
+                        action="droga_pharma_drug_therapy_problem_action"
+                        sequence="13"/>
+                <menuitem
+                        id="droga_pharma_drug_therapy_problem_cause_menu"
+                        name="Drug therapy causes"
+                        action="droga_pharma_drug_therapy_problem_cause_action"
+                        sequence="14"/>
+                <menuitem
+                        id="droga_pharma_intervention_menu"
+                        name="Intervention"
+                        action="droga_pharma_intervention_action"
+                        sequence="15"/>
+                <menuitem
+                        id="droga_pharma_area_coun_menu"
+                        name="Area of counsel"
+                        action="droga_pharma_area_coun_action"
+                        sequence="16"/>
+                <!-->
+                <menuitem
+                        id="droga_pharma_point_types_menu"
+                        name="Point types"
+                        action="droga_pharma_point_types_action"
+                        groups="droga_pharma.pharma_director"
+                        sequence="17"/>
+                <-->
+                <menuitem
+                        id="droga_pharma_update_uom"
+                        name="Update uom"
+                        action="droga_pharma_update_stock_action"
+                        groups="droga_pharma.pharma_director,droga_pharma.pharma_settings_admin"
+                        sequence="18"/>
+
+            </menuitem>
+        </menuitem>
+    </menuitem>
+
+</odoo>

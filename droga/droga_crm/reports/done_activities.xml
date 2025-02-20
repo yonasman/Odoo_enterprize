@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="done_activities_tree" model="ir.ui.view">
+        <field name="name">droga.crm.done.activity.tree</field>
+        <field name="model">droga.crm.done.activity</field>
+        <field name="arch" type="xml">
+            <tree string="" expand="1" create="0" delete="0">
+                <field name="source_name"/>
+                <field name="sales_rep"/>
+                <field name="activity_date" string="Plan date"/>
+                <field name="action_date" string="Done date"/>
+                <field name="res_model_descr" string="Type"/>
+                <field name="sales_area" string="Area"/>
+                <field name="type" optional="hide"/>
+                <field name="state" decoration-success="state == 'Done'" decoration-info="state == 'Open'" decoration-danger="state == 'Cancelled'" widget="badge"/>
+                <field name="feedback" string="Feedback"/>
+                <field name="from_visit_plan"/>
+                <field name="act_note" widget="html" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="done_activities_search" model="ir.ui.view">
+        <field name="name">droga.crm.done.activity.search</field>
+        <field name="model">droga.crm.done.activity</field>
+        <field name="arch" type="xml">
+            <search string="Done Activities">
+                <field name="feedback"/>
+                <field name="source_name"/>
+                <field name="state"/>
+                <field name="sales_area"/>
+                <field name="user"/>
+                <field name="activity_date"/>
+                <field name="action_date"/>
+                <field name="res_model_descr"/>
+                <field name="act_note"/>
+                <filter name="open" string="Open activities" domain="[('state', '=', 'Open')]" />
+                <filter name="cancel" string="Cancelled activities" domain="[('state', '=', 'Cancelled')]" />
+                <filter name="Done" string="Done activities" domain="[('state', '=', 'Done')]" />
+                <filter name="group_user" string="User" context="{'group_by':'sales_rep'}"/>
+
+                <filter string="Current week activities"
+                    domain="[
+                        ('activity_date', '>=', (datetime.datetime.combine(context_today() + relativedelta(weeks=-1,days=1,weekday=0), datetime.time(0,0,0)).to_utc()).strftime('%Y-%m-%d %H:%M:%S')),
+                        ('activity_date', '&lt;', (datetime.datetime.combine(context_today() + relativedelta(days=1,weekday=0), datetime.time(0,0,0)).to_utc()).strftime('%Y-%m-%d %H:%M:%S'))]"
+                    name="current_week_activities"></filter>
+
+                <filter string="Previous week activities"
+                       domain="[
+                    ('activity_date', '&lt;', (context_today() + relativedelta(weeks=-1, weekday=6)).strftime('%Y-%m-%d 00:00:00')),
+                    ('activity_date', '&gt;', (context_today() + relativedelta(weeks=-2, weekday=6)).strftime('%Y-%m-%d 00:00:00'))]"
+                        name="previous_week_activities"></filter>
+                <separator />
+
+                <filter name="unplanned" string="Unplanned Act." domain="[('from_visit_plan', '=', False)]" />
+                <filter name="planned" string="Planned Act." domain="[('from_visit_plan', '=', True)]" />
+
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_done_activity">
+        <field name="name">CRM Activities</field>
+        <field name="res_model">droga.crm.done.activity</field>
+        <field name="view_mode">tree</field>
+        <field name="context">{"search_default_open":1,'search_default_group_user': 1}</field>
+        <field name="domain">[('res_model', '=', 'crm.lead')]</field>
+    </record>
+
+
+    <menuitem
+            id="menu_done_activity"
+            name="Activities"
+            parent="menu_inq_vist_reports"
+            sequence="20"
+            action="action_done_activity"/>
+</odoo>

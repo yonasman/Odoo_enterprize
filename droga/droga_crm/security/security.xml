@@ -1,0 +1,72 @@
+<odoo>
+    <record model="ir.module.category" id="crm_management">
+        <field name="name">CRM</field>
+        <field name="description">User access level for CRM module</field>
+        <field name="sequence">20</field>
+    </record>
+    <record id="crm_mr" model="res.groups">
+        <field name="name">CRM MR/PM</field>
+        <field name="category_id" ref="crm_management"/>
+    </record>
+    <record id="crm_sr" model="res.groups">
+        <field name="name">CRM sales rep</field>
+        <field name="category_id" ref="crm_management"/>
+        <field name="implied_ids" eval="[(4, ref('crm_mr'))]"/>
+    </record>
+    <record id="crm_cust_loc" model="res.groups">
+        <field name="name">CRM customer location setter</field>
+        <field name="category_id" ref="crm_management"/>
+        <field name="implied_ids" eval="[(4, ref('crm_mr'))]"/>
+    </record>
+    <record id="crm_rsm" model="res.groups">
+        <field name="name">CRM or Sales regional area manager</field>
+        <field name="category_id" ref="crm_management"/>
+        <field name="implied_ids" eval="[(4, ref('crm_sr'))]"/>
+    </record>
+    <record id="crm_nsm" model="res.groups">
+        <field name="name">CRM or Sales national sales manager</field>
+        <field name="category_id" ref="crm_management"/>
+        <field name="implied_ids" eval="[(4, ref('crm_rsm'))]"/>
+    </record>
+    <record id="crm_cust_create" model="res.groups">
+        <field name="name">Customer create access</field>
+        <field name="category_id" ref="crm_management"/>
+        <field name="implied_ids" eval="[(4, ref('crm_sr'))]"/>
+    </record>
+    <record id="crm_cust" model="res.groups">
+        <field name="name">CRM admin (all customers access)</field>
+        <field name="category_id" ref="crm_management"/>
+    </record>
+    <record id="tin_admin" model="res.groups">
+        <field name="name">Tin no and customer name update access</field>
+        <field name="category_id" ref="crm_management"/>
+    </record>
+    <record id="crm_core_only" model="res.groups">
+        <field name="name">Only core products access</field>
+        <field name="category_id" ref="crm_management"/>
+    </record>
+
+    <record id="non_existent_group" model="res.groups">
+        <field name="name">No one access, used for hiding menus</field>
+        <field name="category_id" ref="crm_management"/>
+    </record>
+
+    <record id="crm_emp_administrator" model="res.groups">
+        <field name="name">CRM Employee administrator</field>
+        <field name="category_id" ref="crm_management"/>
+    </record>
+</odoo>
+
+
+        <!--
+            This is where you will create your groups.
+                ir.module.category is the module category
+                res.groups are the module user groups, they will refer to the master module category
+
+                For menu access, simply add groups="", in the menu definition
+                The csv file is a set of access rules for models
+                    The format it takes is
+                        id,                                 name,                 model_id:id,                        group_id:id,perm_read,perm_write,perm_create,perm_unlink
+                        "id of the access" can be anything, model.model models id,model_model replace models . with _,1,1,1,1
+
+        -->

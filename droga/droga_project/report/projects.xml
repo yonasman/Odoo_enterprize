@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="droga_report_project_list_tree" model="ir.ui.view">
+        <field name="name">droga.project.project.tree</field>
+        <field name="model">project.project</field>
+        <field name="arch" type="xml">
+            <tree string="" create="false" delete="false" expand="1">
+                <field name="display_name" string="Project"></field>
+                <field name="company_id" string="Company"></field>
+                <field name="name" string="Project"></field>
+                <field name="project_progress" string="Progress"></field>
+                <button icon="fa-credit-card-alt" type="object" string="Tasks" name="proj_tasks"
+                        class="oe_stat_button"></button>
+                <button icon="fa-credit-card-alt" type="object" string="Scopes" name="proj_scopes"
+                        class="oe_stat_button"></button>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_report_project_list_search" model="ir.ui.view">
+        <field name="name">droga.project.project.search</field>
+        <field name="model">project.project</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="display_name" string="Project"></field>
+                <field name="company_id" string="Company"></field>
+                <field name="name" string="Project"></field>
+                <field name="project_progress" string="Progress"></field>
+
+                <filter name="group_type_company" string="Company" context="{'group_by':'company_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="droga_report_project_action" model="ir.actions.act_window">
+        <field name="name">Projects</field>
+        <field name="res_model">project.project</field>
+        <field name="view_mode">tree</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('droga_report_project_list_tree')})]"/>
+        <field name="search_view_id" ref="droga_report_project_list_search"></field>
+        <field name="context">{'search_default_group_type_company': 1}</field>
+    </record>
+
+    <menuitem id="menu_project_report_project_list"
+            name="Projects"
+            action="droga_report_project_action"
+            parent="project.menu_project_report"
+            sequence="11"/>
+
+</odoo>

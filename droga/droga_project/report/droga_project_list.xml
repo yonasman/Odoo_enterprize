@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="mrcv_request_report" model="ir.actions.report">
+        <field name="name">Project List Report</field>
+        <field name="model">project.task</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">droga_project.task_report_template</field>
+        <field name="report_file">droga_project.task_report_template</field>
+        <field name="print_report_name">(object.display_project_id.name)</field>
+        <field name="binding_model_id" ref="model_project_task"/>
+        <field name="binding_type">report</field>
+    </record>
+    <template id="task_report_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="droga_project.droga_custom_header_layout">
+                </t>
+                <style>
+                    #customers {
+                    font-family: Arial, Helvetica, sans-serif;
+                    border-collapse: collapse;
+                    width: 100%;
+                    }
+                    #customers td {
+                    solid #ddd;
+                    padding: 5px;
+                    font-size: 20px;
+                    }
+
+                    #customers th {
+                    padding-top: 12px;
+                    padding-bottom: 12px;
+                    text-align: left;
+                    font-size: 20px;
+                    }
+
+                </style>
+                <div class="page">
+                    <div class="col-lg-12">
+                        <table id="customers">
+                            <tr>
+                                <td style="text-align: center;font-size:200%;font-weight: bold;">Droga Pharma PLC
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;font-size:200%;font-weight: bold;">Inventory Adjustment
+                                    Format
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table id="customers">
+                            <tr>
+                                <td>Contact/Customer</td>
+                                <td></td>
+                                <td>Date</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Operation Type</td>
+                                <td></td>
+                                <td>To Correct Reference</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Source Location</td>
+                                <td></td>
+                                <td>Remark</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Destination Location</td>
+                                <td></td>
+                            </tr>
+                        </table>
+                        <!--List of Product with \'s movement-->
+                        <table id="customers" style=" margin-top: 50px;">
+                            <tr>
+                                <th>Product</th>
+                                <th>Lot/Ser.No.</th>
+                                <th>Expiry Date</th>
+                                <th>Demand</th>
+                                <th>UOM</th>
+                            </tr>
+                            <tr>
+                                <td>Content</td>
+                            </tr>
+                        </table>
+
+                        <table id="customers" style=" margin-top: 50px;">
+                            <tr>
+                                <td>Requested By</td>
+                                <td>Approved By</td>
+                                <td>Authorized By</td>
+                            </tr>
+                            <tr>
+                                <td>Name</td>
+                                <td>Name</td>
+                                <td>Name</td>
+                            </tr>
+                            <tr>
+                                <td>Sign</td>
+                                <td>Sign</td>
+                                <td>Sign</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <t t-call="droga_project.droga_custom_footer_layout">
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

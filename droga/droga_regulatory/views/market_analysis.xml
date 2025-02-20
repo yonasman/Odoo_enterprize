@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+
+    <data>
+
+        <record id="sequence_market_analysis" model="ir.sequence">
+            <field name="name">Market Analysis Sequence</field>
+            <field name="code">droga.reg.market.analysis.sequence</field>
+            <field name="prefix">MARK_ANA_</field>
+        </record>
+
+        <record id="view_droga_bdr_market_analysis_tree" model="ir.ui.view">
+            <field name="name">Droga BDR Market Analysis Tree</field>
+            <field name="model">droga.bdr.market.analysis</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="local_agent"/>
+                    <field name="manufacturer"/>
+                    <field name="brand_name"/>
+                    <field name="generic_name"/>
+                    <field name="quantity"/>
+
+                    <field name="total_price"/>
+
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="view_droga_bdr_market_analysis_graph" model="ir.ui.view">
+            <field name="name">Droga BDR Market Analysis Graph</field>
+            <field name="model">droga.bdr.market.analysis</field>
+            <field name="arch" type="xml">
+                <graph>
+
+                    <field name="local_agent"/>
+                    <field name="total_price"/>
+
+                </graph>
+            </field>
+        </record>
+
+        <record id="view_droga_bdr_market_analysis_form" model="ir.ui.view">
+            <field name="name">Droga BDR Market Analysis Form</field>
+            <field name="model">droga.bdr.market.analysis</field>
+            <field name="arch" type="xml">
+                <form>
+
+
+
+                    <sheet>
+                         <group>
+                        <group>
+                            <field name="mark_an_number"/>
+                            <field name="local_agent"/>
+                        </group>
+                        <group>
+                            <field name="total_price"/>
+
+                        </group>
+                    </group>
+                         <h2>Sales recorded by Agent</h2>
+                        <hr/>
+                        <group>
+                            <h6>Manufacturer and Product</h6>
+                            <group>
+
+                                <field name="manufacturer"/>
+                                <field name="generic_name"/>
+                                <field name="brand_name"/>
+                                <field name="country"/>
+                                <field name="application_number"/>
+                                <br/>
+                                <br/>
+                                <hr/>
+                            </group>
+
+
+                            <h6>Sales Detail</h6>
+
+                            <group>
+                                <field name="unit"/>
+                                <field name="unit_price"/>
+                                <field name="quantity"/>
+                                <br/>
+                                <br/>
+                                <hr/>
+                            </group>
+
+
+                            <h6>Dates</h6>
+                            <group>
+                                <field name="pfi_date"/>
+                                <field name="ip_approval_date"/>
+                                <field name="date_sold"/>
+
+                                <br/>
+                                <br/>
+                                <hr/>
+                            </group>
+
+
+                            <h6>Product Category</h6>
+                            <group>
+                                <field name="dosage_form"/>
+                                <field name="product_type"/>
+                                <field name="pharma_category"/>
+                            </group>
+
+                        </group>
+
+
+                    </sheet>
+
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+
+                </form>
+            </field>
+        </record>
+
+
+        <record id="view_droga_market_analysis_form" model="ir.ui.view">
+            <field name="name">market.sales.detail</field>
+            <field name="model">add.market.sale</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <h2>Sales recorded by Agent</h2>
+                        <hr/>
+                        <group>
+
+
+                            <h6>Manufacturer and Product</h6>
+                            <group>
+
+                                <field name="manufacturer"/>
+                                <field name="generic_name"/>
+                                <field name="brand_name"/>
+                                <field name="application_number"/>
+                                <br/>
+                                <br/>
+                                <hr/>
+                            </group>
+
+
+                            <h6>Sales Detail</h6>
+
+                            <group>
+                                <field name="unit"/>
+                                <field name="unit_price"/>
+                                <field name="quantity"/>
+                                <field name="total_price"/>
+                                <br/>
+                                <br/>
+                                <hr/>
+                            </group>
+
+
+                            <h6>Dates</h6>
+                            <group>
+                                <field name="pfi_date"/>
+                                <field name="ip_approval_date"/>
+                                <field name="date_sold"/>
+
+                                <br/>
+                                <br/>
+                                <hr/>
+                            </group>
+
+
+                            <h6>Product Category</h6>
+                            <group>
+
+                                <field name="product_type"/>
+                                <field name="pharma_category"/>
+                            </group>
+
+                        </group>
+
+
+                    </sheet>
+
+
+                </form>
+            </field>
+        </record>
+
+        <record id="action_droga_bdr_market_analysis" model="ir.actions.act_window">
+            <field name="name">Droga BDR Market Analysis</field>
+            <field name="res_model">droga.bdr.market.analysis</field>
+            <field name="view_mode">tree,form,graph</field>
+        </record>
+
+
+        <!-- Report report Report reportReport reportReport reportReport reportReport reportReport report -->
+        <record id="view_market_analysis_report" model="ir.ui.view">
+            <field name="name">market.analysis.report.wizard.form</field>
+            <field name="model">market.analysis.report.wizard</field>
+            <field name="arch" type="xml">
+                <form string=" Market Analysis Report">
+                    <group>
+
+                        <field name="date_from"/>
+                        <field name="local_agent"/>
+                        <field name="brand_name"/>
+
+                    </group>
+
+                    <group>
+
+                        <field name="date_to"/>
+                        <field name="manufacturer"/>
+                        <field name="generic_name"/>
+
+                    </group>
+                    <footer>
+                        <button name="action_wizard_print_excel_report" type="object" string="Create Report"
+                                class="btn-primary"/>
+                        <button name="action_cancel" string="Cancel" type="object" class="btn-secondary"/>
+                    </footer>
+
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_market_analysis_report">
+            <field name="name">droga.market.analysis.report.wizard.report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">market.analysis.report.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_market_analysis_report"/>
+            <field name="target">new</field>
+
+        </record>
+
+    </data>
+</odoo>

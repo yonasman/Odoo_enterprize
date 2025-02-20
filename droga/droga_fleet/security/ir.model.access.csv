@@ -1,0 +1,16 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+
+
+
+
+access_request_model,access_request_model,model_droga_fleet_request,base.group_user,1,1,1,1
+access_task_model,access_task_model,model_droga_fleet_request_task,base.group_user,1,1,1,1
+access_cancel_reason_wizard,cancel_reason_wizard,model_cancel_reason_wizard,base.group_user,1,1,1,1
+access_contract_date,access_contract_date,model_contract_date,base.group_user,1,1,1,1
+access_service_date,access_service_date,model_service_date,base.group_user,1,1,1,1
+access_fleet_request_rejection_reason_header,access_fleet_request_rejection_reason_header,model_fleet_request_rejection_reason_header,base.group_user,1,1,1,1
+access_fleet_request_rejection_reason,access_fleet_request_rejection_reason,model_fleet_request_rejection_reason,base.group_user,1,1,1,1
+
+access_vehicle_maintenance_fee,access_vehicle_maintenance_fee,model_vehicle_maintenance_fee,base.group_user,1,1,1,1
+access_vehicle_fuel_fee,access_vehicle_fuel_fee,model_vehicle_fuel_fee,base.group_user,1,1,1,1
+access_fleet_cost_report_wizard,access_fleet_cost_report_wizard,model_fleet_cost_report_wizard,base.group_user,1,1,1,1

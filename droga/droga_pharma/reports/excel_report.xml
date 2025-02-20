@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="report_mtm_excel_xlsx" model="ir.actions.report">
+        <field name="name">MTM Excel_xlsx Report</field>
+        <field name="model">mtm.report.wizard</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">report.droga.pharma.mtm.report.xls</field>
+        <field name="report_file">report.droga.pharma.mtm.report.xls</field>
+        <field name="binding_type">report</field>
+
+
+    </record>
+</odoo>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="droga_pharma_purchase_line_pharmacy_pivot" model="ir.ui.view">
+        <field name="name">purchase.order.line.pivot.pharmacy.invoice</field>
+        <field name="model">purchase.order.line</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="product_id" type="row"/>
+                <field name="partner_id" type="col"/>
+                
+                
+                <field name="price_subtotal" string="Amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- graph -->
+    <record id="droga_pharma_purchase_line_pharmacy_graph" model="ir.ui.view">
+        <field name="name">purchase.order.line.graph.pharmacy.invoice</field>
+        <field name="model">purchase.order.line</field>
+        <field name="arch" type="xml">
+            <graph>
+                <field name="partner_id" type="col"/>
+
+
+                <field name="price_subtotal" string="Amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    <record id="droga_pharma_purchases_detail_pharmacy_tree" model="ir.ui.view">
+        <field name="name">purchase.order.line.tree.pharmacy.invoice</field>
+        <field name="model">purchase.order.line</field>
+        <field name="arch" type="xml">
+            <tree string="Purchase order" delete="false" create="false">
+                <field name="name" optional="hide"></field>
+                <field name="order_id"></field>
+                <field name="itemcode" string="Code"></field>
+                <field name="itemdesc"></field>
+                <field name="partner_id" string="Supplier"></field>
+                <field name="product_uom" string="UOM"></field>
+                <field name="product_qty" sum="Total qty" string="Qauntity"></field>
+                <field name="qty_received" sum="Total received" string="Received"></field>
+                <field name="price_unit" string="Unit price"></field>
+                <field name="price_subtotal" string="Amount" sum="Total amount" type="measure"/>
+                <field name="picking_type_id"></field>
+                <button icon="fa-credit-card-alt" type="object" name="open_purchase"
+                        class="oe_stat_button"></button>
+            </tree>
+        </field>
+    </record>
+
+    <record id="droga_pharma_purchases_detail_pharmacy_search" model="ir.ui.view">
+        <field name="name">purchase.order.line.search.pharma.by.pharmacy</field>
+        <field name="model">purchase.order.line</field>
+        <field name="arch" type="xml">
+            <search string="Purchase order">
+                <field name="name" optional="hide"></field>
+                <field name="partner_id" string="Supplier"></field>
+                <field name="order_id"></field>
+                <field name="product_id" string="Code"></field>
+                <field name="product_qty" sum="Total qty" string="Qauntity"></field>
+                <field name="price_subtotal" sum="Total amt" string="Amount"></field>
+                
+                <filter string="Today purchases"
+                        domain="[('date_planned', '&gt;=', context_today().strftime('%Y-%m-%d')), ('date_planned', '&lt;', (context_today() + relativedelta(days=1)).strftime('%Y-%m-%d'))]"
+                        name="today_purchases"></filter>
+
+                <filter string="Yesterday purchases"
+                        domain="[('date_planned', '&gt;=', (context_today()-relativedelta(days=1)).strftime('%Y-%m-%d')), ('date_planned', '&lt;', context_today().strftime('%Y-%m-%d'))]"
+                        name="yest_purchases"></filter>
+
+                <filter string="Current week purchases"
+                    domain="[
+                        ('date_planned', '>=', (datetime.datetime.combine(context_today() + relativedelta(weeks=-1,days=1,weekday=0), datetime.time(0,0,0)).to_utc()).strftime('%Y-%m-%d %H:%M:%S')),
+                        ('date_planned', '&lt;', (datetime.datetime.combine(context_today() + relativedelta(days=1,weekday=0), datetime.time(0,0,0)).to_utc()).strftime('%Y-%m-%d %H:%M:%S'))]"
+                    name="current_week_purchases"></filter>
+
+                <filter string="Previous week purchases"
+                       domain="[
+                    ('date_planned', '&lt;', (context_today() + relativedelta(weeks=-1, weekday=6)).strftime('%Y-%m-%d 00:00:00')),
+                    ('date_planned', '&gt;', (context_today() + relativedelta(weeks=-2, weekday=6)).strftime('%Y-%m-%d 00:00:00'))]"
+                        name="previous_week_purchases"></filter>
+
+                <filter string="Current month purchases"
+                        domain="[('date_planned','&lt;',(context_today()+relativedelta(months=1)).strftime('%%Y-%%m-01')),
+                        ('date_planned','&gt;=',time.strftime('%%Y-%%m-01'))]"
+                        name="current_month_purchases"></filter>
+
+                <filter string="Previous month purchases"
+                        domain="[('date_planned','&gt;=',(context_today()-relativedelta(months=1)).strftime('%%Y-%%m-01')),
+                        ('date_planned','&lt;',time.strftime('%%Y-%%m-01'))]"
+                name="previous_month_purchases"></filter>
+
+                <separator/>
+
+                <filter string="Received"
+                        domain="[('qty_received','&gt;',0)]"
+                name="received"></filter>
+
+                <filter string="Ordered not received"
+                        domain="[('qty_received','=',0)]"
+                name="received"></filter>
+
+            </search>
+        </field>
+    </record>
+
+    <record id="droga_pharma_purchases_detail_pharmacy_action" model="ir.actions.act_window">
+        <field name="name">Purchase order per supplier - Detail</field>
+        <field name="res_model">purchase.order.line</field>
+        <field name="view_mode">tree,pivot,graph</field>
+        <field name="limit">200</field>
+        <field name="context">{'search_default_current_week_purchases':1}
+        </field>
+        <field name="domain">[('order_id','like','PO-DP')]</field>
+        <field name="search_view_id" ref="droga_pharma_purchases_detail_pharmacy_search"></field>
+        <field name="view_ids"
+                   eval="[(5, 0, 0),
+                          (0, 0, {'view_mode': 'graph', 'view_id': ref('droga_pharma_purchase_line_pharmacy_graph')}),
+                          (0, 0, {'view_mode': 'pivot', 'view_id': ref('droga_pharma_purchase_line_pharmacy_pivot')}),
+                          (0, 0, {'view_mode': 'tree', 'view_id': ref('droga_pharma_purchases_detail_pharmacy_tree')})]"/>
+    </record>
+
+</odoo>

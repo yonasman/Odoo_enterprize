@@ -1,0 +1,15 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_droga_payroll_hr_job_salary,hr.job.salary,model_hr_job_salary,base.group_user,1,1,1,1
+access_droga_payroll_hr_job_salary_detail,hr.job.salary.detail,model_hr_job_salary_detail,base.group_user,1,1,1,1
+access_droga_payroll_hr_job_salary_payment,hr.job.salary.payment,model_hr_job_salary_payment,base.group_user,1,1,1,1
+access_droga_payroll_hr_job_grade,hr.job.grade,model_hr_job_grade,base.group_user,1,1,1,1
+
+access_droga_hr_letter,droga.hr.letter,model_droga_hr_letter,base.group_user,1,1,1,1
+access_droga_hr_letter_type,droga.hr.letter.type,model_droga_hr_letter_type,hr.group_hr_user,1,1,1,1
+access_droga_hr_attendance_report,droga.hr.attendance.report,model_droga_hr_attendance_report,hr.group_hr_user,1,1,1,1
+access_droga_hr_attendance_over_time,droga.hr.attendance.over.time,model_droga_hr_attendance_over_time,hr.group_hr_user,1,1,1,1
+access_droga_hr_division,droga.hr.division,model_droga_hr_division,base.group_user,1,1,1,1
+
+
+
+

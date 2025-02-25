@@ -44,6 +44,7 @@ class cust_contact_extension(models.Model):
     loc_history = fields.One2many('droga.crm.loc.history', 'partner')
     loc_set=fields.Boolean('Location set',default=False,compute='_is_loc_set',store=True)
     mature_individually = fields.Boolean('Mature individually', default=False)
+    x_delivery_address = fields.Char(string="Delivery address")
 
     @api.depends('partner_latitude','partner_longitude')
     def _is_loc_set(self):

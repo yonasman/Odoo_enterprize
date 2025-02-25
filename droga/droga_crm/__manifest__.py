@@ -24,6 +24,7 @@
         'security/ir.model.access.csv',
         'reports/excel_reports/visit_plan.xml',
         'reports/core_products.xml',
+        'data/grade_updater_cron.xml',
         'views/cust_extension.xml',
         'views/customer_visits.xml',
         'views/sales_target.xml',

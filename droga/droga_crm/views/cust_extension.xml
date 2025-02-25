@@ -152,7 +152,8 @@
             <xpath expr="//form/sheet/group/group/field[@name='website']" position="after">
                 <field name="vat" string="Tin No"/>
                 <field name="key_account"/>
-                <field name="x_wereda"/>
+<!--                <field name="x_wereda"/>-->
+                <field name="x_delivery_address"/>
                 <field name="x_house_no"/>
                 <field name="x_exclude_maturity_for_reconciliation" groups="droga_crm.tin_admin"></field>
             </xpath>

@@ -149,6 +149,7 @@ class droga_purchase_uom_extension(models.Model):
 
 class droga_stock_quant(models.Model):
     _inherit = 'stock.quant'
+
     warehouse_id = fields.Many2one('stock.warehouse', related='location_id.warehouse_id',store=True)
     branch_id=fields.Many2one('account.analytic.account', related='warehouse_id.linked_analytic',store=True)
     wh_type = fields.Selection([

@@ -22,6 +22,7 @@
         'reports/leads_report.xml',
         'views/module_menus.xml',
         'security/ir.model.access.csv',
+        'views/pharma_stock_views.xml',
         'reports/excel_reports/visit_plan.xml',
         'reports/core_products.xml',
         'data/grade_updater_cron.xml',
@@ -51,7 +52,7 @@
     'depends': ['base', 'hr',
                 'mail', 'stock', 'http_routing', 'sale','web_map',
                 'resource', 'stock', 'droga_inventory',
-                'web', 'crm'],
+                'web', 'crm','droga_finance'],
 
     "assets": {
         "web.assets_backend": [

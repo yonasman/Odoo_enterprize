@@ -1,0 +1,50 @@
+<odoo>
+    <record id="droga_crm_inv_onhand_warehouse_tree" model="ir.ui.view">
+        <field name="name">stock.quant.tree.bywareh</field>
+        <field name="model">stock.quant</field>
+        <field name="arch" type="xml">
+
+            <tree string="Stock on hand" delete="false" create="false">
+                <field name='branch_id' optional="hidden"/>
+                <field name="location_id"/>
+                <field name="warehouse_id" optional="hide"/>
+                <field name="product_id" widget="many2one"/>
+                <field name="product_uom_id" string="Unit" />
+                <field name="pharmacy_group_id" string="Group"></field>
+                <field name='company_id' optional="hidden"/>
+
+                <field name="quantity" string="On Hand Quantity" sum="Total On Hand"/>
+                <field name="selling_price" string="Selling price"/>
+		        <field name="unit_cost" string="Unit cost" />
+                <field name="total_amount" string="Amount" />
+                <field name="lot_id"/>
+
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="droga_crm_inv_onhand_warehouse_search" model="ir.ui.view">
+        <field name="name">stock.quant.pharma.by.warehouse.search</field>
+        <field name="model">stock.quant</field>
+        <field name="arch" type="xml">
+            <search string="Stock on hand">
+                <field name="product_id"></field>
+                <field name="lot_id"></field>
+                <field name="location_id"></field>
+                <field name="quantity"></field>
+                <field name="warehouse_id"></field>
+                <field name="branch_id"></field>
+                <filter name="group_warehouse_id" string="Group by warehouse" context="{'group_by':'warehouse_id'}"/>
+                <filter name="group_product" string="Group by product" context="{'group_by':'product_id'}"/>
+
+                <searchpanel>
+                    <field name="warehouse_id" string="Warehouses"/>
+                    <field name="branch_id" string="Branches"/>
+                </searchpanel>
+            </search>
+        </field>
+    </record>
+
+
+</odoo>

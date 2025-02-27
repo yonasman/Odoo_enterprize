@@ -608,12 +608,13 @@ class PayrollMasterReports(models.Model):
         sheet.write(row_start, 5, 'SACO Regsitration', title_format)
         sheet.write(row_start, 6, 'SACO Saving', title_format)
         sheet.write(row_start, 7, 'SACO Saving Additional', title_format)
-        sheet.write(row_start, 8, 'SACO Share Purchase', title_format)
-        sheet.write(row_start, 9, 'SACO Payment Deduction', title_format)
-        sheet.write(row_start, 10, 'Cost Sharing', title_format)
-        sheet.write(row_start, 11, 'Sport Contribution', title_format)
-        sheet.write(row_start, 12, 'Others', title_format)
-        sheet.write(row_start, 13, 'Total', title_format)
+        sheet.write(row_start,8,"Edir",title_format)
+        sheet.write(row_start, 9, 'SACO Share Purchase', title_format)
+        sheet.write(row_start, 10, 'SACO Payment Deduction', title_format)
+        sheet.write(row_start, 11, 'Cost Sharing', title_format)
+        sheet.write(row_start, 12, 'Sport Contribution', title_format)
+        sheet.write(row_start, 13, 'Others', title_format)
+        sheet.write(row_start, 14, 'Total', title_format)
         row_start += 1
 
         # search based on cost center
@@ -632,6 +633,7 @@ class PayrollMasterReports(models.Model):
         saco_loan_payment_total = 0
         saco_registration_total = 0
         saco_additional_payment_total = 0
+        edit_total = 0
         saco_share_payment_total = 0
         cost_sharing_total = 0
         sport_contribution_total = 0
@@ -682,6 +684,9 @@ class PayrollMasterReports(models.Model):
                 elif payslip_detail.code == 'SACOSAVAD':  # saco additional payment
                     sheet.write(row_start, 7, payslip_detail.total, num_format)
                     saco_additional_payment_total += payslip_detail.total
+                elif payslip_detail.code == 'EDIR': # Edir
+                    sheet.write(row_start, 8, payslip_detail.total,num_format)
+                    edit_total += payslip_detail.total
 
                 elif payslip_detail.code == 'SACOSHA':  # saco share payment
                     sheet.write(row_start, 8, payslip_detail.total, num_format)

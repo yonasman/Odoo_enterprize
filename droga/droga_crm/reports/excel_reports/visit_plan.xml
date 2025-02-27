@@ -37,6 +37,13 @@
             parent="droga_crm.menu_visit_reports"
             groups="crm_mr"
             sequence="17"/>
+<!--    <menuitem-->
+<!--             id="droga_pharma_stock_on_hand_reports_menu"-->
+<!--            name="Stock on Hand"-->
+<!--            action="droga_pharma_inv_onhand_warehouse_action"-->
+<!--            parent="droga_crm.menu_visit_reports"-->
+<!--            sequence="18"-->
+<!--    />-->
 
     <menuitem
             id="menu_excel_vist_reports"
@@ -51,4 +58,23 @@
             parent="menu_excel_vist_reports"
             groups="crm_mr"
             sequence="11"/>
+
+     <record model="ir.actions.act_window" id="droga_crm_inv_onhand_warehouse_action">
+        <field name="name">Stock on hand by warehouse</field>
+        <field name="res_model">stock.quant</field>
+        <field name="domain">[('quantity', '!=', 0), ('has_access', '=', True)]</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="droga_crm_inv_onhand_warehouse_tree"/>
+         <field name="search_view_id" ref="droga_crm_inv_onhand_warehouse_search"></field>
+    </record>
+
+
+    <menuitem
+             id="droga_crm_stock_on_hand_reports_menu"
+             name="Stock on hand"
+             action="droga_crm_inv_onhand_warehouse_action"
+             parent="droga_crm.menu_visit_reports"
+             />
+<!--             sequence="20"-->
+
 </odoo>

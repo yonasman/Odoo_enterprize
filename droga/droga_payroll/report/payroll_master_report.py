@@ -522,6 +522,7 @@ class PayrollMasterReports(models.Model):
     def deductions_report(self, workbook):
         sheet = workbook.add_worksheet('Deductions')
 
+        # Set column widths
         sheet.set_column('A:A', 8)
         sheet.set_column('B:B', 20)
         sheet.set_column('C:C', 10)
@@ -542,184 +543,162 @@ class PayrollMasterReports(models.Model):
 
         row_start = 2
 
-        date_format = workbook.add_format(
-            {'num_format': 'mm/dd/yyyy', 'border': 7})
+        # Define formats
+        date_format = workbook.add_format({'num_format': 'mm/dd/yyyy', 'border': 7})
         num_format = workbook.add_format({'num_format': 43, 'border': 1, 'font_name': 'Calibri', 'font_size': 9})
         num_format_sub_total = workbook.add_format({'num_format': 43, 'border': 1, 'bold': 1})
         cent_format = workbook.add_format({'num_format': 41, 'border': 1})
         border = workbook.add_format({'border': 1, 'font_name': 'Calibri', 'font_size': 9})
         bold = workbook.add_format({'bold': True})
-        header_format = workbook.add_format({
-            'bold': 1,
-            'border': 0,
-            'align': 'center',
-            'valign': 'vcenter',
-            'font_size': 22})
-        main_title_format = workbook.add_format({
-            'bold': 1,
-            'border': 0,
-            'align': 'center',
-            'valign': 'vcenter',
-            'font_name': 'Calibri',
-            'font_size': 16})
-        parameter_format = workbook.add_format({
-            'bold': 1,
-            'border': 7,
-            'align': 'left',
-            'valign': 'vcenter',
-            'font_size': 12,
-            'fg_color': '#F6F5F5'})
+        header_format = workbook.add_format(
+            {'bold': 1, 'border': 0, 'align': 'center', 'valign': 'vcenter', 'font_size': 22})
+        main_title_format = workbook.add_format(
+            {'bold': 1, 'border': 0, 'align': 'center', 'valign': 'vcenter', 'font_name': 'Calibri', 'font_size': 16})
+        parameter_format = workbook.add_format(
+            {'bold': 1, 'border': 7, 'align': 'left', 'valign': 'vcenter', 'font_size': 12, 'fg_color': '#F6F5F5'})
+        separator_format = workbook.add_format(
+            {'bold': 1, 'border': 7, 'align': 'left', 'valign': 'vcenter', 'font_size': 12, 'fg_color': '#D9D9D9'})
+        title_format = workbook.add_format(
+            {'bold': 1, 'border': 1, 'align': 'center', 'valign': 'vcenter', 'font_size': 9, 'font_name': 'Calibri',
+             'text_wrap': 1, 'fg_color': '#F6F5F5'})
+        title_format_num = workbook.add_format(
+            {'bold': 1, 'border': 1, 'num_format': 43, 'align': 'center', 'valign': 'vcenter', 'font_size': 11,
+             'text_wrap': 1, 'fg_color': '#F6F5F5'})
 
-        separator_format = workbook.add_format({
-            'bold': 1,
-            'border': 7,
-            'align': 'left',
-            'valign': 'vcenter',
-            'font_size': 12,
-            'fg_color': '#D9D9D9'})
-
-        title_format = workbook.add_format({
-            'bold': 1,
-            'border': 1,
-            'align': 'center',
-            'valign': 'vcenter',
-            'font_size': 9,
-            'font_name': 'Calibri',
-            'text_wrap': 1,
-            'fg_color': '#F6F5F5'})
-        title_format_num = workbook.add_format({
-            'bold': 1,
-            'border': 1,
-            'num_format': 43,
-            'align': 'center',
-            'valign': 'vcenter',
-            'font_size': 11,
-            'text_wrap': 1,
-            'fg_color': '#F6F5F5'})
-
+        # Write header
         sheet.merge_range('A1:G1', "Deductions", main_title_format)
         sheet.merge_range('A2:G2', self.batch.name, main_title_format)
 
+        # Set column titles
         sheet.write(row_start, 0, 'ID No', title_format)
         sheet.write(row_start, 1, 'Employee Name', title_format)
         sheet.write(row_start, 2, 'Canteen', title_format)
         sheet.write(row_start, 3, 'Loan', title_format)
         sheet.write(row_start, 4, 'Fuel', title_format)
-        sheet.write(row_start, 5, 'SACO Regsitration', title_format)
+        sheet.write(row_start, 5, 'SACO Registration', title_format)
         sheet.write(row_start, 6, 'SACO Saving', title_format)
         sheet.write(row_start, 7, 'SACO Saving Additional', title_format)
-        sheet.write(row_start,8,"Edir",title_format)
+        sheet.write(row_start, 8, "Edir", title_format)
         sheet.write(row_start, 9, 'SACO Share Purchase', title_format)
         sheet.write(row_start, 10, 'SACO Payment Deduction', title_format)
         sheet.write(row_start, 11, 'Cost Sharing', title_format)
         sheet.write(row_start, 12, 'Sport Contribution', title_format)
         sheet.write(row_start, 13, 'Others', title_format)
         sheet.write(row_start, 14, 'Total', title_format)
+
         row_start += 1
 
-        # search based on cost center
-        # search based on cost center
+        # Search based on cost center
         if self.cost_center_analytic.ids:
-            slips = self.batch.slip_ids.search(
-                [('contract_id.analytic_account_id', 'in', self.cost_center_analytic.ids),
-                 ('period', '=', self.batch.period.id)])
+            slips = self.batch.slip_ids.search([
+                ('contract_id.analytic_account_id', 'in', self.cost_center_analytic.ids),
+                ('period', '=', self.batch.period.id)
+            ])
         else:
             slips = self.batch.slip_ids
 
-        canteen_total = 0
-        loan_total = 0
-        fuel_total = 0
-        saco_saving_total = 0
-        saco_loan_payment_total = 0
-        saco_registration_total = 0
-        saco_additional_payment_total = 0
-        edit_total = 0
-        saco_share_payment_total = 0
-        cost_sharing_total = 0
-        sport_contribution_total = 0
-        others_total = 0
+        # Initialize totals
+        totals = {
+            'canteen': 0,
+            'loan': 0,
+            'fuel': 0,
+            'saco_saving': 0,
+            'saco_loan_payment': 0,
+            'saco_registration': 0,
+            'saco_additional_payment': 0,
+            'edir': 0,
+            'saco_share_payment': 0,
+            'cost_sharing': 0,
+            'sport_contribution': 0,
+            'others': 0
+        }
 
+        # Loop through slips and write data
         for record in slips:
             sheet.write(row_start, 0, record.employee_id.barcode, border)
             sheet.write(row_start, 1, record.employee_id.name, border)
 
-            num = 0
-            sheet.write(row_start, 2, num, num_format)
-            sheet.write(row_start, 3, num, num_format)
-            sheet.write(row_start, 4, num, num_format)
-            sheet.write(row_start, 5, num, num_format)
-            sheet.write(row_start, 6, num, num_format)
-            sheet.write(row_start, 7, num, num_format)
-            sheet.write(row_start, 8, num, num_format)
-            sheet.write(row_start, 9, num, num_format)
-            sheet.write(row_start, 10, num, num_format)
-            sheet.write(row_start, 11, num, num_format)
-            sheet.write(row_start, 12, num, num_format)
-            sheet.write(row_start, 13, num, num_format)
+            # Set default values for deductions
+            deductions = {
+                'canteen': 0,
+                'loan': 0,
+                'fuel': 0,
+                'saco_registration': 0,
+                'saco_saving': 0,
+                'saco_additional_payment': 0,
+                'edir': 0,
+                'saco_share_payment': 0,
+                'saco_loan_payment': 0,
+                'cost_sharing': 0,
+                'sport_contribution': 0,
+                'others': 0
+            }
 
-            # load data
-            # get payroll detail
-            total = 0
+            # Write deduction values for each payslip
             for payslip_detail in record.line_ids:
-                # format the cell
-
                 if payslip_detail.code == 'CANDED':  # canteen_total
-                    sheet.write(row_start, 2, payslip_detail.total, num_format)
-                    canteen_total += payslip_detail.total
+                    deductions['canteen'] = payslip_detail.total
+                    totals['canteen'] += payslip_detail.total
                 elif payslip_detail.code == 'LOAN':  # loan_total
-                    sheet.write(row_start, 3, payslip_detail.total, num_format)
-                    loan_total += payslip_detail.total
+                    deductions['loan'] = payslip_detail.total
+                    totals['loan'] += payslip_detail.total
                 elif payslip_detail.code == 'NFALL':  # fuel
-                    sheet.write(row_start, 4, payslip_detail.total, num_format)
-                    fuel_total += payslip_detail.total
-
+                    deductions['fuel'] = payslip_detail.total
+                    totals['fuel'] += payslip_detail.total
                 elif payslip_detail.code == 'SACOREG':  # saco Registration
-                    sheet.write(row_start, 5, payslip_detail.total, num_format)
-                    saco_registration_total += payslip_detail.total
-
+                    deductions['saco_registration'] = payslip_detail.total
+                    totals['saco_registration'] += payslip_detail.total
                 elif payslip_detail.code == 'SACOSAV':  # saco saving
-                    sheet.write(row_start, 6, payslip_detail.total, num_format)
-                    saco_saving_total += payslip_detail.total
-
+                    deductions['saco_saving'] = payslip_detail.total
+                    totals['saco_saving'] += payslip_detail.total
                 elif payslip_detail.code == 'SACOSAVAD':  # saco additional payment
-                    sheet.write(row_start, 7, payslip_detail.total, num_format)
-                    saco_additional_payment_total += payslip_detail.total
-                elif payslip_detail.code == 'EDIR': # Edir
-                    sheet.write(row_start, 8, payslip_detail.total,num_format)
-                    edit_total += payslip_detail.total
-
+                    deductions['saco_additional_payment'] = payslip_detail.total
+                    totals['saco_additional_payment'] += payslip_detail.total
+                elif payslip_detail.code == 'EDIR':  # Edir
+                    deductions['edir'] = payslip_detail.total
+                    totals['edir'] += payslip_detail.total
                 elif payslip_detail.code == 'SACOSHA':  # saco share payment
-                    sheet.write(row_start, 8, payslip_detail.total, num_format)
-                    saco_share_payment_total += payslip_detail.total
-
+                    deductions['saco_share_payment'] = payslip_detail.total
+                    totals['saco_share_payment'] += payslip_detail.total
                 elif payslip_detail.code == 'SACOPAY':  # saco payment deduction
-                    sheet.write(row_start, 9, payslip_detail.total, num_format)
-                    saco_loan_payment_total += payslip_detail.total
-
+                    deductions['saco_loan_payment'] = payslip_detail.total
+                    totals['saco_loan_payment'] += payslip_detail.total
                 elif payslip_detail.code == 'COSTSHA':  # cost sharing
-                    sheet.write(row_start, 10, payslip_detail.total, num_format)
-                    cost_sharing_total += payslip_detail.total
+                    deductions['cost_sharing'] = payslip_detail.total
+                    totals['cost_sharing'] += payslip_detail.total
                 elif payslip_detail.code == 'SPOCONT':  # sport contribution
-                    sheet.write(row_start, 11, payslip_detail.total, num_format)
-                    sport_contribution_total += payslip_detail.total
+                    deductions['sport_contribution'] = payslip_detail.total
+                    totals['sport_contribution'] += payslip_detail.total
+
+            # Write deduction values to the sheet
+            sheet.write(row_start, 2, deductions['canteen'], num_format)
+            sheet.write(row_start, 3, deductions['loan'], num_format)
+            sheet.write(row_start, 4, deductions['fuel'], num_format)
+            sheet.write(row_start, 5, deductions['saco_registration'], num_format)
+            sheet.write(row_start, 6, deductions['saco_saving'], num_format)
+            sheet.write(row_start, 7, deductions['saco_additional_payment'], num_format)
+            sheet.write(row_start, 8, deductions['edir'], num_format)
+            sheet.write(row_start, 9, deductions['saco_share_payment'], num_format)
+            sheet.write(row_start, 10, deductions['saco_loan_payment'], num_format)
+            sheet.write(row_start, 11, deductions['cost_sharing'], num_format)
+            sheet.write(row_start, 12, deductions['sport_contribution'], num_format)
+            sheet.write(row_start, 13, deductions['others'], num_format)
 
             row_start += 1
 
-            # sub total
-
-        sheet.write(row_start, 2, canteen_total, num_format_sub_total)
-        sheet.write(row_start, 3, loan_total, num_format_sub_total)
-        sheet.write(row_start, 4, fuel_total, num_format_sub_total)
-        sheet.write(row_start, 5, saco_registration_total, num_format_sub_total)
-        sheet.write(row_start, 6, saco_saving_total, num_format_sub_total)
-        sheet.write(row_start, 7, saco_additional_payment_total, num_format_sub_total)
-        sheet.write(row_start, 8, saco_share_payment_total, num_format_sub_total)
-        sheet.write(row_start, 9, saco_loan_payment_total, num_format_sub_total)
-
-        sheet.write(row_start, 10, cost_sharing_total, num_format_sub_total)
-        sheet.write(row_start, 11, sport_contribution_total, num_format_sub_total)
-        sheet.write(row_start, 12, 0, num_format_sub_total)
-        sheet.write(row_start, 13, 0, num_format_sub_total)
+        # Write sub-totals
+        sheet.write(row_start, 2, totals['canteen'], num_format_sub_total)
+        sheet.write(row_start, 3, totals['loan'], num_format_sub_total)
+        sheet.write(row_start, 4, totals['fuel'], num_format_sub_total)
+        sheet.write(row_start, 5, totals['saco_registration'], num_format_sub_total)
+        sheet.write(row_start, 6, totals['saco_saving'], num_format_sub_total)
+        sheet.write(row_start, 7, totals['saco_additional_payment'], num_format_sub_total)
+        sheet.write(row_start, 8, totals['edir'], num_format_sub_total)
+        sheet.write(row_start, 9, totals['saco_share_payment'], num_format_sub_total)
+        sheet.write(row_start, 10, totals['saco_loan_payment'], num_format_sub_total)
+        sheet.write(row_start, 11, totals['cost_sharing'], num_format_sub_total)
+        sheet.write(row_start, 12, totals['sport_contribution'], num_format_sub_total)
+        sheet.write(row_start, 13, totals['others'], num_format_sub_total)
 
     # get employee mobile card excel
     def mobile_card_report(self, workbook):

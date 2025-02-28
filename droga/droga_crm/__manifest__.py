@@ -21,6 +21,7 @@
         'security/security.xml',
         'reports/leads_report.xml',
         'views/module_menus.xml',
+        'views/account_move_views.xml',
         'security/ir.model.access.csv',
         'views/pharma_stock_views.xml',
         'reports/excel_reports/visit_plan.xml',
@@ -49,10 +50,10 @@
 
     # any module necessary for this one to work correctly
 
-    'depends': ['base', 'hr',
+    'depends': ['base', 'droga_finance','hr',
                 'mail', 'stock', 'http_routing', 'sale','web_map',
                 'resource', 'stock', 'droga_inventory',
-                'web', 'crm','droga_finance'],
+                'web', 'crm'],
 
     "assets": {
         "web.assets_backend": [

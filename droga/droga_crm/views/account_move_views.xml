@@ -1,0 +1,35 @@
+<odoo>
+    <!-- Tree View for Invoices (inherits from finance) -->
+    <record id="droga_crm_account_move_invoice_tree_view" model="ir.ui.view">
+        <field name="name">droga.finance.account.move.invoice.tree</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                <attribute name="string">Invoices</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Form View for Invoices (inherits from finance) -->
+    <record id="droga_crm_account_move_invoice_form_view" model="ir.ui.view">
+        <field name="name">droga.finance.account.move.invoice.form</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+    </record>
+
+    <!-- Action for Invoices -->
+    <record id="droga_crm_account_move_invoice_action" model="ir.actions.act_window">
+        <field name="name">Invoices</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="droga_crm_account_move_invoice_tree_view"/>
+        <field name="domain">[('move_type', '=', 'out_invoice')]</field>
+    </record>
+
+    <!-- Menu for Invoices -->
+    <menuitem id="droga_finance_invoice_menu"
+              name="Invoices"
+              parent="crm.crm_menu_sales"
+              action="droga_crm_account_move_invoice_action"/>
+</odoo>

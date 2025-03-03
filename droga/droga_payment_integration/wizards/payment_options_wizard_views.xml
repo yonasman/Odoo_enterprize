@@ -1,0 +1,21 @@
+<odoo>
+    <record id="view_payment_provider_options_wizard" model="ir.ui.view">
+        <field name="name">payment.provider.options.wizard</field>
+        <field name="model">payment.options.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Payment Provider Options">
+                <group>
+                    <field name="payment_providers"/>
+                </group>
+                <group attrs="{'invisible': [('payment_providers', '=', False)]}">
+                    <field name="phone"/>
+                    <field name="amount" string="Amount to Pay" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                </group>
+                <footer>
+                    <button name="action_pay_with_telebirr" string="Pay" type="object" class="btn-primary"/>
+                    <button name="action_cancel" string="Cancel" type="object" class="btn-default"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

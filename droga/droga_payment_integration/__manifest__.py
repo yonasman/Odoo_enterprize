@@ -10,8 +10,13 @@
         # 'views/telebirr_payment_acquirer_form.xml',
         # 'data/telebirr_payment_acquirer_data.xml',
         'security/ir.model.access.csv',
-        'views/account_move_inherit_views.xml'
+        'wizards/payment_options_wizard_views.xml',
+        'views/account_move_inherit_views.xml',
+
+
+
     ],
+    'images':['static/description/icon.png'],
     'installable': True,
     'application': True,
 }

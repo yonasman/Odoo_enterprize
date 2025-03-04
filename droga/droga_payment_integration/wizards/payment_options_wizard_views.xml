@@ -8,8 +8,8 @@
                     <field name="payment_providers"/>
                 </group>
                 <group attrs="{'invisible': [('payment_providers', '=', False)]}">
-                    <field name="phone"/>
-                    <field name="amount" string="Amount to Pay" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                    <field name="phone_number"/>
+                        <field name="amount" string="Amount to Pay (Birr)" />
                 </group>
                 <footer>
                     <button name="action_pay_with_telebirr" string="Pay" type="object" class="btn-primary"/>

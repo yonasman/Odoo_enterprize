@@ -7,13 +7,19 @@ class sales_report_fields(models.Model):
     _inherit = 'sale.order'
     cust_location = fields.Many2one('droga.crm.settings.city', related='partner_id.city_name', store=True)
     fs_number=fields.Char('FS Number')
+    cust_area = fields.Many2one('droga.crm.settings.area',related='partner_id.area',store=True)
+    print(cust_area)
 
 class sales_report_det_fields(models.Model):
     _inherit = 'sale.order.line'
     cust_location = fields.Many2one('droga.crm.settings.city', related='order_id.cust_location', store=True)
     cust_type_ext_det = fields.Many2one('droga.cust.type', string='Customer type', related='order_id.cust_type_ext',
                                         store=True)
+
     fs_number=fields.Char(compute='_get_fs_no',store=True)
+
+    print(cust_location)
+
     @api.depends('order_id.fs_number')
     def _get_fs_no(self):
         for rec in self:

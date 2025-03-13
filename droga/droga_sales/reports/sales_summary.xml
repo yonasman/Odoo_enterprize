@@ -7,6 +7,7 @@
             <tree default_order='date_order,partner_id,name' string="" create="false" delete="false">
                 <field name="partner_id"></field>
                 <field name="cust_location"></field>
+                <field name="cust_area"></field>
                 <field name="name"></field>
                 <field name="date_order" string="Date"></field>
                 <field name="order_type"></field>

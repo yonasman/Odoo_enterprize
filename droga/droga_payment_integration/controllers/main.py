@@ -1,35 +1,41 @@
 from odoo import http
 from odoo.http import request
 import json
+from werkzeug.utils import redirect
 
+class PaymentController(http.Controller):
+        @http.route('/payment/notify', type='json', auth='public', methods=['POST'], csrf=False)
+        def payment_notify(self, **post):
+            """ Handle Telebirr payment notification """
+            try:
+                print('hello')
+                data = json.loads(request.httprequest.data)
+                print(data)
+                reference = data.get("reference")
+                status = data.get("status")  # Example: "paid"
 
-class TelebirrWebhookController(http.Controller):
+                # Find the invoice
+                invoice = request.env['account.move'].sudo().browse(int(reference))
+                print(invoice)
 
-    @http.route('/telebirr/webhook', auth='public', methods=['POST'], csrf=False)
-    def handle_telebirr_webhook(self, **post):
-        # Get the JSON data from the POST request
-        try:
-            data = json.loads(request.httprequest.data)
+                if invoice and status == "paid":
+                    # Register payment in Odoo
+                    payment = request.env['account.payment'].sudo().create({
+                        'payment_type': 'inbound',
+                        'partner_id': invoice.partner_id.id,
+                        'amount': invoice.amount_total,
+                        'payment_method_line_id': request.env.ref('account.account_payment_method_manual_in').id,
+                        'journal_id': request.env['account.journal'].sudo().search([('type', '=', 'bank')], limit=1).id,
+                    })
+                    payment.action_post()
 
-            # Process the data here (save to database, update order status, etc.)
-            # For example, you can create or update a payment record based on the data:
-            self.process_telebirr_data(data)
+                    # Mark invoice as paid
+                    invoice.sudo().write({'payment_state': 'paid'})
 
-            # Respond with a 200 OK status to Telebirr
-            return "OK"
+                    # Redirect user to invoice page
+                    return {'success': True, 'redirect_url': f"/web#id={invoice.id}&model=account.move&view_type=form"}
 
-        except Exception as e:
-            return "Error", 500
+                return {'success': False, 'message': 'Payment failed or invoice not found'}
 
-    def process_telebirr_data(self, data):
-        # Example: Process the webhook data, update an order, or create a payment
-        order_id = data.get('order_id')
-        payment_status = data.get('status')
-
-        if order_id and payment_status:
-            # Find or create a payment record, depending on the webhook data
-            order = request.env['sale.order'].search([('name', '=', order_id)], limit=1)
-            if order:
-                # Update order status based on the webhook data
-                # order.write({'state': 'done' if payment_status == 'success' else 'cancel'})
-                print("Order %s status updated to %s", order_id, order.state)
+            except Exception as e:
+                return {'success': False, 'message': str(e)}
